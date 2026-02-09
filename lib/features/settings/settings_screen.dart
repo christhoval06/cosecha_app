@@ -66,6 +66,11 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
             _SectionTitle(text: l10n.settingsSectionAbout),
             const SizedBox(height: 12),
+            _StoryCard(
+              title: l10n.settingsOriginTitle,
+              body: l10n.settingsOriginBody,
+            ),
+            const SizedBox(height: 16),
             _SettingsTile(
               icon: Icons.code,
               iconBg: colorScheme.tertiaryContainer,
@@ -107,6 +112,53 @@ class SettingsScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _StoryCard extends StatelessWidget {
+  const _StoryCard({required this.title, required this.body});
+
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final shadowColor = Theme.of(context).shadowColor;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: shadowColor.withOpacity(0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 8),
+          ),
+        ],
+        border: Border.all(color: colorScheme.outline.withOpacity(0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            body,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurface.withOpacity(0.72),
+              height: 1.4,
+            ),
+          ),
+        ],
       ),
     );
   }
