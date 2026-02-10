@@ -672,6 +672,42 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsBackupSubtitle => 'Copias de seguridad y Exportar Excel';
 
   @override
+  String get settingsSectionNotifications => 'Notificaciones';
+
+  @override
+  String get settingsBackupReminderTitle => 'Recordatorios de respaldo';
+
+  @override
+  String get settingsBackupReminderSubtitle =>
+      'Configura y gestiona recordatorios para evitar pérdida de datos.';
+
+  @override
+  String get settingsBackupReminderEnabled => 'Activar recordatorios';
+
+  @override
+  String get settingsBackupReminderFrequency => 'Frecuencia';
+
+  @override
+  String get settingsBackupReminderFrequencyDaily => 'Diario';
+
+  @override
+  String get settingsBackupReminderFrequencyWeekly => 'Semanal';
+
+  @override
+  String get settingsBackupReminderTest => 'Enviar notificación de prueba';
+
+  @override
+  String get settingsBackupReminderTestSent => 'Notificación de prueba enviada';
+
+  @override
+  String get settingsBackupReminderPermissionDenied =>
+      'Permiso de notificaciones denegado. Actívalo en ajustes del sistema.';
+
+  @override
+  String get settingsBackupReminderTestError =>
+      'No se pudo enviar la notificación de prueba.';
+
+  @override
   String get dataBackupTitle => 'Datos y Respaldo';
 
   @override
@@ -855,6 +891,21 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get settingsResetConfirmBody =>
       'Esta acción eliminará todos tus datos. ¿Deseas continuar?';
+
+  @override
+  String get backupReminderNotificationChannelName =>
+      'Recordatorios de respaldo';
+
+  @override
+  String get backupReminderNotificationChannelDescription =>
+      'Recordatorios para respaldar los datos de la app';
+
+  @override
+  String get backupReminderNotificationTitle => 'Protege tus datos';
+
+  @override
+  String get backupReminderNotificationBody =>
+      'Haz un respaldo para no perder tu información.';
 
   @override
   String get reportsTitle => 'Reportes';

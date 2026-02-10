@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../l10n/app_localizations.dart';
 import '../../core/constants/app_routes.dart';
 import '../../core/services/app_reset_service.dart';
+import '../../l10n/app_localizations.dart';
+import 'widgets/settings_brand_header.dart';
+import 'widgets/settings_section_title.dart';
+import 'widgets/settings_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -33,7 +36,7 @@ class SettingsScreen extends StatelessWidget {
                 final version = info == null
                     ? l10n.settingsAppVersion
                     : '${info.version} (${info.buildNumber})';
-                return _BrandHeader(
+                return SettingsBrandHeader(
                   title: l10n.settingsAppName,
                   subtitle: l10n.settingsAppTagline,
                   version: version,
@@ -41,9 +44,9 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 28),
-            _SectionTitle(text: l10n.settingsSectionGeneral),
+            SettingsSectionTitle(text: l10n.settingsSectionGeneral),
             const SizedBox(height: 12),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.storefront_outlined,
               iconBg: colorScheme.primaryContainer,
               iconColor: colorScheme.onPrimaryContainer,
@@ -54,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
               ).pushNamed(AppRoutes.profileSetup, arguments: true),
             ),
             const SizedBox(height: 12),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.cloud_sync_outlined,
               iconBg: colorScheme.primaryContainer,
               iconColor: colorScheme.onPrimaryContainer,
@@ -63,10 +66,21 @@ class SettingsScreen extends StatelessWidget {
               onTap: () =>
                   Navigator.of(context).pushNamed(AppRoutes.dataBackup),
             ),
-            const SizedBox(height: 24),
-            _SectionTitle(text: l10n.settingsSectionAbout),
             const SizedBox(height: 12),
-            _SettingsTile(
+            SettingsTile(
+              icon: Icons.notifications_outlined,
+              iconBg: colorScheme.primaryContainer,
+              iconColor: colorScheme.onPrimaryContainer,
+              title: l10n.settingsSectionNotifications,
+              subtitle: l10n.settingsBackupReminderSubtitle,
+              onTap: () => Navigator.of(
+                context,
+              ).pushNamed(AppRoutes.notificationSettings),
+            ),
+            const SizedBox(height: 24),
+            SettingsSectionTitle(text: l10n.settingsSectionAbout),
+            const SizedBox(height: 12),
+            SettingsTile(
               icon: Icons.menu_book_outlined,
               iconBg: colorScheme.primaryContainer,
               iconColor: colorScheme.onPrimaryContainer,
@@ -75,7 +89,7 @@ class SettingsScreen extends StatelessWidget {
               onTap: () => _showOurStorySheet(context, l10n),
             ),
             const SizedBox(height: 16),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.code,
               iconBg: colorScheme.tertiaryContainer,
               iconColor: colorScheme.onTertiaryContainer,
@@ -84,7 +98,7 @@ class SettingsScreen extends StatelessWidget {
               onTap: () => Navigator.of(context).pushNamed(AppRoutes.developer),
             ),
             const SizedBox(height: 12),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.mail_outline,
               iconBg: colorScheme.primaryContainer,
               iconColor: colorScheme.onPrimaryContainer,
@@ -103,9 +117,9 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            _SectionTitle(text: l10n.settingsSectionDanger),
+            SettingsSectionTitle(text: l10n.settingsSectionDanger),
             const SizedBox(height: 12),
-            _SettingsTile(
+            SettingsTile(
               icon: Icons.delete_forever_outlined,
               iconBg: colorScheme.errorContainer,
               iconColor: colorScheme.onErrorContainer,
@@ -125,146 +139,6 @@ String _storyPreview(String body) {
   final normalized = body.replaceAll('\n', ' ').trim();
   if (normalized.length <= 72) return normalized;
   return '${normalized.substring(0, 72).trim()}...';
-}
-
-class _BrandHeader extends StatelessWidget {
-  const _BrandHeader({
-    required this.title,
-    required this.subtitle,
-    required this.version,
-  });
-
-  final String title;
-  final String subtitle;
-  final String version;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final shadowColor = Theme.of(context).shadowColor;
-    return Column(
-      children: [
-        Container(
-          width: 96,
-          height: 96,
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: shadowColor.withValues(alpha: 0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Icon(Icons.eco_outlined, color: colorScheme.primary, size: 40),
-        ),
-        const SizedBox(height: 16),
-        Text(title, style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 4),
-        Text(
-          version,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: colorScheme.onSurface.withValues(alpha: 0.6),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          subtitle,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: colorScheme.primary),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.text});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Text(
-      text.toUpperCase(),
-      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-        letterSpacing: 1.6,
-        color: colorScheme.onSurface.withValues(alpha: 0.5),
-      ),
-    );
-  }
-}
-
-class _SettingsTile extends StatelessWidget {
-  const _SettingsTile({
-    required this.icon,
-    required this.iconBg,
-    required this.title,
-    required this.subtitle,
-    required this.iconColor,
-    this.titleColor,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final Color iconBg;
-  final String title;
-  final String subtitle;
-  final Color iconColor;
-  final Color? titleColor;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: iconBg,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(icon, color: iconColor),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: titleColor ?? colorScheme.onSurface,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: colorScheme.onSurface.withValues(alpha: 0.6),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Icon(
-            Icons.chevron_right,
-            color: colorScheme.onSurface.withValues(alpha: 0.4),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class SettingsPlaceholderScreen extends StatelessWidget {
@@ -375,11 +249,11 @@ Future<void> _showOurStorySheet(
                     child: Text(
                       l10n.settingsOriginBody,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            height: 1.45,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurface.withValues(alpha: 0.78),
-                          ),
+                        height: 1.45,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withValues(alpha: 0.78),
+                      ),
                     ),
                   ),
                 ),

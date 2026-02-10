@@ -1338,6 +1338,72 @@ abstract class AppLocalizations {
   /// **'Copias de seguridad y Exportar Excel'**
   String get settingsBackupSubtitle;
 
+  /// No description provided for @settingsSectionNotifications.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificaciones'**
+  String get settingsSectionNotifications;
+
+  /// No description provided for @settingsBackupReminderTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Recordatorios de respaldo'**
+  String get settingsBackupReminderTitle;
+
+  /// No description provided for @settingsBackupReminderSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Configura y gestiona recordatorios para evitar pérdida de datos.'**
+  String get settingsBackupReminderSubtitle;
+
+  /// No description provided for @settingsBackupReminderEnabled.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar recordatorios'**
+  String get settingsBackupReminderEnabled;
+
+  /// No description provided for @settingsBackupReminderFrequency.
+  ///
+  /// In es, this message translates to:
+  /// **'Frecuencia'**
+  String get settingsBackupReminderFrequency;
+
+  /// No description provided for @settingsBackupReminderFrequencyDaily.
+  ///
+  /// In es, this message translates to:
+  /// **'Diario'**
+  String get settingsBackupReminderFrequencyDaily;
+
+  /// No description provided for @settingsBackupReminderFrequencyWeekly.
+  ///
+  /// In es, this message translates to:
+  /// **'Semanal'**
+  String get settingsBackupReminderFrequencyWeekly;
+
+  /// No description provided for @settingsBackupReminderTest.
+  ///
+  /// In es, this message translates to:
+  /// **'Enviar notificación de prueba'**
+  String get settingsBackupReminderTest;
+
+  /// No description provided for @settingsBackupReminderTestSent.
+  ///
+  /// In es, this message translates to:
+  /// **'Notificación de prueba enviada'**
+  String get settingsBackupReminderTestSent;
+
+  /// No description provided for @settingsBackupReminderPermissionDenied.
+  ///
+  /// In es, this message translates to:
+  /// **'Permiso de notificaciones denegado. Actívalo en ajustes del sistema.'**
+  String get settingsBackupReminderPermissionDenied;
+
+  /// No description provided for @settingsBackupReminderTestError.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo enviar la notificación de prueba.'**
+  String get settingsBackupReminderTestError;
+
   /// No description provided for @dataBackupTitle.
   ///
   /// In es, this message translates to:
@@ -1685,6 +1751,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Esta acción eliminará todos tus datos. ¿Deseas continuar?'**
   String get settingsResetConfirmBody;
+
+  /// No description provided for @backupReminderNotificationChannelName.
+  ///
+  /// In es, this message translates to:
+  /// **'Recordatorios de respaldo'**
+  String get backupReminderNotificationChannelName;
+
+  /// No description provided for @backupReminderNotificationChannelDescription.
+  ///
+  /// In es, this message translates to:
+  /// **'Recordatorios para respaldar los datos de la app'**
+  String get backupReminderNotificationChannelDescription;
+
+  /// No description provided for @backupReminderNotificationTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Protege tus datos'**
+  String get backupReminderNotificationTitle;
+
+  /// No description provided for @backupReminderNotificationBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Haz un respaldo para no perder tu información.'**
+  String get backupReminderNotificationBody;
 
   /// No description provided for @reportsTitle.
   ///

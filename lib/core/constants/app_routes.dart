@@ -10,6 +10,7 @@ class AppRoutes {
   static const salesHistory = '/sales-history';
   static const saleAdd = '/sale-add';
   static const settings = '/settings';
+  static const notificationSettings = '/notification-settings';
   static const developer = '/developer';
   static const dataBackup = '/data-backup';
 }

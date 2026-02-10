@@ -7,6 +7,7 @@ import '../../features/products/product_edit_screen.dart';
 import '../../features/products/product_list_screen.dart';
 import '../../features/settings/developer_screen.dart';
 import '../../features/settings/data_backup_screen.dart';
+import '../../features/settings/notification_settings_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/transactions/add_sale_screen.dart';
 import '../../features/transactions/sales_history_screen.dart';
@@ -36,6 +37,8 @@ class AppRouter {
       return const AddSaleScreen();
     },
     AppRoutes.settings: (context) => const SettingsScreen(),
+    AppRoutes.notificationSettings: (context) =>
+        const NotificationSettingsScreen(),
     AppRoutes.productEdit: (context) {
       final args = ModalRoute.of(context)?.settings.arguments;
       if (args == null) {

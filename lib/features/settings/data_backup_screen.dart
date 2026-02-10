@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../core/services/backup_service.dart';
 import '../../core/services/excel_export_service.dart';
+import '../../core/services/app_services.dart';
 import '../../core/widgets/excel_export_config_sheet.dart';
 import '../../data/hive/boxes.dart';
 import '../../data/models/product.dart';
@@ -36,22 +37,23 @@ class DataBackupScreen extends StatelessWidget {
             const SizedBox(height: 12),
             _SummaryCard(
               title: l10n.dataBackupProducts,
-              valueListenable:
-                  Hive.box<Product>(HiveBoxes.products).listenable(),
+              valueListenable: Hive.box<Product>(
+                HiveBoxes.products,
+              ).listenable(),
             ),
             const SizedBox(height: 12),
             _SummaryCard(
               title: l10n.dataBackupSales,
-              valueListenable:
-                  Hive.box<SaleTransaction>(HiveBoxes.transactions)
-                      .listenable(),
+              valueListenable: Hive.box<SaleTransaction>(
+                HiveBoxes.transactions,
+              ).listenable(),
             ),
             const SizedBox(height: 12),
             _SummaryCard(
               title: l10n.dataBackupPriceHistory,
-              valueListenable: Hive
-                  .box<ProductPriceHistory>(HiveBoxes.productPriceHistory)
-                  .listenable(),
+              valueListenable: Hive.box<ProductPriceHistory>(
+                HiveBoxes.productPriceHistory,
+              ).listenable(),
             ),
             const SizedBox(height: 24),
             Text(
@@ -114,10 +116,7 @@ class DataBackupScreen extends StatelessWidget {
 }
 
 class _SummaryCard extends StatelessWidget {
-  const _SummaryCard({
-    required this.title,
-    required this.valueListenable,
-  });
+  const _SummaryCard({required this.title, required this.valueListenable});
 
   final String title;
   final ValueListenable<Box> valueListenable;
@@ -145,14 +144,16 @@ class _SummaryCard extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Text(title, style: Theme.of(context).textTheme.titleSmall),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
               ),
               Text(
                 box.length.toString(),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.copyWith(color: colorScheme.primary),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(color: colorScheme.primary),
               ),
             ],
           ),
@@ -162,10 +163,7 @@ class _SummaryCard extends StatelessWidget {
   }
 }
 
-Future<void> _exportExcel(
-  BuildContext context,
-  AppLocalizations l10n,
-) async {
+Future<void> _exportExcel(BuildContext context, AppLocalizations l10n) async {
   try {
     final result = await _withLoader(
       context,
@@ -177,10 +175,9 @@ Future<void> _exportExcel(
     );
     if (result == null || !context.mounted) return;
     final path = result;
-    await Share.shareXFiles(
-      [XFile(path)],
-      sharePositionOrigin: _shareOrigin(context),
-    );
+    await Share.shareXFiles([
+      XFile(path),
+    ], sharePositionOrigin: _shareOrigin(context));
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('${l10n.dataBackupExported}: $path')),
@@ -188,9 +185,9 @@ Future<void> _exportExcel(
     }
   } catch (error) {
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${l10n.errorTitle}: $error')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('${l10n.errorTitle}: $error')));
   }
 }
 
@@ -219,21 +216,18 @@ Future<void> _exportEncrypted(
   );
   if (result == null || !context.mounted) return;
   final path = result;
-  await Share.shareXFiles(
-    [XFile(path)],
-    sharePositionOrigin: _shareOrigin(context),
-  );
+  await Share.shareXFiles([
+    XFile(path),
+  ], sharePositionOrigin: _shareOrigin(context));
   if (context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('${l10n.dataBackupEncryptedExported}: $path')),
     );
   }
+  await AppServices.backupReminders.onBackupCompleted();
 }
 
-Future<void> _restoreBackup(
-  BuildContext context,
-  AppLocalizations l10n,
-) async {
+Future<void> _restoreBackup(BuildContext context, AppLocalizations l10n) async {
   final result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['json'],
@@ -254,21 +248,19 @@ Future<void> _restoreBackup(
     await _withLoader(
       context,
       l10n.dataBackupRestoring,
-      () => BackupService.restoreEncryptedBackup(
-        file: file,
-        password: password,
-      ),
+      () =>
+          BackupService.restoreEncryptedBackup(file: file, password: password),
     );
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.dataBackupRestoreSuccess)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.dataBackupRestoreSuccess)));
     }
   } catch (_) {
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.dataBackupRestoreError)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.dataBackupRestoreError)));
     }
   }
 }
@@ -340,9 +332,7 @@ Future<String?> _askPassword(
         content: TextField(
           controller: controller,
           obscureText: true,
-          decoration: InputDecoration(
-            labelText: l10n.dataBackupPasswordLabel,
-          ),
+          decoration: InputDecoration(labelText: l10n.dataBackupPasswordLabel),
         ),
         actions: [
           TextButton(
