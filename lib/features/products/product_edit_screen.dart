@@ -3,7 +3,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import '../../core/widgets/avatar_image_picker.dart';
 import '../../core/utils/file.dart';
-import '../../core/constants/app_routes.dart';
 import '../../data/models/product.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../l10n/app_localizations.dart';
@@ -62,8 +61,12 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     final totalLabel = values.isNotEmpty
         ? formatCurrency(values.last)
         : formatCurrency(widget.product?.currentPrice ?? 0);
-    final changePercent = values.length >= 2 && values.first > 0
-        ? ((values.last - values.first) / values.first) * 100
+    // Use the latest two price points: previous vs current.
+    final changePercent = values.length >= 2
+        ? _changePercent(
+            previous: values[values.length - 2],
+            current: values.last,
+          )
         : null;
     return Scaffold(
       appBar: AppBar(
@@ -200,6 +203,14 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       default:
         return now.subtract(const Duration(days: 30));
     }
+  }
+
+  double? _changePercent({
+    required double previous,
+    required double current,
+  }) {
+    if (previous <= 0) return null;
+    return ((current - previous) / previous) * 100;
   }
 
   Future<void> _saveProduct() async {

@@ -610,6 +610,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportsTotalSales => 'Total sales';
 
   @override
+  String get reportsMonthlySalesLast6 => 'Monthly sales (last 6 months)';
+
+  @override
+  String get reportsDailyHeatmap => 'Daily activity heatmap';
+
+  @override
   String get reportsTransactions => 'Transactions';
 
   @override

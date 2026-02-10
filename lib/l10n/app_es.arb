@@ -218,6 +218,8 @@
   "reportsTopProducts": "Top productos",
   "reportsTopEmpty": "No hay ventas en este rango.",
   "reportsTotalSales": "Total ventas",
+  "reportsMonthlySalesLast6": "Ventas mensuales (últimos 6 meses)",
+  "reportsDailyHeatmap": "Mapa de calor diario",
   "reportsTransactions": "Transacciones",
   "reportsAvgTicket": "Ticket promedio",
   "reportsUnits": "unidades"

@@ -26,11 +26,16 @@ class SparklineCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final shadowColor = Theme.of(context).shadowColor;
+    final hasValidChange = changePercent != null && changePercent!.isFinite;
     final trendUp = (changePercent ?? 0) >= 0;
-    final trendColor = trendUp ? colorScheme.secondary : colorScheme.error;
+    // trendUp ? colorScheme.secondary : colorScheme.error;
+    final trendColor = colorScheme.surface;
     final badgeBg = trendUp
         ? colorScheme.secondaryContainer
         : colorScheme.errorContainer;
+    final changeLabel = hasValidChange
+        ? '${trendUp ? '+' : ''}${changePercent!.toStringAsFixed(1)}%'
+        : null;
 
     if (values.isEmpty) {
       return Container(
@@ -40,7 +45,7 @@ class SparklineCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: shadowColor.withOpacity(0.04),
+              color: shadowColor.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -61,7 +66,7 @@ class SparklineCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: shadowColor.withOpacity(0.04),
+            color: shadowColor.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -73,7 +78,7 @@ class SparklineCard extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.6),
+              color: colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
           const SizedBox(height: 8),
@@ -87,7 +92,7 @@ class SparklineCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (changePercent != null)
+              if (changeLabel != null)
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -98,7 +103,7 @@ class SparklineCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
-                    '${trendUp ? '+' : ''}${changePercent!.toStringAsFixed(1)}%',
+                    changeLabel,
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       color: trendColor,
                       fontWeight: FontWeight.w600,
@@ -157,8 +162,8 @@ class SparklineCard extends StatelessWidget {
                       show: true,
                       gradient: LinearGradient(
                         colors: [
-                          colorScheme.secondary.withOpacity(0.2),
-                          colorScheme.secondary.withOpacity(0.0),
+                          colorScheme.secondary.withValues(alpha: 0.2),
+                          colorScheme.secondary.withValues(alpha: 0.0),
                         ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -205,7 +210,7 @@ class SparklineCard extends StatelessWidget {
       child: Text(
         label.toUpperCase(),
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
           letterSpacing: 1.2,
         ),
       ),

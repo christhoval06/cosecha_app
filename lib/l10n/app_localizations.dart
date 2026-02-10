@@ -1256,6 +1256,18 @@ abstract class AppLocalizations {
   /// **'Total ventas'**
   String get reportsTotalSales;
 
+  /// No description provided for @reportsMonthlySalesLast6.
+  ///
+  /// In es, this message translates to:
+  /// **'Ventas mensuales (últimos 6 meses)'**
+  String get reportsMonthlySalesLast6;
+
+  /// No description provided for @reportsDailyHeatmap.
+  ///
+  /// In es, this message translates to:
+  /// **'Mapa de calor diario'**
+  String get reportsDailyHeatmap;
+
   /// No description provided for @reportsTransactions.
   ///
   /// In es, this message translates to:

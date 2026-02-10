@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/utils/formatters.dart';
 import '../../../l10n/app_localizations.dart';
 
 class SummaryRow extends StatelessWidget {
@@ -10,31 +11,37 @@ class SummaryRow extends StatelessWidget {
     required this.avg,
   });
 
-  final String total;
+  final double total;
   final int count;
-  final String avg;
+  final double avg;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Row(
       children: [
-        SummaryCard(
-          label: AppLocalizations.of(context).reportsTotalSales,
-          value: total,
-          color: colorScheme.primaryContainer,
+        Expanded(
+          child: SummaryCard(
+            label: AppLocalizations.of(context).reportsTotalSales,
+            value: formatCurrencyCompact(total),
+            color: colorScheme.primaryContainer,
+          ),
         ),
         const SizedBox(width: 12),
-        SummaryCard(
-          label: AppLocalizations.of(context).reportsTransactions,
-          value: count.toString(),
-          color: colorScheme.secondaryContainer,
+        Expanded(
+          child: SummaryCard(
+            label: AppLocalizations.of(context).reportsTransactions,
+            value: count.toString(),
+            color: colorScheme.secondaryContainer,
+          ),
         ),
         const SizedBox(width: 12),
-        SummaryCard(
-          label: AppLocalizations.of(context).reportsAvgTicket,
-          value: avg,
-          color: colorScheme.tertiaryContainer,
+        Expanded(
+          child: SummaryCard(
+            label: AppLocalizations.of(context).reportsAvgTicket,
+            value: formatCurrencyCompact(avg),
+            color: colorScheme.tertiaryContainer,
+          ),
         ),
       ],
     );
@@ -56,7 +63,8 @@ class SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Expanded(
+    return SizedBox(
+      height: 92,
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -64,18 +72,25 @@ class SummaryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context)
                   .textTheme
                   .labelSmall
-                  ?.copyWith(color: colorScheme.onSurface.withOpacity(0.7)),
+                  ?.copyWith(
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
             ),
             const SizedBox(height: 6),
             Text(
               value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ],

@@ -218,6 +218,8 @@
   "reportsTopProducts": "Top products",
   "reportsTopEmpty": "No sales in this range.",
   "reportsTotalSales": "Total sales",
+  "reportsMonthlySalesLast6": "Monthly sales (last 6 months)",
+  "reportsDailyHeatmap": "Daily activity heatmap",
   "reportsTransactions": "Transactions",
   "reportsAvgTicket": "Avg. ticket",
   "reportsUnits": "units"

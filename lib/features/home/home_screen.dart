@@ -135,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     PerformanceCard(
                       label: l10n.homeToday,
-                      amount: formatCurrency(today.current),
+                      amount: formatCurrencyCompact(today.current),
                       delta: formatPercentDelta(today.deltaPercent),
                       deltaPositive: today.deltaPercent >= 0,
                       background: colorScheme.surface,
@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 12),
                     PerformanceCard(
                       label: l10n.homeThisWeek,
-                      amount: formatCurrency(week.current),
+                      amount: formatCurrencyCompact(week.current),
                       delta: formatPercentDelta(week.deltaPercent),
                       deltaPositive: week.deltaPercent >= 0,
                       background: colorScheme.surface,
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 12),
                     PerformanceCard(
                       label: l10n.homeThisMonth,
-                      amount: formatCurrency(month.current),
+                      amount: formatCurrencyCompact(month.current),
                       delta: formatPercentDelta(month.deltaPercent),
                       deltaPositive: month.deltaPercent >= 0,
                       background: colorScheme.surface,

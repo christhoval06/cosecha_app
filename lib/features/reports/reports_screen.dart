@@ -10,6 +10,7 @@ import '../../core/services/backup_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../products/widgets/segment_tabs.dart';
 import 'widgets/heatmap_card.dart';
+import 'widgets/monthly_sales_bar_chart.dart';
 import 'widgets/sparkline_card.dart';
 import 'widgets/summary_row.dart';
 import 'widgets/top_product_tile.dart';
@@ -54,11 +55,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
         actions: [
           IconButton(
             onPressed: () async {
+              final shareOrigin = _shareOrigin(context);
               try {
                 final path = await BackupService.exportToExcel();
                 await Share.shareXFiles(
                   [XFile(path)],
-                  sharePositionOrigin: _shareOrigin(context),
+                  sharePositionOrigin: shareOrigin,
                 );
               } catch (error) {
                 if (!context.mounted) return;
@@ -86,6 +88,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
             final count = repo.totalCount(from, to);
             final avg = count == 0 ? 0.0 : total / count;
             final series = repo.dailySeries(from, to);
+            final monthlyTotals = repo.monthlyTotalsLastMonths(
+              months: 6,
+              reference: now,
+            );
             final heatmap = repo.dailyTotals(from, to);
             final top = repo.topProducts(from, to, limit: 5);
             final rangeDuration = to.difference(from);
@@ -104,7 +110,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
-                        ?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                        ?.copyWith(
+                          color: colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -121,9 +129,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ),
                 const SizedBox(height: 16),
                 SummaryRow(
-                  total: formatCurrency(total),
+                  total: total,
                   count: count,
-                  avg: formatCurrency(avg),
+                  avg: avg,
                 ),
                 const SizedBox(height: 16),
                 SparklineCard(
@@ -135,7 +143,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   to: to,
                 ),
                 const SizedBox(height: 16),
+                MonthlySalesBarChart(
+                  title: l10n.reportsMonthlySalesLast6,
+                  items: monthlyTotals,
+                ),
+                const SizedBox(height: 16),
                 HeatmapCard(
+                  title: l10n.reportsDailyHeatmap,
                   totals: heatmap,
                   to: to,
                 ),
@@ -151,7 +165,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
-                        ?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                        ?.copyWith(
+                          color: colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
                   )
                 else
                   ...top.map(

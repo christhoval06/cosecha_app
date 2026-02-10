@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 
 class HeatmapCard extends StatelessWidget {
-  const HeatmapCard({super.key, required this.totals, required this.to});
+  const HeatmapCard({
+    super.key,
+    required this.title,
+    required this.totals,
+    required this.to,
+  });
 
+  final String title;
   final Map<DateTime, double> totals;
   final DateTime to;
 
@@ -22,35 +28,45 @@ class HeatmapCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: shadowColor.withOpacity(0.04),
+            color: shadowColor.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: HeatMap(
-        startDate: DateTime(
-          to.year,
-          to.month,
-          to.day,
-        ).subtract(const Duration(days: 120)),
-        endDate: DateTime(to.year, to.month, to.day),
-        datasets: datasets,
-        colorMode: ColorMode.opacity,
-        defaultColor: colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
-        textColor: colorScheme.onSurface,
-        size: 14,
-        fontSize: 10,
-        showText: false,
-        showColorTip: false,
-        scrollable: true,
-        colorsets: {
-          1: colorScheme.primary.withOpacity(0.2),
-          2: colorScheme.primary.withOpacity(0.35),
-          3: colorScheme.primary.withOpacity(0.5),
-          4: colorScheme.primary.withOpacity(0.7),
-          5: colorScheme.primary.withOpacity(0.9),
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 12),
+          HeatMap(
+            startDate: DateTime(
+              to.year,
+              to.month,
+              to.day,
+            ).subtract(const Duration(days: 120)),
+            endDate: DateTime(to.year, to.month, to.day),
+            datasets: datasets,
+            colorMode: ColorMode.opacity,
+            defaultColor: colorScheme.onSurfaceVariant.withValues(alpha: 0.1),
+            textColor: colorScheme.onSurface,
+            size: 14,
+            fontSize: 10,
+            showText: false,
+            showColorTip: false,
+            scrollable: true,
+            colorsets: {
+              1: colorScheme.primary.withValues(alpha: 0.2),
+              2: colorScheme.primary.withValues(alpha: 0.35),
+              3: colorScheme.primary.withValues(alpha: 0.5),
+              4: colorScheme.primary.withValues(alpha: 0.7),
+              5: colorScheme.primary.withValues(alpha: 0.9),
+            },
+          ),
+        ],
       ),
     );
   }

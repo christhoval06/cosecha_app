@@ -60,6 +60,36 @@ class ReportsRepository {
     return list.take(limit).toList();
   }
 
+  List<MonthlyTotal> monthlyTotalsLastMonths({
+    int months = 6,
+    DateTime? reference,
+  }) {
+    final now = reference ?? DateTime.now();
+    final start = DateTime(now.year, now.month - (months - 1), 1);
+    final endExclusive = DateTime(now.year, now.month + 1, 1);
+
+    final buckets = <DateTime, double>{};
+    for (var i = 0; i < months; i++) {
+      final monthStart = DateTime(start.year, start.month + i, 1);
+      buckets[monthStart] = 0;
+    }
+
+    for (final sale in _box.values) {
+      final createdAt = sale.createdAt;
+      if (createdAt.isBefore(start) || !createdAt.isBefore(endExclusive)) {
+        continue;
+      }
+      final monthStart = DateTime(createdAt.year, createdAt.month, 1);
+      if (!buckets.containsKey(monthStart)) continue;
+      buckets[monthStart] = (buckets[monthStart] ?? 0) + sale.amount;
+    }
+
+    return buckets.entries
+        .map((entry) => MonthlyTotal(monthStart: entry.key, total: entry.value))
+        .toList()
+      ..sort((a, b) => a.monthStart.compareTo(b.monthStart));
+  }
+
   List<DateTime> _daysBetween(DateTime from, DateTime to) {
     final start = DateTime(from.year, from.month, from.day);
     final end = DateTime(to.year, to.month, to.day);
@@ -94,4 +124,14 @@ class TopProduct {
       quantity: quantity ?? this.quantity,
     );
   }
+}
+
+class MonthlyTotal {
+  MonthlyTotal({
+    required this.monthStart,
+    required this.total,
+  });
+
+  final DateTime monthStart;
+  final double total;
 }
