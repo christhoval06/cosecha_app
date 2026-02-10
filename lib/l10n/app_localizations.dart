@@ -1380,6 +1380,30 @@ abstract class AppLocalizations {
   /// **'Semanal'**
   String get settingsBackupReminderFrequencyWeekly;
 
+  /// No description provided for @settingsBackupReminderTapAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Al tocar la notificación'**
+  String get settingsBackupReminderTapAction;
+
+  /// No description provided for @settingsBackupReminderTapOpenDataBackup.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir Datos y Respaldo'**
+  String get settingsBackupReminderTapOpenDataBackup;
+
+  /// No description provided for @settingsBackupReminderTapOpenSettings.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir Ajustes'**
+  String get settingsBackupReminderTapOpenSettings;
+
+  /// No description provided for @settingsBackupReminderTapOpenNotificationSettings.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir Notificaciones'**
+  String get settingsBackupReminderTapOpenNotificationSettings;
+
   /// No description provided for @settingsBackupReminderTest.
   ///
   /// In es, this message translates to:

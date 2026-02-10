@@ -11,13 +11,24 @@ class AppNavigator {
 
   static void pushNamed(String route, {Object? arguments}) {
     final state = navigatorKey.currentState;
-    if (state == null) {
+    if (!_canNavigate(state)) {
       _pendingRoute = route;
       _pendingArguments = arguments;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        flushPendingRoute();
+      });
       return;
     }
 
-    state.pushNamed(route, arguments: arguments);
+    try {
+      state!.pushNamed(route, arguments: arguments);
+    } catch (_) {
+      _pendingRoute = route;
+      _pendingArguments = arguments;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        flushPendingRoute();
+      });
+    }
   }
 
   static void flushPendingRoute() {
@@ -25,10 +36,20 @@ class AppNavigator {
     if (route == null) return;
 
     final state = navigatorKey.currentState;
-    if (state == null) return;
+    if (!_canNavigate(state)) return;
 
-    state.pushNamed(route, arguments: _pendingArguments);
+    try {
+      state!.pushNamed(route, arguments: _pendingArguments);
+    } catch (_) {
+      return;
+    }
     _pendingRoute = null;
     _pendingArguments = null;
+  }
+
+  static bool _canNavigate(NavigatorState? state) {
+    if (state == null) return false;
+    final context = state.context;
+    return state.mounted && context.mounted;
   }
 }

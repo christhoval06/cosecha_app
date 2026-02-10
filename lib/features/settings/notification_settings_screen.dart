@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constants/app_routes.dart';
 import '../../core/services/app_services.dart';
 import '../../core/services/notifications/notification_service.dart';
 import '../../l10n/app_localizations.dart';
@@ -17,6 +18,7 @@ class _NotificationSettingsScreenState
   bool _loading = true;
   bool _enabled = true;
   AppNotificationRepeat _repeat = AppNotificationRepeat.weekly;
+  String _tapRoute = AppRoutes.dataBackup;
 
   @override
   void initState() {
@@ -27,10 +29,12 @@ class _NotificationSettingsScreenState
   Future<void> _loadState() async {
     final enabled = await AppServices.backupReminders.isEnabled();
     final repeat = await AppServices.backupReminders.getFrequency();
+    final tapRoute = await AppServices.backupReminders.getTapRoute();
     if (!mounted) return;
     setState(() {
       _enabled = enabled;
       _repeat = repeat;
+      _tapRoute = tapRoute;
       _loading = false;
     });
   }
@@ -109,6 +113,44 @@ class _NotificationSettingsScreenState
                                   setState(() => _repeat = value);
                                   await AppServices.backupReminders
                                       .setFrequency(value);
+                                }
+                              : null,
+                        ),
+                        const SizedBox(height: 12),
+                        DropdownButtonFormField<String>(
+                          initialValue: _tapRoute,
+                          decoration: InputDecoration(
+                            labelText: l10n.settingsBackupReminderTapAction,
+                            border: const OutlineInputBorder(),
+                            isDense: true,
+                          ),
+                          items: [
+                            DropdownMenuItem(
+                              value: AppRoutes.dataBackup,
+                              child: Text(
+                                l10n.settingsBackupReminderTapOpenDataBackup,
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: AppRoutes.settings,
+                              child: Text(
+                                l10n.settingsBackupReminderTapOpenSettings,
+                              ),
+                            ),
+                            DropdownMenuItem(
+                              value: AppRoutes.notificationSettings,
+                              child: Text(
+                                l10n.settingsBackupReminderTapOpenNotificationSettings,
+                              ),
+                            ),
+                          ],
+                          onChanged: _enabled
+                              ? (value) async {
+                                  if (value == null) return;
+                                  setState(() => _tapRoute = value);
+                                  await AppServices.backupReminders.setTapRoute(
+                                    value,
+                                  );
                                 }
                               : null,
                         ),

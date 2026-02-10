@@ -694,6 +694,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsBackupReminderFrequencyWeekly => 'Semanal';
 
   @override
+  String get settingsBackupReminderTapAction => 'Al tocar la notificación';
+
+  @override
+  String get settingsBackupReminderTapOpenDataBackup =>
+      'Abrir Datos y Respaldo';
+
+  @override
+  String get settingsBackupReminderTapOpenSettings => 'Abrir Ajustes';
+
+  @override
+  String get settingsBackupReminderTapOpenNotificationSettings =>
+      'Abrir Notificaciones';
+
+  @override
   String get settingsBackupReminderTest => 'Enviar notificación de prueba';
 
   @override

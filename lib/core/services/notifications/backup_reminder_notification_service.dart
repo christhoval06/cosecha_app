@@ -19,6 +19,12 @@ class BackupReminderNotificationService {
   static const String _channelId = 'backup_reminders';
   static const String _testChannelId = 'backup_reminders_high';
 
+  static const List<String> availableTapRoutes = <String>[
+    AppRoutes.dataBackup,
+    AppRoutes.settings,
+    AppRoutes.notificationSettings,
+  ];
+
   Future<void> ensureScheduled() async {
     final prefs = await SharedPreferences.getInstance();
     final enabled = prefs.getBool(AppPrefs.backupReminderEnabled) ?? true;
@@ -29,6 +35,7 @@ class BackupReminderNotificationService {
 
     final l10n = _localizedStrings();
     final repeat = _readFrequency(prefs);
+    final tapRoute = _readTapRoute(prefs);
     await _notificationService.showPeriodic(
       NotificationRequest(
         id: _notificationId,
@@ -41,8 +48,7 @@ class BackupReminderNotificationService {
         ),
         payload: const NotificationPayload(
           type: 'backup_reminder',
-          route: AppRoutes.dataBackup,
-        ).encode(),
+        ).encodeWithRoute(tapRoute),
       ),
       repeat: repeat,
     );
@@ -84,6 +90,18 @@ class BackupReminderNotificationService {
     await ensureScheduled();
   }
 
+  Future<String> getTapRoute() async {
+    final prefs = await SharedPreferences.getInstance();
+    return _readTapRoute(prefs);
+  }
+
+  Future<void> setTapRoute(String route) async {
+    if (!availableTapRoutes.contains(route)) return;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(AppPrefs.backupReminderTapRoute, route);
+    await ensureScheduled();
+  }
+
   Future<void> sendTestNotification() async {
     try {
       final granted = await _notificationService.requestPermissions();
@@ -91,6 +109,8 @@ class BackupReminderNotificationService {
         throw StateError('notification_permission_denied');
       }
       final l10n = _localizedStrings();
+      final prefs = await SharedPreferences.getInstance();
+      final tapRoute = _readTapRoute(prefs);
       await _notificationService.show(
         NotificationRequest(
           id: _testNotificationId,
@@ -104,8 +124,7 @@ class BackupReminderNotificationService {
           highPriority: true,
           payload: const NotificationPayload(
             type: 'backup_reminder',
-            route: AppRoutes.dataBackup,
-          ).encode(),
+          ).encodeWithRoute(tapRoute),
         ),
       );
     } catch (error, stackTrace) {
@@ -132,5 +151,23 @@ class BackupReminderNotificationService {
       'weekly' => AppNotificationRepeat.weekly,
       _ => AppNotificationRepeat.weekly,
     };
+  }
+
+  String _readTapRoute(SharedPreferences prefs) {
+    final raw = prefs.getString(AppPrefs.backupReminderTapRoute);
+    if (raw != null && availableTapRoutes.contains(raw)) {
+      return raw;
+    }
+    return AppRoutes.dataBackup;
+  }
+}
+
+extension on NotificationPayload {
+  String encodeWithRoute(String route) {
+    return NotificationPayload(
+      type: type,
+      route: route,
+      arguments: arguments,
+    ).encode();
   }
 }
