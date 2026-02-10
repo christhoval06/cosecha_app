@@ -21,7 +21,10 @@ class ProductRepository {
     return items;
   }
 
-  Future<void> save(Product product) async {
+  Future<void> save(
+    Product product, {
+    List<String> priceChangeTags = const <String>[],
+  }) async {
     final resolved = _withId(product);
     final existing = _productBox.get(resolved.id);
     await _productBox.put(resolved.id, resolved);
@@ -30,6 +33,7 @@ class ProductRepository {
       await _savePriceHistory(
         productId: resolved.id,
         price: resolved.currentPrice,
+        strategyTags: priceChangeTags,
       );
     }
   }
@@ -41,6 +45,7 @@ class ProductRepository {
   Future<void> _savePriceHistory({
     required String productId,
     required double price,
+    required List<String> strategyTags,
   }) async {
     final timestamp = DateTime.now();
     final history = ProductPriceHistory(
@@ -48,6 +53,7 @@ class ProductRepository {
       productId: productId,
       price: price,
       recordedAt: timestamp,
+      strategyTags: strategyTags,
     );
     await _historyBox.put(history.id, history);
   }

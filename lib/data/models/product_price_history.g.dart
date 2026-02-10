@@ -21,13 +21,15 @@ class ProductPriceHistoryAdapter extends TypeAdapter<ProductPriceHistory> {
       productId: fields[1] as String,
       price: fields[2] as double,
       recordedAt: fields[3] as DateTime,
+      strategyTags:
+          (fields[4] as List?)?.cast<String>() ?? const <String>[],
     );
   }
 
   @override
   void write(BinaryWriter writer, ProductPriceHistory obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +37,9 @@ class ProductPriceHistoryAdapter extends TypeAdapter<ProductPriceHistory> {
       ..writeByte(2)
       ..write(obj.price)
       ..writeByte(3)
-      ..write(obj.recordedAt);
+      ..write(obj.recordedAt)
+      ..writeByte(4)
+      ..write(obj.strategyTags);
   }
 
   @override

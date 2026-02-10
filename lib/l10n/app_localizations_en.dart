@@ -223,6 +223,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productPriceInvalid => 'Enter a valid price.';
 
   @override
+  String productPricePreview(Object value) {
+    return 'Preview: $value';
+  }
+
+  @override
+  String get productStrategyTitle => 'Strategy tags';
+
+  @override
+  String get productStrategyPromo => 'Promotion';
+
+  @override
+  String get productStrategySeason => 'Seasonal';
+
+  @override
+  String get productStrategyCost => 'Cost update';
+
+  @override
+  String get productStrategyCompetition => 'Competition';
+
+  @override
+  String get productSuggestedPriceTitle => 'Suggested price';
+
+  @override
+  String get productSuggestedPriceSubtitle => 'Based on recent product sales.';
+
+  @override
+  String get productSuggestedPriceApply => 'Apply suggestion';
+
+  @override
+  String get productPriceImpactTitle => 'Change impact';
+
+  @override
+  String get productPriceImpactDelta => 'Delta';
+
+  @override
+  String get productPriceImpactPercent => '%';
+
+  @override
+  String productPriceImpactUnits(Object units) {
+    return 'Estimated impact for $units units';
+  }
+
+  @override
+  String get productPriceHistoryCompactTitle => 'Recent price history';
+
+  @override
+  String get productPriceHistoryCompactEmpty => 'No price changes yet.';
+
+  @override
+  String get productPriceHistoryCompactDelta => 'Change:';
+
+  @override
+  String get productExtremeChangeTitle => 'Large price change';
+
+  @override
+  String productExtremeChangeBody(Object percent, Object strategy) {
+    return 'The change is $percent. Strategy: $strategy. Do you want to continue?';
+  }
+
+  @override
+  String get productDuplicateSuffix => 'copy';
+
+  @override
+  String get productDuplicateSuccess => 'Product duplicated successfully.';
+
+  @override
   String get productUpdatePrice => 'Update price';
 
   @override
@@ -942,4 +1008,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get excelExportFieldRecordedAt => 'Recorded at';
+
+  @override
+  String get excelExportFieldStrategyTags => 'Strategy tags';
 }

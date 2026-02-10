@@ -9,6 +9,7 @@ class ProductPriceHistory extends HiveObject {
     required this.productId,
     required this.price,
     required this.recordedAt,
+    this.strategyTags = const [],
   });
 
   @HiveField(0)
@@ -22,4 +23,7 @@ class ProductPriceHistory extends HiveObject {
 
   @HiveField(3)
   final DateTime recordedAt;
+
+  @HiveField(4, defaultValue: [])
+  final List<String> strategyTags;
 }

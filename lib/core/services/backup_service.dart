@@ -108,6 +108,7 @@ class BackupService {
                   'productId': h.productId,
                   'price': h.price,
                   'recordedAt': h.recordedAt.toIso8601String(),
+                  'strategyTags': h.strategyTags,
                 })
             .toList();
 
@@ -164,6 +165,9 @@ class BackupService {
         productId: h['productId'] as String,
         price: (h['price'] as num).toDouble(),
         recordedAt: DateTime.parse(h['recordedAt'] as String),
+        strategyTags: (h['strategyTags'] as List<dynamic>? ?? const [])
+            .map((e) => e.toString())
+            .toList(),
       );
       await historyBox.put(item.id, item);
     }

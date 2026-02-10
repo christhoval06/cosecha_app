@@ -78,6 +78,42 @@
   "productPriceHint": "189.99",
   "productPriceRequired": "El precio es obligatorio.",
   "productPriceInvalid": "Ingresa un precio válido.",
+  "productPricePreview": "Vista previa: {value}",
+  "@productPricePreview": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "productStrategyTitle": "Etiquetas de estrategia",
+  "productStrategyPromo": "Promocion",
+  "productStrategySeason": "Temporada",
+  "productStrategyCost": "Ajuste costo",
+  "productStrategyCompetition": "Competencia",
+  "productSuggestedPriceTitle": "Precio sugerido",
+  "productSuggestedPriceSubtitle": "Basado en ventas recientes del producto.",
+  "productSuggestedPriceApply": "Aplicar sugerido",
+  "productPriceImpactTitle": "Impacto del cambio",
+  "productPriceImpactDelta": "Delta",
+  "productPriceImpactPercent": "%",
+  "productPriceImpactUnits": "Impacto estimado para {units} unidades",
+  "@productPriceImpactUnits": {
+    "placeholders": {
+      "units": {}
+    }
+  },
+  "productPriceHistoryCompactTitle": "Historial reciente de precio",
+  "productPriceHistoryCompactEmpty": "Aun no hay cambios de precio.",
+  "productPriceHistoryCompactDelta": "Cambio:",
+  "productExtremeChangeTitle": "Cambio de precio elevado",
+  "productExtremeChangeBody": "El cambio es de {percent}. Estrategia: {strategy}. ¿Deseas continuar?",
+  "@productExtremeChangeBody": {
+    "placeholders": {
+      "percent": {},
+      "strategy": {}
+    }
+  },
+  "productDuplicateSuffix": "copia",
+  "productDuplicateSuccess": "Producto duplicado correctamente.",
   "productUpdatePrice": "Actualizar precio",
   "productPricePerformanceTitle": "Rendimiento del precio",
   "productPricePerformanceChart": "Gráfico ({range})",
@@ -355,5 +391,6 @@
   "excelExportFieldChannel": "Canal",
   "excelExportFieldCreatedAt": "Fecha creacion",
   "excelExportFieldPrice": "Precio",
-  "excelExportFieldRecordedAt": "Fecha registro"
+  "excelExportFieldRecordedAt": "Fecha registro",
+  "excelExportFieldStrategyTags": "Etiquetas de estrategia"
 }

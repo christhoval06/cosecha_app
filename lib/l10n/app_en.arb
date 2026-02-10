@@ -78,6 +78,42 @@
   "productPriceHint": "189.99",
   "productPriceRequired": "Price is required.",
   "productPriceInvalid": "Enter a valid price.",
+  "productPricePreview": "Preview: {value}",
+  "@productPricePreview": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "productStrategyTitle": "Strategy tags",
+  "productStrategyPromo": "Promotion",
+  "productStrategySeason": "Seasonal",
+  "productStrategyCost": "Cost update",
+  "productStrategyCompetition": "Competition",
+  "productSuggestedPriceTitle": "Suggested price",
+  "productSuggestedPriceSubtitle": "Based on recent product sales.",
+  "productSuggestedPriceApply": "Apply suggestion",
+  "productPriceImpactTitle": "Change impact",
+  "productPriceImpactDelta": "Delta",
+  "productPriceImpactPercent": "%",
+  "productPriceImpactUnits": "Estimated impact for {units} units",
+  "@productPriceImpactUnits": {
+    "placeholders": {
+      "units": {}
+    }
+  },
+  "productPriceHistoryCompactTitle": "Recent price history",
+  "productPriceHistoryCompactEmpty": "No price changes yet.",
+  "productPriceHistoryCompactDelta": "Change:",
+  "productExtremeChangeTitle": "Large price change",
+  "productExtremeChangeBody": "The change is {percent}. Strategy: {strategy}. Do you want to continue?",
+  "@productExtremeChangeBody": {
+    "placeholders": {
+      "percent": {},
+      "strategy": {}
+    }
+  },
+  "productDuplicateSuffix": "copy",
+  "productDuplicateSuccess": "Product duplicated successfully.",
   "productUpdatePrice": "Update price",
   "productPricePerformanceTitle": "Price performance",
   "productPricePerformanceChart": "Chart ({range})",
@@ -355,5 +391,6 @@
   "excelExportFieldChannel": "Channel",
   "excelExportFieldCreatedAt": "Created at",
   "excelExportFieldPrice": "Price",
-  "excelExportFieldRecordedAt": "Recorded at"
+  "excelExportFieldRecordedAt": "Recorded at",
+  "excelExportFieldStrategyTags": "Strategy tags"
 }

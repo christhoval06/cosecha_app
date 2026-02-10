@@ -224,6 +224,73 @@ class AppLocalizationsEs extends AppLocalizations {
   String get productPriceInvalid => 'Ingresa un precio válido.';
 
   @override
+  String productPricePreview(Object value) {
+    return 'Vista previa: $value';
+  }
+
+  @override
+  String get productStrategyTitle => 'Etiquetas de estrategia';
+
+  @override
+  String get productStrategyPromo => 'Promocion';
+
+  @override
+  String get productStrategySeason => 'Temporada';
+
+  @override
+  String get productStrategyCost => 'Ajuste costo';
+
+  @override
+  String get productStrategyCompetition => 'Competencia';
+
+  @override
+  String get productSuggestedPriceTitle => 'Precio sugerido';
+
+  @override
+  String get productSuggestedPriceSubtitle =>
+      'Basado en ventas recientes del producto.';
+
+  @override
+  String get productSuggestedPriceApply => 'Aplicar sugerido';
+
+  @override
+  String get productPriceImpactTitle => 'Impacto del cambio';
+
+  @override
+  String get productPriceImpactDelta => 'Delta';
+
+  @override
+  String get productPriceImpactPercent => '%';
+
+  @override
+  String productPriceImpactUnits(Object units) {
+    return 'Impacto estimado para $units unidades';
+  }
+
+  @override
+  String get productPriceHistoryCompactTitle => 'Historial reciente de precio';
+
+  @override
+  String get productPriceHistoryCompactEmpty => 'Aun no hay cambios de precio.';
+
+  @override
+  String get productPriceHistoryCompactDelta => 'Cambio:';
+
+  @override
+  String get productExtremeChangeTitle => 'Cambio de precio elevado';
+
+  @override
+  String productExtremeChangeBody(Object percent, Object strategy) {
+    return 'El cambio es de $percent. Estrategia: $strategy. ¿Deseas continuar?';
+  }
+
+  @override
+  String get productDuplicateSuffix => 'copia';
+
+  @override
+  String get productDuplicateSuccess => 'Producto duplicado correctamente.';
+
+  @override
   String get productUpdatePrice => 'Actualizar precio';
 
   @override
@@ -950,4 +1017,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get excelExportFieldRecordedAt => 'Fecha registro';
+
+  @override
+  String get excelExportFieldStrategyTags => 'Etiquetas de estrategia';
 }

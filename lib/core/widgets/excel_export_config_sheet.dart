@@ -207,6 +207,8 @@ String _fieldLabel(AppLocalizations l10n, String model, String field) {
           return l10n.excelExportFieldPrice;
         case 'recordedAt':
           return l10n.excelExportFieldRecordedAt;
+        case 'strategyTags':
+          return l10n.excelExportFieldStrategyTags;
       }
   }
   return field;

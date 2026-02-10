@@ -506,6 +506,126 @@ abstract class AppLocalizations {
   /// **'Ingresa un precio válido.'**
   String get productPriceInvalid;
 
+  /// No description provided for @productPricePreview.
+  ///
+  /// In es, this message translates to:
+  /// **'Vista previa: {value}'**
+  String productPricePreview(Object value);
+
+  /// No description provided for @productStrategyTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Etiquetas de estrategia'**
+  String get productStrategyTitle;
+
+  /// No description provided for @productStrategyPromo.
+  ///
+  /// In es, this message translates to:
+  /// **'Promocion'**
+  String get productStrategyPromo;
+
+  /// No description provided for @productStrategySeason.
+  ///
+  /// In es, this message translates to:
+  /// **'Temporada'**
+  String get productStrategySeason;
+
+  /// No description provided for @productStrategyCost.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajuste costo'**
+  String get productStrategyCost;
+
+  /// No description provided for @productStrategyCompetition.
+  ///
+  /// In es, this message translates to:
+  /// **'Competencia'**
+  String get productStrategyCompetition;
+
+  /// No description provided for @productSuggestedPriceTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Precio sugerido'**
+  String get productSuggestedPriceTitle;
+
+  /// No description provided for @productSuggestedPriceSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Basado en ventas recientes del producto.'**
+  String get productSuggestedPriceSubtitle;
+
+  /// No description provided for @productSuggestedPriceApply.
+  ///
+  /// In es, this message translates to:
+  /// **'Aplicar sugerido'**
+  String get productSuggestedPriceApply;
+
+  /// No description provided for @productPriceImpactTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Impacto del cambio'**
+  String get productPriceImpactTitle;
+
+  /// No description provided for @productPriceImpactDelta.
+  ///
+  /// In es, this message translates to:
+  /// **'Delta'**
+  String get productPriceImpactDelta;
+
+  /// No description provided for @productPriceImpactPercent.
+  ///
+  /// In es, this message translates to:
+  /// **'%'**
+  String get productPriceImpactPercent;
+
+  /// No description provided for @productPriceImpactUnits.
+  ///
+  /// In es, this message translates to:
+  /// **'Impacto estimado para {units} unidades'**
+  String productPriceImpactUnits(Object units);
+
+  /// No description provided for @productPriceHistoryCompactTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial reciente de precio'**
+  String get productPriceHistoryCompactTitle;
+
+  /// No description provided for @productPriceHistoryCompactEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Aun no hay cambios de precio.'**
+  String get productPriceHistoryCompactEmpty;
+
+  /// No description provided for @productPriceHistoryCompactDelta.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambio:'**
+  String get productPriceHistoryCompactDelta;
+
+  /// No description provided for @productExtremeChangeTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Cambio de precio elevado'**
+  String get productExtremeChangeTitle;
+
+  /// No description provided for @productExtremeChangeBody.
+  ///
+  /// In es, this message translates to:
+  /// **'El cambio es de {percent}. Estrategia: {strategy}. ¿Deseas continuar?'**
+  String productExtremeChangeBody(Object percent, Object strategy);
+
+  /// No description provided for @productDuplicateSuffix.
+  ///
+  /// In es, this message translates to:
+  /// **'copia'**
+  String get productDuplicateSuffix;
+
+  /// No description provided for @productDuplicateSuccess.
+  ///
+  /// In es, this message translates to:
+  /// **'Producto duplicado correctamente.'**
+  String get productDuplicateSuccess;
+
   /// No description provided for @productUpdatePrice.
   ///
   /// In es, this message translates to:
@@ -1883,6 +2003,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Fecha registro'**
   String get excelExportFieldRecordedAt;
+
+  /// No description provided for @excelExportFieldStrategyTags.
+  ///
+  /// In es, this message translates to:
+  /// **'Etiquetas de estrategia'**
+  String get excelExportFieldStrategyTags;
 }
 
 class _AppLocalizationsDelegate

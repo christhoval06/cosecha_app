@@ -89,6 +89,7 @@ List<HiveExportModelDef> hiveExportSchema() {
         HiveExportFieldDef(id: 'productId', toCell: _historyProductIdCell),
         HiveExportFieldDef(id: 'price', toCell: _historyPriceCell),
         HiveExportFieldDef(id: 'recordedAt', toCell: _historyRecordedAtCell),
+        HiveExportFieldDef(id: 'strategyTags', toCell: _historyTagsCell),
       ],
     ),
   ];
@@ -134,3 +135,5 @@ CellValue _historyPriceCell(dynamic item) =>
     DoubleCellValue((item as ProductPriceHistory).price);
 CellValue _historyRecordedAtCell(dynamic item) =>
     TextCellValue(formatDateTimeYmdHm((item as ProductPriceHistory).recordedAt));
+CellValue _historyTagsCell(dynamic item) =>
+    TextCellValue((item as ProductPriceHistory).strategyTags.join(', '));
