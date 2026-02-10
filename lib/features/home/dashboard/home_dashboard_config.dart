@@ -1,5 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/constants/app_prefs.dart';
+
 class HomeDashboardConfig {
   const HomeDashboardConfig({
     required this.enabledWidgetIds,
@@ -11,16 +13,13 @@ class HomeDashboardConfig {
 }
 
 class HomeDashboardConfigStore {
-  static const _enabledKey = 'home_dashboard_enabled_widgets';
-  static const _orderKey = 'home_dashboard_order_widgets';
-
   Future<HomeDashboardConfig> load(
     List<String> defaultOrderWidgetIds, {
     List<String>? defaultEnabledWidgetIds,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    final savedEnabled = prefs.getStringList(_enabledKey);
-    final savedOrder = prefs.getStringList(_orderKey);
+    final savedEnabled = prefs.getStringList(AppPrefs.homeDashboardEnabledWidgets);
+    final savedOrder = prefs.getStringList(AppPrefs.homeDashboardOrderWidgets);
 
     final enabledDefaults = defaultEnabledWidgetIds ?? defaultOrderWidgetIds;
     final ordered = _sanitizeOrder(
@@ -37,8 +36,14 @@ class HomeDashboardConfigStore {
 
   Future<void> save(HomeDashboardConfig config) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(_enabledKey, config.enabledWidgetIds);
-    await prefs.setStringList(_orderKey, config.orderedWidgetIds);
+    await prefs.setStringList(
+      AppPrefs.homeDashboardEnabledWidgets,
+      config.enabledWidgetIds,
+    );
+    await prefs.setStringList(
+      AppPrefs.homeDashboardOrderWidgets,
+      config.orderedWidgetIds,
+    );
   }
 
   List<String> _sanitizeOrder(List<String> source, List<String> defaults) {

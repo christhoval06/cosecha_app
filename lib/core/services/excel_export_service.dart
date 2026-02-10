@@ -6,44 +6,29 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/hive/boxes.dart';
-import '../../data/models/product.dart';
-import '../../data/models/product_price_history.dart';
-import '../../data/models/sale_transaction.dart';
-import '../utils/date_formatters.dart';
+import '../constants/app_prefs.dart';
+import '../../data/hive/hive_export_schema.dart';
 
 class ExcelExportService {
   ExcelExportService._();
 
-  static const modelProducts = 'products';
-  static const modelSales = 'sales';
-  static const modelPriceHistory = 'price_history';
+  static const modelProducts = HiveExportModelIds.products;
+  static const modelSales = HiveExportModelIds.sales;
+  static const modelPriceHistory = HiveExportModelIds.priceHistory;
 
-  static const List<String> models = [
-    modelProducts,
-    modelSales,
-    modelPriceHistory,
-  ];
+  static final List<HiveExportModelDef> _schema = hiveExportSchema();
 
-  static const Map<String, List<String>> modelFields = {
-    modelProducts: ['id', 'name', 'imageUrl', 'currentPrice'],
-    modelSales: [
-      'id',
-      'productId',
-      'productName',
-      'amount',
-      'quantity',
-      'channel',
-      'createdAt',
-    ],
-    modelPriceHistory: ['id', 'productId', 'price', 'recordedAt'],
-  };
+  static List<String> get models =>
+      _schema.map((model) => model.id).toList(growable: false);
 
-  static const _prefsKey = 'excel_export_config_v1';
+  static Map<String, List<String>> get modelFields => {
+        for (final model in _schema)
+          model.id: model.fields.map((field) => field.id).toList(growable: false),
+      };
 
   static Future<ExcelExportConfig> loadConfig() async {
     final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_prefsKey);
+    final raw = prefs.getString(AppPrefs.excelExportConfig);
     if (raw == null || raw.isEmpty) return ExcelExportConfig.all();
     try {
       final decoded = jsonDecode(raw) as Map<String, dynamic>;
@@ -55,7 +40,10 @@ class ExcelExportService {
 
   static Future<void> saveConfig(ExcelExportConfig config) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_prefsKey, jsonEncode(config.sanitize().toJson()));
+    await prefs.setString(
+      AppPrefs.excelExportConfig,
+      jsonEncode(config.sanitize().toJson()),
+    );
   }
 
   static Future<String> exportToExcel({
@@ -64,42 +52,22 @@ class ExcelExportService {
     final effectiveConfig = (config ?? await loadConfig()).sanitize();
     final excel = Excel.createExcel();
 
-    if (effectiveConfig.enabledModels.contains(modelProducts)) {
-      final selectedFields = effectiveConfig.fieldsFor(modelProducts);
-      final sheet = excel['Products'];
+    for (final model in _schema) {
+      if (!effectiveConfig.enabledModels.contains(model.id)) continue;
+      final selectedFields = effectiveConfig.fieldsFor(model.id);
+      if (selectedFields.isEmpty) continue;
+
+      final sheet = excel[model.sheetName];
       sheet.appendRow(selectedFields.map(TextCellValue.new).toList());
 
-      final products = Hive.box<Product>(HiveBoxes.products).values.toList();
-      for (final product in products) {
+      final fieldDefs = {
+        for (final field in model.fields) field.id: field,
+      };
+      final rows = Hive.box(model.boxName).values.toList();
+      for (final row in rows) {
         sheet.appendRow([
-          for (final field in selectedFields) _productCell(field, product),
-        ]);
-      }
-    }
-
-    if (effectiveConfig.enabledModels.contains(modelSales)) {
-      final selectedFields = effectiveConfig.fieldsFor(modelSales);
-      final sheet = excel['Sales'];
-      sheet.appendRow(selectedFields.map(TextCellValue.new).toList());
-
-      final sales = Hive.box<SaleTransaction>(HiveBoxes.transactions).values.toList();
-      for (final sale in sales) {
-        sheet.appendRow([
-          for (final field in selectedFields) _saleCell(field, sale),
-        ]);
-      }
-    }
-
-    if (effectiveConfig.enabledModels.contains(modelPriceHistory)) {
-      final selectedFields = effectiveConfig.fieldsFor(modelPriceHistory);
-      final sheet = excel['PriceHistory'];
-      sheet.appendRow(selectedFields.map(TextCellValue.new).toList());
-
-      final history =
-          Hive.box<ProductPriceHistory>(HiveBoxes.productPriceHistory).values.toList();
-      for (final item in history) {
-        sheet.appendRow([
-          for (final field in selectedFields) _priceHistoryCell(field, item),
+          for (final fieldId in selectedFields)
+            (fieldDefs[fieldId]?.toCell(row) ?? TextCellValue('')),
         ]);
       }
     }
@@ -111,57 +79,6 @@ class ExcelExportService {
     file.createSync(recursive: true);
     file.writeAsBytesSync(excel.encode()!);
     return file.path;
-  }
-
-  static CellValue _productCell(String field, Product product) {
-    switch (field) {
-      case 'id':
-        return TextCellValue(product.id);
-      case 'name':
-        return TextCellValue(product.name);
-      case 'imageUrl':
-        return TextCellValue(product.imageUrl);
-      case 'currentPrice':
-        return DoubleCellValue(product.currentPrice);
-      default:
-        return TextCellValue('');
-    }
-  }
-
-  static CellValue _saleCell(String field, SaleTransaction sale) {
-    switch (field) {
-      case 'id':
-        return TextCellValue(sale.id);
-      case 'productId':
-        return TextCellValue(sale.productId);
-      case 'productName':
-        return TextCellValue(sale.productName);
-      case 'amount':
-        return DoubleCellValue(sale.amount);
-      case 'quantity':
-        return IntCellValue(sale.quantity);
-      case 'channel':
-        return TextCellValue(sale.channel);
-      case 'createdAt':
-        return TextCellValue(formatDateTimeYmdHm(sale.createdAt));
-      default:
-        return TextCellValue('');
-    }
-  }
-
-  static CellValue _priceHistoryCell(String field, ProductPriceHistory item) {
-    switch (field) {
-      case 'id':
-        return TextCellValue(item.id);
-      case 'productId':
-        return TextCellValue(item.productId);
-      case 'price':
-        return DoubleCellValue(item.price);
-      case 'recordedAt':
-        return TextCellValue(formatDateTimeYmdHm(item.recordedAt));
-      default:
-        return TextCellValue('');
-    }
   }
 }
 

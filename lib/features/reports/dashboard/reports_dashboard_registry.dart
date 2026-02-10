@@ -31,11 +31,6 @@ class ReportsDashboardWidgetIds {
 List<ReportsDashboardWidgetDef> reportsDashboardRegistry() {
   return const [
     ReportsDashboardWidgetDef(
-      id: ReportsDashboardWidgetIds.exportTools,
-      title: _exportToolsTitle,
-      builder: ReportsExportToolsPanel.new,
-    ),
-    ReportsDashboardWidgetDef(
       id: ReportsDashboardWidgetIds.summary,
       title: _summaryTitle,
       builder: ReportsSummaryPanel.new,
@@ -75,15 +70,27 @@ List<ReportsDashboardWidgetDef> reportsDashboardRegistry() {
       title: _bottomProductsTitle,
       builder: ReportsBottomProductsPanel.new,
     ),
+    ReportsDashboardWidgetDef(
+      id: ReportsDashboardWidgetIds.exportTools,
+      title: _exportToolsTitle,
+      builder: ReportsExportToolsPanel.new,
+    ),
   ];
 }
 
-String _exportToolsTitle(AppLocalizations l10n) => l10n.reportsWidgetExportTools;
+String _exportToolsTitle(AppLocalizations l10n) =>
+    l10n.reportsWidgetExportTools;
 String _summaryTitle(AppLocalizations l10n) => l10n.reportsWidgetSummary;
-String _periodComparisonTitle(AppLocalizations l10n) => l10n.reportsWidgetPeriodComparison;
-String _totalSalesTrendTitle(AppLocalizations l10n) => l10n.reportsWidgetTotalSalesTrend;
+String _periodComparisonTitle(AppLocalizations l10n) =>
+    l10n.reportsWidgetPeriodComparison;
+String _totalSalesTrendTitle(AppLocalizations l10n) =>
+    l10n.reportsWidgetTotalSalesTrend;
 String _channelMixTitle(AppLocalizations l10n) => l10n.reportsWidgetChannelMix;
-String _monthlySalesTitle(AppLocalizations l10n) => l10n.reportsWidgetMonthlySales;
-String _dailyHeatmapTitle(AppLocalizations l10n) => l10n.reportsWidgetDailyHeatmap;
-String _topProductsTitle(AppLocalizations l10n) => l10n.reportsWidgetTopProducts;
-String _bottomProductsTitle(AppLocalizations l10n) => l10n.reportsWidgetBottomProducts;
+String _monthlySalesTitle(AppLocalizations l10n) =>
+    l10n.reportsWidgetMonthlySales;
+String _dailyHeatmapTitle(AppLocalizations l10n) =>
+    l10n.reportsWidgetDailyHeatmap;
+String _topProductsTitle(AppLocalizations l10n) =>
+    l10n.reportsWidgetTopProducts;
+String _bottomProductsTitle(AppLocalizations l10n) =>
+    l10n.reportsWidgetBottomProducts;

@@ -1,5 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/constants/app_prefs.dart';
+
 class ReportsDashboardConfig {
   const ReportsDashboardConfig({
     required this.enabledWidgetIds,
@@ -21,16 +23,13 @@ class ReportsDashboardConfig {
 }
 
 class ReportsDashboardConfigStore {
-  static const _enabledKey = 'reports_dashboard_enabled_widgets';
-  static const _orderKey = 'reports_dashboard_order_widgets';
-
   Future<ReportsDashboardConfig> load(
     List<String> defaultOrderWidgetIds, {
     List<String>? defaultEnabledWidgetIds,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    final savedEnabled = prefs.getStringList(_enabledKey);
-    final savedOrder = prefs.getStringList(_orderKey);
+    final savedEnabled = prefs.getStringList(AppPrefs.reportsDashboardEnabledWidgets);
+    final savedOrder = prefs.getStringList(AppPrefs.reportsDashboardOrderWidgets);
 
     final enabledDefaults = defaultEnabledWidgetIds ?? defaultOrderWidgetIds;
     final ordered = _sanitizeOrder(
@@ -47,8 +46,14 @@ class ReportsDashboardConfigStore {
 
   Future<void> save(ReportsDashboardConfig config) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(_enabledKey, config.enabledWidgetIds);
-    await prefs.setStringList(_orderKey, config.orderedWidgetIds);
+    await prefs.setStringList(
+      AppPrefs.reportsDashboardEnabledWidgets,
+      config.enabledWidgetIds,
+    );
+    await prefs.setStringList(
+      AppPrefs.reportsDashboardOrderWidgets,
+      config.orderedWidgetIds,
+    );
   }
 
   List<String> _sanitizeOrder(List<String> source, List<String> defaults) {
