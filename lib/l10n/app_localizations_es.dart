@@ -369,6 +369,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get salesChannelWholesale => 'Mayorista';
 
   @override
+  String get salesFiltersAll => 'Todos';
+
+  @override
+  String get salesFiltersSort => 'Orden';
+
+  @override
+  String get salesSortLatest => 'Más recientes';
+
+  @override
+  String get salesSortHighestAmount => 'Mayor monto';
+
+  @override
+  String get salesSortHighestQuantity => 'Mayor cantidad';
+
+  @override
+  String get salesFiltersClear => 'Limpiar';
+
+  @override
+  String get salesFiltersApply => 'Aplicar';
+
+  @override
   String get salesSave => 'Guardar venta';
 
   @override

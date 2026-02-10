@@ -140,6 +140,13 @@
   "salesChannelRequired": "Select a channel.",
   "salesChannelRetail": "Retail",
   "salesChannelWholesale": "Wholesale",
+  "salesFiltersAll": "All",
+  "salesFiltersSort": "Sort",
+  "salesSortLatest": "Most recent",
+  "salesSortHighestAmount": "Highest amount",
+  "salesSortHighestQuantity": "Highest quantity",
+  "salesFiltersClear": "Clear",
+  "salesFiltersApply": "Apply",
   "salesSave": "Save sale",
   "salesSaving": "Saving...",
   "salesSaveError": "Failed to save sale"

@@ -9,6 +9,8 @@ import '../../data/models/sale_transaction.dart';
 import '../../data/repositories/sales_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/constants/app_routes.dart';
+import '../products/widgets/segment_tabs.dart';
+import 'widgets/sales_history_filters_sheet.dart';
 
 class SalesHistoryScreen extends StatefulWidget {
   const SalesHistoryScreen({super.key});
@@ -20,6 +22,9 @@ class SalesHistoryScreen extends StatefulWidget {
 class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
   String _range = '1D';
   final _repository = SalesRepository();
+  SalesHistorySort _sort = SalesHistorySort.latest;
+  String? _channelFilter;
+  String? _productIdFilter;
 
   DateTime _rangeStart(DateTime now) {
     switch (_range) {
@@ -45,9 +50,35 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
       appBar: AppBar(
         title: Text(l10n.salesHistoryTitle),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.filter_list),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                onPressed: _openFilters,
+                icon: const Icon(Icons.filter_list),
+              ),
+              if (_activeFilterCount > 0)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      _activeFilterCount.toString(),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: colorScheme.onPrimary,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
           IconButton(
             onPressed: _seedDemoData,
@@ -64,17 +95,11 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: SegmentedButton<String>(
-                segments: [
-                  ButtonSegment(value: '1H', label: Text(l10n.salesRange1H)),
-                  ButtonSegment(value: '1D', label: Text(l10n.salesRange1D)),
-                  ButtonSegment(value: '1W', label: Text(l10n.salesRange1W)),
-                  ButtonSegment(value: '1M', label: Text(l10n.salesRange1M)),
-                ],
-                selected: {_range},
-                onSelectionChanged: (values) {
-                  setState(() => _range = values.first);
-                },
+              child: SegmentTabs(
+                value: _range,
+                options: const ['1H', '1D', '1W', '1M'],
+                labelBuilder: (option) => _rangeLabel(l10n, option),
+                onChanged: (value) => setState(() => _range = value),
               ),
             ),
             Expanded(
@@ -87,10 +112,10 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                   final start = _rangeStart(now);
                   final items = box.values
                       .where((item) => item.createdAt.isAfter(start))
-                      .toList()
-                    ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+                      .toList();
+                  final filteredItems = _applyFilters(items);
 
-                  if (items.isEmpty) {
+                  if (filteredItems.isEmpty) {
                     return ListEmptyState(
                       icon: Icons.receipt_long,
                       title: l10n.salesEmptyTitle,
@@ -101,7 +126,7 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
                     );
                   }
 
-                  final grouped = _groupByDay(items);
+                  final grouped = _groupByDay(filteredItems);
                   return ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: grouped.length,
@@ -137,6 +162,83 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
 
   bool _sameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  String _rangeLabel(AppLocalizations l10n, String value) {
+    switch (value) {
+      case '1H':
+        return l10n.salesRange1H;
+      case '1D':
+        return l10n.salesRange1D;
+      case '1W':
+        return l10n.salesRange1W;
+      case '1M':
+        return l10n.salesRange1M;
+      default:
+        return value;
+    }
+  }
+
+  int get _activeFilterCount {
+    var count = 0;
+    if (_channelFilter != null) count++;
+    if (_productIdFilter != null) count++;
+    if (_sort != SalesHistorySort.latest) count++;
+    return count;
+  }
+
+  List<SaleTransaction> _applyFilters(List<SaleTransaction> items) {
+    var filtered = items.where((item) {
+      if (_channelFilter != null &&
+          SalesChannels.normalize(item.channel) != _channelFilter) {
+        return false;
+      }
+      if (_productIdFilter != null && item.productId != _productIdFilter) {
+        return false;
+      }
+      return true;
+    }).toList();
+
+    switch (_sort) {
+      case SalesHistorySort.latest:
+        filtered.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      case SalesHistorySort.highestAmount:
+        filtered.sort((a, b) => b.amount.compareTo(a.amount));
+      case SalesHistorySort.highestQuantity:
+        filtered.sort((a, b) => b.quantity.compareTo(a.quantity));
+    }
+    return filtered;
+  }
+
+  Future<void> _openFilters() async {
+    final allItems = Hive.box<SaleTransaction>(HiveBoxes.transactions).values;
+    final products = <ProductFilterOption>[
+      for (final entry in {
+        for (final item in allItems)
+          item.productId: ProductFilterOption(
+            productId: item.productId,
+            productName: item.productName,
+          ),
+      }.values)
+        entry,
+    ]..sort((a, b) => a.productName.compareTo(b.productName));
+
+    final values = await showSalesHistoryFiltersSheet(
+      context: context,
+      initialChannel: _channelFilter,
+      initialProductId: _productIdFilter,
+      initialSort: _sort,
+      products: products,
+    );
+
+    if (values == null) return;
+
+    if (!mounted) return;
+    setState(() {
+      _channelFilter = values.channel;
+      _productIdFilter = values.productId;
+      _sort = values.sort;
+    });
   }
 
   List<_DayGroup> _groupByDay(List<SaleTransaction> items) {
@@ -264,7 +366,7 @@ class _SaleTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: shadowColor.withOpacity(0.04),
+            color: shadowColor.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -287,7 +389,7 @@ class _SaleTile extends StatelessWidget {
                         .textTheme
                         .labelSmall
                         ?.copyWith(
-                            color: colorScheme.onSurface.withOpacity(0.6)),
+                            color: colorScheme.onSurface.withValues(alpha: 0.6)),
                   ),
                 ],
               ),
@@ -309,7 +411,7 @@ class _SaleTile extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall
-                    ?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                    ?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
             ],
           ),

@@ -788,6 +788,48 @@ abstract class AppLocalizations {
   /// **'Mayorista'**
   String get salesChannelWholesale;
 
+  /// No description provided for @salesFiltersAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Todos'**
+  String get salesFiltersAll;
+
+  /// No description provided for @salesFiltersSort.
+  ///
+  /// In es, this message translates to:
+  /// **'Orden'**
+  String get salesFiltersSort;
+
+  /// No description provided for @salesSortLatest.
+  ///
+  /// In es, this message translates to:
+  /// **'Más recientes'**
+  String get salesSortLatest;
+
+  /// No description provided for @salesSortHighestAmount.
+  ///
+  /// In es, this message translates to:
+  /// **'Mayor monto'**
+  String get salesSortHighestAmount;
+
+  /// No description provided for @salesSortHighestQuantity.
+  ///
+  /// In es, this message translates to:
+  /// **'Mayor cantidad'**
+  String get salesSortHighestQuantity;
+
+  /// No description provided for @salesFiltersClear.
+  ///
+  /// In es, this message translates to:
+  /// **'Limpiar'**
+  String get salesFiltersClear;
+
+  /// No description provided for @salesFiltersApply.
+  ///
+  /// In es, this message translates to:
+  /// **'Aplicar'**
+  String get salesFiltersApply;
+
   /// No description provided for @salesSave.
   ///
   /// In es, this message translates to:

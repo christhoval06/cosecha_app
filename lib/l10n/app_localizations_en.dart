@@ -367,6 +367,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get salesChannelWholesale => 'Wholesale';
 
   @override
+  String get salesFiltersAll => 'All';
+
+  @override
+  String get salesFiltersSort => 'Sort';
+
+  @override
+  String get salesSortLatest => 'Most recent';
+
+  @override
+  String get salesSortHighestAmount => 'Highest amount';
+
+  @override
+  String get salesSortHighestQuantity => 'Highest quantity';
+
+  @override
+  String get salesFiltersClear => 'Clear';
+
+  @override
+  String get salesFiltersApply => 'Apply';
+
+  @override
   String get salesSave => 'Save sale';
 
   @override

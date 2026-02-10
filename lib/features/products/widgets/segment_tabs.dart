@@ -6,11 +6,13 @@ class SegmentTabs extends StatelessWidget {
     required this.value,
     required this.onChanged,
     required this.options,
+    this.labelBuilder,
   });
 
   final String value;
   final ValueChanged<String> onChanged;
   final List<String> options;
+  final String Function(String option)? labelBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class SegmentTabs extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: options.map((option) {
@@ -34,16 +36,16 @@ class SegmentTabs extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isActive
                       ? colorScheme.primary
-                      : colorScheme.surface.withOpacity(0),
+                      : colorScheme.surface.withValues(alpha: 0),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  option,
+                  labelBuilder?.call(option) ?? option,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         color: isActive
                             ? colorScheme.onPrimary
-                            : colorScheme.onSurface.withOpacity(0.6),
+                            : colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                 ),
               ),
