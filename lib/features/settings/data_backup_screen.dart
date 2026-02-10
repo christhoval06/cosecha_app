@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/constants/app_prefs.dart';
 import '../../core/services/backup_service.dart';
 import '../../core/services/excel_export_service.dart';
 import '../../core/services/app_services.dart';
@@ -16,8 +19,22 @@ import '../../data/models/product_price_history.dart';
 import '../../data/models/sale_transaction.dart';
 import '../../l10n/app_localizations.dart';
 
-class DataBackupScreen extends StatelessWidget {
+class DataBackupScreen extends StatefulWidget {
   const DataBackupScreen({super.key});
+
+  @override
+  State<DataBackupScreen> createState() => _DataBackupScreenState();
+}
+
+class _DataBackupScreenState extends State<DataBackupScreen> {
+  int _lastBackupRefreshTick = 0;
+
+  void _refreshLastBackup() {
+    if (!mounted) return;
+    setState(() {
+      _lastBackupRefreshTick++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +72,8 @@ class DataBackupScreen extends StatelessWidget {
                 HiveBoxes.productPriceHistory,
               ).listenable(),
             ),
+            const SizedBox(height: 12),
+            _LastBackupCard(refreshTick: _lastBackupRefreshTick),
             const SizedBox(height: 24),
             Text(
               l10n.dataBackupActionsTitle,
@@ -91,7 +110,11 @@ class DataBackupScreen extends StatelessWidget {
                   foregroundColor: colorScheme.onSecondaryContainer,
                 ),
                 onPressed: () {
-                  _exportEncrypted(context, l10n);
+                  _exportEncrypted(
+                    context,
+                    l10n,
+                    onBackupCompleted: _refreshLastBackup,
+                  );
                 },
                 icon: const Icon(Icons.lock_outline),
                 label: Text(l10n.dataBackupExportEncrypted),
@@ -111,6 +134,61 @@ class DataBackupScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _LastBackupCard extends StatelessWidget {
+  const _LastBackupCard({required this.refreshTick});
+
+  final int refreshTick;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    final shadowColor = Theme.of(context).shadowColor;
+
+    return FutureBuilder<int?>(
+      future: _readLastBackupAt(),
+      key: ValueKey(refreshTick),
+      builder: (context, snapshot) {
+        final millis = snapshot.data;
+        final value = millis == null
+            ? l10n.dataBackupLastBackupNever
+            : _formatLastBackup(context, millis);
+
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: shadowColor.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.dataBackupLastBackupTitle,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              Text(
+                value,
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium?.copyWith(color: colorScheme.primary),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -204,8 +282,9 @@ Future<void> _configureExcelExport(BuildContext context) async {
 
 Future<void> _exportEncrypted(
   BuildContext context,
-  AppLocalizations l10n,
-) async {
+  AppLocalizations l10n, {
+  VoidCallback? onBackupCompleted,
+}) async {
   final password = await _askPassword(context, l10n);
   if (!context.mounted) return;
   if (password == null || password.isEmpty) return;
@@ -225,6 +304,7 @@ Future<void> _exportEncrypted(
     );
   }
   await AppServices.backupReminders.onBackupCompleted();
+  onBackupCompleted?.call();
 }
 
 Future<void> _restoreBackup(BuildContext context, AppLocalizations l10n) async {
@@ -354,4 +434,15 @@ Rect _shareOrigin(BuildContext context) {
   if (box == null) return Rect.zero;
   final origin = box.localToGlobal(Offset.zero) & box.size;
   return origin;
+}
+
+Future<int?> _readLastBackupAt() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getInt(AppPrefs.backupLastCompletedAtMs);
+}
+
+String _formatLastBackup(BuildContext context, int millis) {
+  final locale = Localizations.localeOf(context).toLanguageTag();
+  final date = DateTime.fromMillisecondsSinceEpoch(millis);
+  return DateFormat.yMMMd(locale).add_jm().format(date);
 }

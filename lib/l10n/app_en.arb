@@ -300,6 +300,8 @@
   "dataBackupProducts": "Products",
   "dataBackupSales": "Sales",
   "dataBackupPriceHistory": "Price history",
+  "dataBackupLastBackupTitle": "Last backup",
+  "dataBackupLastBackupNever": "Never",
   "dataBackupActionsTitle": "Actions",
   "dataBackupExportExcel": "Export to Excel",
   "dataBackupExportConfig": "Configure Excel export",

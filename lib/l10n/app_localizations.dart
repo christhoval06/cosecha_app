@@ -1458,6 +1458,18 @@ abstract class AppLocalizations {
   /// **'Historial de precios'**
   String get dataBackupPriceHistory;
 
+  /// No description provided for @dataBackupLastBackupTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Último respaldo'**
+  String get dataBackupLastBackupTitle;
+
+  /// No description provided for @dataBackupLastBackupNever.
+  ///
+  /// In es, this message translates to:
+  /// **'Nunca'**
+  String get dataBackupLastBackupNever;
+
   /// No description provided for @dataBackupActionsTitle.
   ///
   /// In es, this message translates to:

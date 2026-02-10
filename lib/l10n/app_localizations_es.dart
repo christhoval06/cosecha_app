@@ -737,6 +737,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dataBackupPriceHistory => 'Historial de precios';
 
   @override
+  String get dataBackupLastBackupTitle => 'Último respaldo';
+
+  @override
+  String get dataBackupLastBackupNever => 'Nunca';
+
+  @override
   String get dataBackupActionsTitle => 'Acciones';
 
   @override
