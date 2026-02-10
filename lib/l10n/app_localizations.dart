@@ -1046,6 +1046,18 @@ abstract class AppLocalizations {
   /// **'Acerca de'**
   String get settingsSectionAbout;
 
+  /// No description provided for @settingsOriginTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuestra historia'**
+  String get settingsOriginTitle;
+
+  /// No description provided for @settingsOriginBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta app nació al ver a mi amigo y socio Michael “Micha” anotar cada venta en una libreta. Quise ayudarlo a tener el control de su negocio con una herramienta simple, rápida y hecha a su medida. Cosecha es ese apoyo diario para vender con claridad y decidir con confianza.'**
+  String get settingsOriginBody;
+
   /// No description provided for @settingsDeveloperTitle.
   ///
   /// In es, this message translates to:

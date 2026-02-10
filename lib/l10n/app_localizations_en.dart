@@ -499,6 +499,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionAbout => 'About';
 
   @override
+  String get settingsOriginTitle => 'Our story';
+
+  @override
+  String get settingsOriginBody =>
+      'This app started when I saw my friend and partner Michael “Micha” writing every sale in a notebook. I wanted to help him take control of his business with a simple, fast tool built for his day-to-day. Cosecha is that daily support to sell with clarity and decide with confidence.';
+
+  @override
   String get settingsDeveloperTitle => 'Developer';
 
   @override

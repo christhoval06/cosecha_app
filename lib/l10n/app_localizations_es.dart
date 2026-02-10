@@ -502,6 +502,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsSectionAbout => 'Acerca de';
 
   @override
+  String get settingsOriginTitle => 'Nuestra historia';
+
+  @override
+  String get settingsOriginBody =>
+      'Esta app nació al ver a mi amigo y socio Michael “Micha” anotar cada venta en una libreta. Quise ayudarlo a tener el control de su negocio con una herramienta simple, rápida y hecha a su medida. Cosecha es ese apoyo diario para vender con claridad y decidir con confianza.';
+
+  @override
   String get settingsDeveloperTitle => 'Desarrollador';
 
   @override
