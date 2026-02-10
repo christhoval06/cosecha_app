@@ -59,7 +59,7 @@ class ReportsExportToolsPanel extends StatelessWidget {
                     await ExcelExportService.saveConfig(updated);
                   },
                   icon: const Icon(Icons.tune),
-                  label: Text(l10n.dataBackupExportConfig),
+                  label: Text(l10n.reportsExportConfigure),
                 ),
               ),
               const SizedBox(width: 12),
@@ -76,15 +76,15 @@ class ReportsExportToolsPanel extends StatelessWidget {
                         [XFile(path)],
                         sharePositionOrigin: _shareOrigin(context),
                       );
-                    } catch (_) {
+                    } catch (error) {
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(l10n.errorTitle)),
+                        SnackBar(content: Text('${l10n.errorTitle}: $error')),
                       );
                     }
                   },
                   icon: const Icon(Icons.table_view),
-                  label: Text(l10n.dataBackupExportExcel),
+                  label: Text(l10n.reportsExportRun),
                 ),
               ),
             ],

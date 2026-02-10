@@ -17,7 +17,6 @@ class ReportsDashboardWidgetDef {
 }
 
 class ReportsDashboardWidgetIds {
-  static const exportTools = 'export_tools';
   static const summary = 'summary';
   static const periodComparison = 'period_comparison';
   static const totalSalesTrend = 'total_sales_trend';
@@ -26,6 +25,7 @@ class ReportsDashboardWidgetIds {
   static const dailyHeatmap = 'daily_heatmap';
   static const topProducts = 'top_products';
   static const bottomProducts = 'bottom_products';
+  static const exportTools = 'export_tools';
 }
 
 List<ReportsDashboardWidgetDef> reportsDashboardRegistry() {

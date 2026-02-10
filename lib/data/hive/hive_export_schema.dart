@@ -1,5 +1,5 @@
 import 'package:excel/excel.dart';
-
+import 'package:hive/hive.dart';
 import '../../core/utils/date_formatters.dart';
 import '../models/product.dart';
 import '../models/product_price_history.dart';
@@ -23,25 +23,28 @@ class HiveExportFieldDef {
 }
 
 class HiveExportModelDef {
-  const HiveExportModelDef({
+  HiveExportModelDef({
     required this.id,
     required this.boxName,
     required this.sheetName,
     required this.fields,
+    required this.rowsReader,
   });
 
   final String id;
   final String boxName;
   final String sheetName;
   final List<HiveExportFieldDef> fields;
+  final List<dynamic> Function() rowsReader;
 }
 
 List<HiveExportModelDef> hiveExportSchema() {
-  return const [
+  return [
     HiveExportModelDef(
       id: HiveExportModelIds.products,
       boxName: HiveBoxes.products,
       sheetName: 'Products',
+      rowsReader: _productRows,
       fields: [
         HiveExportFieldDef(
           id: 'id',
@@ -65,6 +68,7 @@ List<HiveExportModelDef> hiveExportSchema() {
       id: HiveExportModelIds.sales,
       boxName: HiveBoxes.transactions,
       sheetName: 'Sales',
+      rowsReader: _saleRows,
       fields: [
         HiveExportFieldDef(id: 'id', toCell: _saleIdCell),
         HiveExportFieldDef(id: 'productId', toCell: _saleProductIdCell),
@@ -79,6 +83,7 @@ List<HiveExportModelDef> hiveExportSchema() {
       id: HiveExportModelIds.priceHistory,
       boxName: HiveBoxes.productPriceHistory,
       sheetName: 'PriceHistory',
+      rowsReader: _historyRows,
       fields: [
         HiveExportFieldDef(id: 'id', toCell: _historyIdCell),
         HiveExportFieldDef(id: 'productId', toCell: _historyProductIdCell),
@@ -88,6 +93,14 @@ List<HiveExportModelDef> hiveExportSchema() {
     ),
   ];
 }
+
+List<dynamic> _productRows() => Hive.box<Product>(HiveBoxes.products).values.toList();
+List<dynamic> _saleRows() =>
+    Hive.box<SaleTransaction>(HiveBoxes.transactions).values.toList();
+List<dynamic> _historyRows() => Hive
+    .box<ProductPriceHistory>(HiveBoxes.productPriceHistory)
+    .values
+    .toList();
 
 CellValue _productIdCell(dynamic item) =>
     TextCellValue((item as Product).id);

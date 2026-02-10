@@ -1698,6 +1698,18 @@ abstract class AppLocalizations {
   /// **'Configura campos y exporta los datos actuales'**
   String get reportsExportToolsSubtitle;
 
+  /// No description provided for @reportsExportConfigure.
+  ///
+  /// In es, this message translates to:
+  /// **'Configurar'**
+  String get reportsExportConfigure;
+
+  /// No description provided for @reportsExportRun.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportar'**
+  String get reportsExportRun;
+
   /// No description provided for @reportsFilterAmountRange.
   ///
   /// In es, this message translates to:

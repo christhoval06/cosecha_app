@@ -51,25 +51,54 @@ class ExcelExportService {
   }) async {
     final effectiveConfig = (config ?? await loadConfig()).sanitize();
     final excel = Excel.createExcel();
+    final errors = <String>[];
+    var exportedSheets = 0;
 
     for (final model in _schema) {
       if (!effectiveConfig.enabledModels.contains(model.id)) continue;
       final selectedFields = effectiveConfig.fieldsFor(model.id);
       if (selectedFields.isEmpty) continue;
 
-      final sheet = excel[model.sheetName];
-      sheet.appendRow(selectedFields.map(TextCellValue.new).toList());
+      try {
+        if (!Hive.isBoxOpen(model.boxName)) {
+          errors.add('${model.id}: box_not_open');
+          continue;
+        }
 
-      final fieldDefs = {
-        for (final field in model.fields) field.id: field,
-      };
-      final rows = Hive.box(model.boxName).values.toList();
-      for (final row in rows) {
-        sheet.appendRow([
-          for (final fieldId in selectedFields)
-            (fieldDefs[fieldId]?.toCell(row) ?? TextCellValue('')),
-        ]);
+        final sheet = excel[model.sheetName];
+        sheet.appendRow(selectedFields.map(TextCellValue.new).toList());
+
+        final fieldDefs = {
+          for (final field in model.fields) field.id: field,
+        };
+        final rows = model.rowsReader();
+        var modelHasError = false;
+        for (final row in rows) {
+          try {
+            sheet.appendRow([
+              for (final fieldId in selectedFields)
+                (fieldDefs[fieldId]?.toCell(row) ?? TextCellValue('')),
+            ]);
+          } catch (error) {
+            modelHasError = true;
+            errors.add('${model.id}: row_map_failed: $error');
+          }
+        }
+
+        if (!modelHasError) {
+          exportedSheets++;
+        }
+      } catch (error) {
+        errors.add('${model.id}: $error');
       }
+    }
+
+    if (exportedSheets == 0) {
+      final reason = errors.isEmpty ? 'no_models_selected' : errors.join(' | ');
+      throw StateError('Excel export failed: $reason');
+    }
+    if (errors.isNotEmpty) {
+      throw StateError('Excel export failed: ${errors.join(' | ')}');
     }
 
     final appDir = await getApplicationDocumentsDirectory();

@@ -324,6 +324,8 @@
   "reportsChannelOther": "Otros",
   "reportsExportToolsTitle": "Exportacion Excel",
   "reportsExportToolsSubtitle": "Configura campos y exporta los datos actuales",
+  "reportsExportConfigure": "Configurar",
+  "reportsExportRun": "Exportar",
   "reportsFilterAmountRange": "Rango de monto",
   "reportsFilterMinAmount": "Monto minimo",
   "reportsFilterMaxAmount": "Monto maximo",

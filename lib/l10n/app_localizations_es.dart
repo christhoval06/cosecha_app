@@ -859,6 +859,12 @@ class AppLocalizationsEs extends AppLocalizations {
       'Configura campos y exporta los datos actuales';
 
   @override
+  String get reportsExportConfigure => 'Configurar';
+
+  @override
+  String get reportsExportRun => 'Exportar';
+
+  @override
   String get reportsFilterAmountRange => 'Rango de monto';
 
   @override

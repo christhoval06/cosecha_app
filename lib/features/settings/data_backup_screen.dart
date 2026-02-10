@@ -166,23 +166,30 @@ Future<void> _exportExcel(
   BuildContext context,
   AppLocalizations l10n,
 ) async {
-  final result = await _withLoader(
-    context,
-    l10n.dataBackupExporting,
-    () async {
-      final config = await ExcelExportService.loadConfig();
-      return ExcelExportService.exportToExcel(config: config);
-    },
-  );
-  if (result == null || !context.mounted) return;
-  final path = result;
-  await Share.shareXFiles(
-    [XFile(path)],
-    sharePositionOrigin: _shareOrigin(context),
-  );
-  if (context.mounted) {
+  try {
+    final result = await _withLoader(
+      context,
+      l10n.dataBackupExporting,
+      () async {
+        final config = await ExcelExportService.loadConfig();
+        return ExcelExportService.exportToExcel(config: config);
+      },
+    );
+    if (result == null || !context.mounted) return;
+    final path = result;
+    await Share.shareXFiles(
+      [XFile(path)],
+      sharePositionOrigin: _shareOrigin(context),
+    );
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${l10n.dataBackupExported}: $path')),
+      );
+    }
+  } catch (error) {
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${l10n.dataBackupExported}: $path')),
+      SnackBar(content: Text('${l10n.errorTitle}: $error')),
     );
   }
 }
