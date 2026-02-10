@@ -94,7 +94,7 @@ class _AvatarImagePickerState extends State<AvatarImagePicker> {
           Material(
             shape: const CircleBorder(),
             elevation: 8,
-            shadowColor: shadowColor.withOpacity(0.15),
+            shadowColor: shadowColor.withValues(alpha: 0.15),
             child: InkWell(
               onTap: widget.enabled ? _showPickerSheet : null,
               customBorder: const CircleBorder(),

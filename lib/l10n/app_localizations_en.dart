@@ -48,7 +48,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingSlide3Description =>
-      'View clear statistics on revenue and sales. Make better decisions with real data.';
+      'Customize your home with widgets and presets to focus only on what matters.';
+
+  @override
+  String get onboardingSlide4Title => 'Analyze with reports';
+
+  @override
+  String get onboardingSlide4Description =>
+      'Filter by channel, product, amount, and quantity to spot changes and opportunities quickly.';
+
+  @override
+  String get onboardingSlide5Title => 'Export to Excel';
+
+  @override
+  String get onboardingSlide5Description =>
+      'Configure models and fields to export. By default, you can export everything in one tap.';
 
   @override
   String get onboardingSkip => 'Skip';
@@ -269,6 +283,153 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeRecentSales => 'Recent product sales';
 
   @override
+  String get homeCustomizeTitle => 'Customize home widgets';
+
+  @override
+  String get homeCustomizePresetsTitle => 'Presets';
+
+  @override
+  String get homePresetBasic => 'Basic';
+
+  @override
+  String get homePresetCommercial => 'Commercial';
+
+  @override
+  String get homePresetAnalytical => 'Analytical';
+
+  @override
+  String get homeWidgetSalesGoal => 'Sales goal';
+
+  @override
+  String get homeWidgetQuickActions => 'Quick actions';
+
+  @override
+  String get homeWidgetChannelMix => 'Channel mix';
+
+  @override
+  String get homeWidgetAvgTicketTrend => 'Avg. ticket trend';
+
+  @override
+  String get homeWidgetProductsAtRisk => 'Products at risk';
+
+  @override
+  String get homeWidgetWeeklyActivity => 'Weekly activity';
+
+  @override
+  String get homeWidgetWeeklyInsights => 'Weekly insights';
+
+  @override
+  String get homeQuickActionsTitle => 'Quick actions';
+
+  @override
+  String get homeQuickActionsSubtitle => 'Shortcuts for frequent tasks';
+
+  @override
+  String get homeActionNewSale => 'New sale';
+
+  @override
+  String get homeActionSalesHistory => 'History';
+
+  @override
+  String get homeActionReports => 'Reports';
+
+  @override
+  String get homeActionBackup => 'Backup';
+
+  @override
+  String get homeActionViewProducts => 'View products';
+
+  @override
+  String get homeSalesGoalTitle => 'Monthly goal progress';
+
+  @override
+  String get homeSalesGoalSubtitle => 'Current month vs estimated goal';
+
+  @override
+  String homeSalesGoalOf(Object goal) {
+    return 'of $goal';
+  }
+
+  @override
+  String get homeNoSalesData => 'No sales data available.';
+
+  @override
+  String get homeChannelMixTitle => 'Channel mix';
+
+  @override
+  String get homeChannelMixSubtitle => 'Sales split in the last 30 days';
+
+  @override
+  String get homeAvgTicketTitle => 'Average ticket';
+
+  @override
+  String get homeAvgTicketSubtitle => 'Last 7 days vs previous 7 days';
+
+  @override
+  String homeAvgTicketTransactions(Object count) {
+    return '$count transactions in the period';
+  }
+
+  @override
+  String get homeWeeklyActivityTitle => 'Weekly activity';
+
+  @override
+  String get homeWeeklyActivitySubtitle => 'Transactions by day (last 7 days)';
+
+  @override
+  String get homeProductsAtRiskTitle => 'Products at risk';
+
+  @override
+  String get homeProductsAtRiskSubtitle => 'No sales in the last 21 days';
+
+  @override
+  String get homeProductsAtRiskEmpty => 'No products at risk right now.';
+
+  @override
+  String get homeProductsAtRiskNoSales => 'No recorded sales';
+
+  @override
+  String homeProductsAtRiskDaysNoSales(Object days) {
+    return '$days days without sales';
+  }
+
+  @override
+  String get homeWeeklyInsightsTitle => 'Weekly insights';
+
+  @override
+  String get homeWeeklyInsightsSubtitle =>
+      'Automatic summary of the last 7 days';
+
+  @override
+  String get homeInsightDirectionUp => 'Up';
+
+  @override
+  String get homeInsightDirectionDown => 'Down';
+
+  @override
+  String homeInsightRevenueDelta(
+    Object direction,
+    Object percent,
+    Object amount,
+  ) {
+    return '$direction sales $percent ($amount) vs previous week';
+  }
+
+  @override
+  String homeInsightChannelShift(Object channel, Object percent) {
+    return '$channel channel gains share ($percent)';
+  }
+
+  @override
+  String homeInsightTopProduct(Object product) {
+    return 'Top product: $product';
+  }
+
+  @override
+  String get homeInsightNoSignificantChange =>
+      'No significant changes this week.';
+
+  @override
   String get homeSeeHistory => 'See history';
 
   @override
@@ -460,6 +621,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dataBackupExportExcel => 'Export to Excel';
 
   @override
+  String get dataBackupExportConfig => 'Configure Excel export';
+
+  @override
   String get dataBackupExportEncrypted => 'Export encrypted backup';
 
   @override
@@ -622,7 +786,87 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportsTitle => 'Reports';
 
   @override
+  String get reportsCustomizeTitle => 'Customize widgets';
+
+  @override
+  String get reportsCustomizePresetsTitle => 'Presets';
+
+  @override
+  String get reportsPresetBasic => 'Basic';
+
+  @override
+  String get reportsPresetCommercial => 'Commercial';
+
+  @override
+  String get reportsPresetAnalytical => 'Analytical';
+
+  @override
+  String get reportsWidgetExportTools => 'Export tools';
+
+  @override
+  String get reportsWidgetSummary => 'Summary';
+
+  @override
+  String get reportsWidgetPeriodComparison => 'Period comparison';
+
+  @override
+  String get reportsWidgetTotalSalesTrend => 'Total sales trend';
+
+  @override
+  String get reportsWidgetChannelMix => 'Channel mix';
+
+  @override
+  String get reportsWidgetMonthlySales => 'Monthly sales';
+
+  @override
+  String get reportsWidgetDailyHeatmap => 'Daily heatmap';
+
+  @override
+  String get reportsWidgetTopProducts => 'Top products';
+
+  @override
+  String get reportsWidgetBottomProducts => 'Bottom products';
+
+  @override
+  String get reportsPeriodComparisonTitle => 'Period comparison';
+
+  @override
+  String get reportsPeriodComparisonSubtitle =>
+      'Current range vs previous range';
+
+  @override
+  String get reportsChannelMixTitle => 'Sales by channel';
+
+  @override
+  String get reportsChannelMixSubtitle => 'Channel share in selected range';
+
+  @override
+  String get reportsChannelOther => 'Other';
+
+  @override
+  String get reportsExportToolsTitle => 'Excel export';
+
+  @override
+  String get reportsExportToolsSubtitle =>
+      'Configure fields and export current data';
+
+  @override
+  String get reportsFilterAmountRange => 'Amount range';
+
+  @override
+  String get reportsFilterMinAmount => 'Min amount';
+
+  @override
+  String get reportsFilterMaxAmount => 'Max amount';
+
+  @override
+  String get reportsFilterMinQuantity => 'Min quantity';
+
+  @override
   String get reportsTopProducts => 'Top products';
+
+  @override
+  String get reportsBottomProducts => 'Bottom products';
 
   @override
   String get reportsTopEmpty => 'No sales in this range.';
@@ -644,4 +888,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportsUnits => 'units';
+
+  @override
+  String get excelExportConfigTitle => 'Excel export settings';
+
+  @override
+  String get excelExportModelProducts => 'Products';
+
+  @override
+  String get excelExportModelSales => 'Sales';
+
+  @override
+  String get excelExportModelPriceHistory => 'Price history';
+
+  @override
+  String get excelExportFieldId => 'ID';
+
+  @override
+  String get excelExportFieldName => 'Name';
+
+  @override
+  String get excelExportFieldImageUrl => 'Image URL';
+
+  @override
+  String get excelExportFieldCurrentPrice => 'Current price';
+
+  @override
+  String get excelExportFieldProductId => 'Product ID';
+
+  @override
+  String get excelExportFieldProductName => 'Product name';
+
+  @override
+  String get excelExportFieldAmount => 'Amount';
+
+  @override
+  String get excelExportFieldQuantity => 'Quantity';
+
+  @override
+  String get excelExportFieldChannel => 'Channel';
+
+  @override
+  String get excelExportFieldCreatedAt => 'Created at';
+
+  @override
+  String get excelExportFieldPrice => 'Price';
+
+  @override
+  String get excelExportFieldRecordedAt => 'Recorded at';
 }

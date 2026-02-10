@@ -12,7 +12,11 @@
   "onboardingSlide2Title": "Organize your business",
   "onboardingSlide2Description": "Manage products, prices, and transactions in one place. Stay in control without complicated processes.",
   "onboardingSlide3Title": "Understand your results",
-  "onboardingSlide3Description": "View clear statistics on revenue and sales. Make better decisions with real data.",
+  "onboardingSlide3Description": "Customize your home with widgets and presets to focus only on what matters.",
+  "onboardingSlide4Title": "Analyze with reports",
+  "onboardingSlide4Description": "Filter by channel, product, amount, and quantity to spot changes and opportunities quickly.",
+  "onboardingSlide5Title": "Export to Excel",
+  "onboardingSlide5Description": "Configure models and fields to export. By default, you can export everything in one tap.",
   "onboardingSkip": "Skip",
   "onboardingNext": "Next",
   "onboardingStart": "Get started",
@@ -100,6 +104,82 @@
   "homeQuickSale": "QUICK SALE",
   "homeAddSale": "Add sale",
   "homeRecentSales": "Recent product sales",
+  "homeCustomizeTitle": "Customize home widgets",
+  "homeCustomizePresetsTitle": "Presets",
+  "homePresetBasic": "Basic",
+  "homePresetCommercial": "Commercial",
+  "homePresetAnalytical": "Analytical",
+  "homeWidgetSalesGoal": "Sales goal",
+  "homeWidgetQuickActions": "Quick actions",
+  "homeWidgetChannelMix": "Channel mix",
+  "homeWidgetAvgTicketTrend": "Avg. ticket trend",
+  "homeWidgetProductsAtRisk": "Products at risk",
+  "homeWidgetWeeklyActivity": "Weekly activity",
+  "homeWidgetWeeklyInsights": "Weekly insights",
+  "homeQuickActionsTitle": "Quick actions",
+  "homeQuickActionsSubtitle": "Shortcuts for frequent tasks",
+  "homeActionNewSale": "New sale",
+  "homeActionSalesHistory": "History",
+  "homeActionReports": "Reports",
+  "homeActionBackup": "Backup",
+  "homeActionViewProducts": "View products",
+  "homeSalesGoalTitle": "Monthly goal progress",
+  "homeSalesGoalSubtitle": "Current month vs estimated goal",
+  "homeSalesGoalOf": "of {goal}",
+  "@homeSalesGoalOf": {
+    "placeholders": {
+      "goal": {}
+    }
+  },
+  "homeNoSalesData": "No sales data available.",
+  "homeChannelMixTitle": "Channel mix",
+  "homeChannelMixSubtitle": "Sales split in the last 30 days",
+  "homeAvgTicketTitle": "Average ticket",
+  "homeAvgTicketSubtitle": "Last 7 days vs previous 7 days",
+  "homeAvgTicketTransactions": "{count} transactions in the period",
+  "@homeAvgTicketTransactions": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "homeWeeklyActivityTitle": "Weekly activity",
+  "homeWeeklyActivitySubtitle": "Transactions by day (last 7 days)",
+  "homeProductsAtRiskTitle": "Products at risk",
+  "homeProductsAtRiskSubtitle": "No sales in the last 21 days",
+  "homeProductsAtRiskEmpty": "No products at risk right now.",
+  "homeProductsAtRiskNoSales": "No recorded sales",
+  "homeProductsAtRiskDaysNoSales": "{days} days without sales",
+  "@homeProductsAtRiskDaysNoSales": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "homeWeeklyInsightsTitle": "Weekly insights",
+  "homeWeeklyInsightsSubtitle": "Automatic summary of the last 7 days",
+  "homeInsightDirectionUp": "Up",
+  "homeInsightDirectionDown": "Down",
+  "homeInsightRevenueDelta": "{direction} sales {percent} ({amount}) vs previous week",
+  "@homeInsightRevenueDelta": {
+    "placeholders": {
+      "direction": {},
+      "percent": {},
+      "amount": {}
+    }
+  },
+  "homeInsightChannelShift": "{channel} channel gains share ({percent})",
+  "@homeInsightChannelShift": {
+    "placeholders": {
+      "channel": {},
+      "percent": {}
+    }
+  },
+  "homeInsightTopProduct": "Top product: {product}",
+  "@homeInsightTopProduct": {
+    "placeholders": {
+      "product": {}
+    }
+  },
+  "homeInsightNoSignificantChange": "No significant changes this week.",
   "homeSeeHistory": "See history",
   "homeHoursAgo": "{hours} HOURS AGO",
   "@homeHoursAgo": {
@@ -171,6 +251,7 @@
   "dataBackupPriceHistory": "Price history",
   "dataBackupActionsTitle": "Actions",
   "dataBackupExportExcel": "Export to Excel",
+  "dataBackupExportConfig": "Configure Excel export",
   "dataBackupExportEncrypted": "Export encrypted backup",
   "dataBackupRestore": "Restore backup",
   "dataBackupExportExcelSoon": "Excel export will be available soon.",
@@ -222,7 +303,33 @@
   "settingsResetConfirmTitle": "Reset app",
   "settingsResetConfirmBody": "This action will delete all your data. Do you want to continue?",
   "reportsTitle": "Reports",
+  "reportsCustomizeTitle": "Customize widgets",
+  "reportsCustomizePresetsTitle": "Presets",
+  "reportsPresetBasic": "Basic",
+  "reportsPresetCommercial": "Commercial",
+  "reportsPresetAnalytical": "Analytical",
+  "reportsWidgetExportTools": "Export tools",
+  "reportsWidgetSummary": "Summary",
+  "reportsWidgetPeriodComparison": "Period comparison",
+  "reportsWidgetTotalSalesTrend": "Total sales trend",
+  "reportsWidgetChannelMix": "Channel mix",
+  "reportsWidgetMonthlySales": "Monthly sales",
+  "reportsWidgetDailyHeatmap": "Daily heatmap",
+  "reportsWidgetTopProducts": "Top products",
+  "reportsWidgetBottomProducts": "Bottom products",
+  "reportsPeriodComparisonTitle": "Period comparison",
+  "reportsPeriodComparisonSubtitle": "Current range vs previous range",
+  "reportsChannelMixTitle": "Sales by channel",
+  "reportsChannelMixSubtitle": "Channel share in selected range",
+  "reportsChannelOther": "Other",
+  "reportsExportToolsTitle": "Excel export",
+  "reportsExportToolsSubtitle": "Configure fields and export current data",
+  "reportsFilterAmountRange": "Amount range",
+  "reportsFilterMinAmount": "Min amount",
+  "reportsFilterMaxAmount": "Max amount",
+  "reportsFilterMinQuantity": "Min quantity",
   "reportsTopProducts": "Top products",
+  "reportsBottomProducts": "Bottom products",
   "reportsTopEmpty": "No sales in this range.",
   "reportsTotalSales": "Total sales",
   "reportsMonthlySalesLast6": "Monthly sales (last 6 months)",
@@ -230,4 +337,21 @@
   "reportsTransactions": "Transactions",
   "reportsAvgTicket": "Avg. ticket",
   "reportsUnits": "units"
+  ,
+  "excelExportConfigTitle": "Excel export settings",
+  "excelExportModelProducts": "Products",
+  "excelExportModelSales": "Sales",
+  "excelExportModelPriceHistory": "Price history",
+  "excelExportFieldId": "ID",
+  "excelExportFieldName": "Name",
+  "excelExportFieldImageUrl": "Image URL",
+  "excelExportFieldCurrentPrice": "Current price",
+  "excelExportFieldProductId": "Product ID",
+  "excelExportFieldProductName": "Product name",
+  "excelExportFieldAmount": "Amount",
+  "excelExportFieldQuantity": "Quantity",
+  "excelExportFieldChannel": "Channel",
+  "excelExportFieldCreatedAt": "Created at",
+  "excelExportFieldPrice": "Price",
+  "excelExportFieldRecordedAt": "Recorded at"
 }

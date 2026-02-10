@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cryptography/cryptography.dart';
-import 'package:excel/excel.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -11,61 +10,13 @@ import '../../data/hive/boxes.dart';
 import '../../data/models/product.dart';
 import '../../data/models/product_price_history.dart';
 import '../../data/models/sale_transaction.dart';
-import '../utils/date_formatters.dart';
+import 'excel_export_service.dart';
 
 class BackupService {
   BackupService._();
 
   static Future<String> exportToExcel() async {
-    final excel = Excel.createExcel();
-
-    final productsSheet = excel['Products'];
-    productsSheet.appendRow([
-      TextCellValue('id'),
-      TextCellValue('name'),
-      TextCellValue('imageUrl'),
-      TextCellValue('currentPrice'),
-    ]);
-    final products = Hive.box<Product>(HiveBoxes.products).values.toList();
-    for (final p in products) {
-      productsSheet.appendRow([
-        TextCellValue(p.id),
-        TextCellValue(p.name),
-        TextCellValue(p.imageUrl),
-        DoubleCellValue(p.currentPrice),
-      ]);
-    }
-
-    final salesSheet = excel['Sales'];
-    salesSheet.appendRow([
-      TextCellValue('id'),
-      TextCellValue('productId'),
-      TextCellValue('productName'),
-      TextCellValue('amount'),
-      TextCellValue('quantity'),
-      TextCellValue('channel'),
-      TextCellValue('createdAt'),
-    ]);
-    final sales =
-        Hive.box<SaleTransaction>(HiveBoxes.transactions).values.toList();
-    for (final s in sales) {
-      salesSheet.appendRow([
-        TextCellValue(s.id),
-        TextCellValue(s.productId),
-        TextCellValue(s.productName),
-        DoubleCellValue(s.amount),
-        IntCellValue(s.quantity),
-        TextCellValue(s.channel),
-        TextCellValue(formatDateTimeYmdHm(s.createdAt)),
-      ]);
-    }
-
-    final appDir = await getApplicationDocumentsDirectory();
-    final file =
-        File('${appDir.path}/cosecha_export_${DateTime.now().millisecondsSinceEpoch}.xlsx');
-    file.createSync(recursive: true);
-    file.writeAsBytesSync(excel.encode()!);
-    return file.path;
+    return ExcelExportService.exportToExcel();
   }
 
   static Future<String> exportEncryptedBackup(String password) async {

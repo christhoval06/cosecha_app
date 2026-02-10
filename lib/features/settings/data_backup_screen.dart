@@ -7,6 +7,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/services/backup_service.dart';
+import '../../core/services/excel_export_service.dart';
+import '../../core/widgets/excel_export_config_sheet.dart';
 import '../../data/hive/boxes.dart';
 import '../../data/models/product.dart';
 import '../../data/models/product_price_history.dart';
@@ -70,6 +72,17 @@ class DataBackupScreen extends StatelessWidget {
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  _configureExcelExport(context);
+                },
+                icon: const Icon(Icons.tune),
+                label: Text(l10n.dataBackupExportConfig),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
               child: FilledButton.icon(
                 style: FilledButton.styleFrom(
                   backgroundColor: colorScheme.secondaryContainer,
@@ -123,7 +136,7 @@ class _SummaryCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: shadowColor.withOpacity(0.04),
+                color: shadowColor.withValues(alpha: 0.04),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -156,7 +169,10 @@ Future<void> _exportExcel(
   final result = await _withLoader(
     context,
     l10n.dataBackupExporting,
-    () => BackupService.exportToExcel(),
+    () async {
+      final config = await ExcelExportService.loadConfig();
+      return ExcelExportService.exportToExcel(config: config);
+    },
   );
   if (result == null || !context.mounted) return;
   final path = result;
@@ -171,11 +187,23 @@ Future<void> _exportExcel(
   }
 }
 
+Future<void> _configureExcelExport(BuildContext context) async {
+  final current = await ExcelExportService.loadConfig();
+  if (!context.mounted) return;
+  final updated = await showExcelExportConfigSheet(
+    context: context,
+    current: current,
+  );
+  if (updated == null) return;
+  await ExcelExportService.saveConfig(updated);
+}
+
 Future<void> _exportEncrypted(
   BuildContext context,
   AppLocalizations l10n,
 ) async {
   final password = await _askPassword(context, l10n);
+  if (!context.mounted) return;
   if (password == null || password.isEmpty) return;
   final result = await _withLoader(
     context,
@@ -203,12 +231,15 @@ Future<void> _restoreBackup(
     type: FileType.custom,
     allowedExtensions: ['json'],
   );
+  if (!context.mounted) return;
   if (result == null || result.files.single.path == null) return;
 
   final confirmed = await _confirmRestore(context, l10n);
+  if (!context.mounted) return;
   if (!confirmed) return;
 
   final password = await _askPassword(context, l10n);
+  if (!context.mounted) return;
   if (password == null || password.isEmpty) return;
 
   final file = File(result.files.single.path!);

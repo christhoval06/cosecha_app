@@ -38,7 +38,7 @@ class ListEmptyState extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(color: colorScheme.onSurface.withOpacity(0.7)),
+                  ?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.7)),
               textAlign: TextAlign.center,
             ),
             if (actionLabel != null && onAction != null) ...[

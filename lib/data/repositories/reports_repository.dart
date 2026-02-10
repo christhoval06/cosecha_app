@@ -7,23 +7,71 @@ class ReportsRepository {
   Box<SaleTransaction> get _box =>
       Hive.box<SaleTransaction>(HiveBoxes.transactions);
 
-  List<SaleTransaction> _salesInRange(DateTime from, DateTime to) {
+  List<SaleTransaction> _salesInRange(
+    DateTime from,
+    DateTime to, {
+    bool Function(SaleTransaction sale)? where,
+  }) {
     return _box.values
         .where((s) => s.createdAt.isAfter(from) && s.createdAt.isBefore(to))
+        .where((s) => where?.call(s) ?? true)
         .toList();
   }
 
-  double totalAmount(DateTime from, DateTime to) {
-    return _salesInRange(from, to).fold(0, (sum, s) => sum + s.amount);
+  double totalAmount(
+    DateTime from,
+    DateTime to, {
+    bool Function(SaleTransaction sale)? where,
+  }) {
+    return _salesInRange(from, to, where: where).fold(0, (sum, s) => sum + s.amount);
   }
 
-  int totalCount(DateTime from, DateTime to) {
-    return _salesInRange(from, to).length;
+  int totalCount(
+    DateTime from,
+    DateTime to, {
+    bool Function(SaleTransaction sale)? where,
+  }) {
+    return _salesInRange(from, to, where: where).length;
   }
 
-  Map<DateTime, double> dailyTotals(DateTime from, DateTime to) {
+  ChannelBreakdown channelBreakdown(
+    DateTime from,
+    DateTime to, {
+    bool Function(SaleTransaction sale)? where,
+  }) {
+    final sales = _salesInRange(from, to, where: where);
+    var retail = 0.0;
+    var wholesale = 0.0;
+    var other = 0.0;
+
+    for (final sale in sales) {
+      switch (_normalizeChannel(sale.channel)) {
+        case 'retail':
+          retail += sale.amount;
+          break;
+        case 'wholesale':
+          wholesale += sale.amount;
+          break;
+        default:
+          other += sale.amount;
+          break;
+      }
+    }
+
+    return ChannelBreakdown(
+      retail: retail,
+      wholesale: wholesale,
+      other: other,
+    );
+  }
+
+  Map<DateTime, double> dailyTotals(
+    DateTime from,
+    DateTime to, {
+    bool Function(SaleTransaction sale)? where,
+  }) {
     final Map<DateTime, double> buckets = {};
-    final sales = _salesInRange(from, to);
+    final sales = _salesInRange(from, to, where: where);
     for (final s in sales) {
       final day = DateTime(s.createdAt.year, s.createdAt.month, s.createdAt.day);
       buckets[day] = (buckets[day] ?? 0) + s.amount;
@@ -31,38 +79,68 @@ class ReportsRepository {
     return buckets;
   }
 
-  List<double> dailySeries(DateTime from, DateTime to) {
-    final totals = dailyTotals(from, to);
+  List<double> dailySeries(
+    DateTime from,
+    DateTime to, {
+    bool Function(SaleTransaction sale)? where,
+  }) {
+    final totals = dailyTotals(from, to, where: where);
     final days = _daysBetween(from, to);
     return days.map((d) => totals[d] ?? 0).toList();
   }
 
-  List<TopProduct> topProducts(DateTime from, DateTime to, {int limit = 5}) {
-    final sales = _salesInRange(from, to);
+  List<TopProduct> topProducts(
+    DateTime from,
+    DateTime to, {
+    int limit = 5,
+    bool Function(SaleTransaction sale)? where,
+  }) {
+    final list = productTotals(from, to, where: where)
+      ..sort((a, b) => b.amount.compareTo(a.amount));
+    return list.take(limit).toList();
+  }
+
+  List<TopProduct> bottomProducts(
+    DateTime from,
+    DateTime to, {
+    int limit = 5,
+    bool Function(SaleTransaction sale)? where,
+  }) {
+    final list = productTotals(from, to, where: where)
+      ..sort((a, b) => a.amount.compareTo(b.amount));
+    return list.take(limit).toList();
+  }
+
+  List<TopProduct> productTotals(
+    DateTime from,
+    DateTime to, {
+    bool Function(SaleTransaction sale)? where,
+  }) {
+    final sales = _salesInRange(from, to, where: where);
     final Map<String, TopProduct> map = {};
     for (final s in sales) {
+      final key = s.productId.isNotEmpty ? s.productId : s.productName;
       final entry = map.putIfAbsent(
-        s.productId,
+        key,
         () => TopProduct(
-          productId: s.productId,
+          productId: key,
           name: s.productName,
           amount: 0,
           quantity: 0,
         ),
       );
-      map[s.productId] = entry.copyWith(
+      map[key] = entry.copyWith(
         amount: entry.amount + s.amount,
         quantity: entry.quantity + s.quantity,
       );
     }
-    final list = map.values.toList()
-      ..sort((a, b) => b.amount.compareTo(a.amount));
-    return list.take(limit).toList();
+    return map.values.toList();
   }
 
   List<MonthlyTotal> monthlyTotalsLastMonths({
     int months = 6,
     DateTime? reference,
+    bool Function(SaleTransaction sale)? where,
   }) {
     final now = reference ?? DateTime.now();
     final start = DateTime(now.year, now.month - (months - 1), 1);
@@ -75,6 +153,7 @@ class ReportsRepository {
     }
 
     for (final sale in _box.values) {
+      if (!(where?.call(sale) ?? true)) continue;
       final createdAt = sale.createdAt;
       if (createdAt.isBefore(start) || !createdAt.isBefore(endExclusive)) {
         continue;
@@ -100,6 +179,17 @@ class ReportsRepository {
       current = current.add(const Duration(days: 1));
     }
     return days;
+  }
+
+  String _normalizeChannel(String value) {
+    switch (value) {
+      case 'Retail':
+        return 'retail';
+      case 'Wholesale':
+        return 'wholesale';
+      default:
+        return value;
+    }
   }
 }
 
@@ -134,4 +224,18 @@ class MonthlyTotal {
 
   final DateTime monthStart;
   final double total;
+}
+
+class ChannelBreakdown {
+  ChannelBreakdown({
+    required this.retail,
+    required this.wholesale,
+    required this.other,
+  });
+
+  final double retail;
+  final double wholesale;
+  final double other;
+
+  double get total => retail + wholesale + other;
 }

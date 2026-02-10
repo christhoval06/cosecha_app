@@ -18,7 +18,7 @@ class TopProductTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.outline.withOpacity(0.15)),
+        border: Border.all(color: colorScheme.outline.withValues(alpha: 0.15)),
       ),
       child: Row(
         children: [
@@ -33,7 +33,7 @@ class TopProductTile extends StatelessWidget {
                   style: Theme.of(context)
                       .textTheme
                       .labelSmall
-                      ?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                      ?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6)),
                 ),
               ],
             ),

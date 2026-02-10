@@ -58,14 +58,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         description: l10n.onboardingSlide1Description,
       ),
       OnboardingItem(
-        icon: Icons.inventory_2_outlined,
+        icon: Icons.storefront_outlined,
         title: l10n.onboardingSlide2Title,
         description: l10n.onboardingSlide2Description,
       ),
       OnboardingItem(
-        icon: Icons.bar_chart_rounded,
+        icon: Icons.dashboard_customize_outlined,
         title: l10n.onboardingSlide3Title,
         description: l10n.onboardingSlide3Description,
+      ),
+      OnboardingItem(
+        icon: Icons.analytics_outlined,
+        title: l10n.onboardingSlide4Title,
+        description: l10n.onboardingSlide4Description,
+      ),
+      OnboardingItem(
+        icon: Icons.table_view_outlined,
+        title: l10n.onboardingSlide5Title,
+        description: l10n.onboardingSlide5Description,
       ),
     ];
 
@@ -73,7 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: theme.colorScheme.surface.withOpacity(0),
+        backgroundColor: theme.colorScheme.surface.withValues(alpha: 0),
         elevation: 0,
         actions: [
           TextButton(

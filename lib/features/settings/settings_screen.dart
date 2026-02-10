@@ -66,9 +66,13 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
             _SectionTitle(text: l10n.settingsSectionAbout),
             const SizedBox(height: 12),
-            _StoryCard(
+            _SettingsTile(
+              icon: Icons.menu_book_outlined,
+              iconBg: colorScheme.primaryContainer,
+              iconColor: colorScheme.onPrimaryContainer,
               title: l10n.settingsOriginTitle,
-              body: l10n.settingsOriginBody,
+              subtitle: _storyPreview(l10n.settingsOriginBody),
+              onTap: () => _showOurStorySheet(context, l10n),
             ),
             const SizedBox(height: 16),
             _SettingsTile(
@@ -117,51 +121,10 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-class _StoryCard extends StatelessWidget {
-  const _StoryCard({required this.title, required this.body});
-
-  final String title;
-  final String body;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final shadowColor = Theme.of(context).shadowColor;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: shadowColor.withOpacity(0.06),
-            blurRadius: 12,
-            offset: const Offset(0, 8),
-          ),
-        ],
-        border: Border.all(color: colorScheme.outline.withOpacity(0.08)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: colorScheme.primary,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            body,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: colorScheme.onSurface.withOpacity(0.72),
-              height: 1.4,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+String _storyPreview(String body) {
+  final normalized = body.replaceAll('\n', ' ').trim();
+  if (normalized.length <= 72) return normalized;
+  return '${normalized.substring(0, 72).trim()}...';
 }
 
 class _BrandHeader extends StatelessWidget {
@@ -185,11 +148,11 @@ class _BrandHeader extends StatelessWidget {
           width: 96,
           height: 96,
           decoration: BoxDecoration(
-            color: colorScheme.surfaceVariant,
+            color: colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: shadowColor.withOpacity(0.08),
+                color: shadowColor.withValues(alpha: 0.08),
                 blurRadius: 16,
                 offset: const Offset(0, 10),
               ),
@@ -203,7 +166,7 @@ class _BrandHeader extends StatelessWidget {
         Text(
           version,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: colorScheme.onSurface.withOpacity(0.6),
+            color: colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
         const SizedBox(height: 8),
@@ -231,7 +194,7 @@ class _SectionTitle extends StatelessWidget {
       text.toUpperCase(),
       style: Theme.of(context).textTheme.labelLarge?.copyWith(
         letterSpacing: 1.6,
-        color: colorScheme.onSurface.withOpacity(0.5),
+        color: colorScheme.onSurface.withValues(alpha: 0.5),
       ),
     );
   }
@@ -288,7 +251,7 @@ class _SettingsTile extends StatelessWidget {
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: colorScheme.onSurface.withOpacity(0.6),
+                    color: colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -296,7 +259,7 @@ class _SettingsTile extends StatelessWidget {
           ),
           Icon(
             Icons.chevron_right,
-            color: colorScheme.onSurface.withOpacity(0.4),
+            color: colorScheme.onSurface.withValues(alpha: 0.4),
           ),
         ],
       ),
@@ -332,7 +295,7 @@ class SettingsPlaceholderScreen extends StatelessWidget {
               Text(
                 description,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurface.withOpacity(0.7),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -374,4 +337,57 @@ Future<void> _resetApp(BuildContext context, AppLocalizations l10n) async {
       (_) => false,
     );
   }
+}
+
+Future<void> _showOurStorySheet(
+  BuildContext context,
+  AppLocalizations l10n,
+) async {
+  await showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    builder: (context) {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      l10n.settingsOriginTitle,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
+                    child: Text(
+                      l10n.settingsOriginBody,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            height: 1.45,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.78),
+                          ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

@@ -89,7 +89,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   subtitle: Text(
                     product.formatAmount(),
                     style: TextStyle(
-                      color: colorScheme.onSurface.withOpacity(0.6),
+                      color: colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                         trailing: const Icon(Icons.chevron_right),
@@ -100,7 +100,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         },
                       );
                     },
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
                     itemCount: filtered.length,
                   ),
                 ),

@@ -15,9 +15,14 @@ support: clear, practical, and designed for real-world selling.
 
 - Product management with local images
 - Sales tracking with quick add and history
-- Performance overview, trends, and reports
+- Home dashboard with configurable widgets and presets
+- Reports dashboard with configurable widgets and presets
+- Advanced report filters (channel, product, amount range, min quantity)
+- Performance overview, trends, heatmap, and monthly bars
+- Configurable Excel export (models/fields), shared across Reports and Settings
 - Local-first storage with optional encrypted backups
 - Business profile with currency preferences
+- Multi-language support (EN/ES) with `gen-l10n`
 
 ## Directory Layout
 
@@ -71,6 +76,24 @@ lib/
 - One business profile: cached in a session singleton for fast access.
 - Price changes create history records for trend charts.
 - i18n managed via `lib/l10n/*.arb` and `flutter gen-l10n`.
+- App routing is centralized in `lib/core/router/app_router.dart`.
+- Dashboard pattern used in Home and Reports:
+  - `registry`: available widget definitions (`id/title/builder`)
+  - `config`: persisted enabled/order state (`SharedPreferences`)
+  - `customize sheet`: toggle, reorder, and presets
+  - `panels`: widget logic isolated in dedicated files
+- Excel export is centralized in `lib/core/services/excel_export_service.dart`:
+  - Shared configuration (models + fields) with defaults to export all
+  - Reused by Reports and Data Backup screens via a shared sheet
+
+## Internal References
+
+- Dashboard architecture guide:
+  - `DASHBOARD_ARCHITECTURE.md`
+- Home roadmap/status:
+  - `HOME_SUGERENCIAS.md`
+- Reports roadmap/status:
+  - `REPORTES_SUGERENCIAS.md`
 
 ## Getting Started
 

@@ -12,8 +12,8 @@ Future<String?> saveLocally(File imageFile) async {
     final newFile = await imageFile.copy(newPath);
 
     return newFile.path;
-  } catch (e) {
-    print('Error al guardar la imagen: $e');
+  } catch (_) {
+    // Intentionally swallow and return null to keep form flows resilient.
     return null;
   }
 }
@@ -22,8 +22,7 @@ Future<String?> saveLocallyFromPath(String imagePath) async {
   try {
     final imageFile = File(imagePath);
     return await saveLocally(imageFile);
-  } catch (e) {
-    print('Error al guardar la imagen: $e');
+  } catch (_) {
     return null;
   }
 }

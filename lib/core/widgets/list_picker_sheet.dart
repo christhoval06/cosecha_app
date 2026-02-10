@@ -95,7 +95,7 @@ class _ListPickerSheetBodyState<T> extends State<_ListPickerSheetBody<T>> {
               child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: filtered.length,
-                separatorBuilder: (_, __) => const Divider(height: 1),
+                separatorBuilder: (_, _) => const Divider(height: 1),
                 itemBuilder: (context, index) {
                   final item = filtered[index];
                   return ListTile(

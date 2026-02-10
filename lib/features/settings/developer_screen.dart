@@ -40,7 +40,7 @@ class DeveloperScreen extends StatelessWidget {
                   Text(
                     l10n.developerRole,
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onSurface.withOpacity(0.6),
+                          color: colorScheme.onSurface.withValues(alpha: 0.6),
                         ),
                   ),
                 ],
@@ -108,7 +108,7 @@ class _InfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: shadowColor.withOpacity(0.04),
+            color: shadowColor.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -122,7 +122,7 @@ class _InfoCard extends StatelessWidget {
           Text(
             body,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colorScheme.onSurface.withOpacity(0.7),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
           ),
         ],
@@ -156,7 +156,7 @@ class _LinkTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: colorScheme.surface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: colorScheme.outline.withOpacity(0.15)),
+          border: Border.all(color: colorScheme.outline.withValues(alpha: 0.15)),
         ),
         child: Row(
           children: [
@@ -169,7 +169,7 @@ class _LinkTile extends StatelessWidget {
               ),
             ),
             Icon(Icons.open_in_new,
-                color: colorScheme.onSurface.withOpacity(0.4)),
+                color: colorScheme.onSurface.withValues(alpha: 0.4)),
           ],
         ),
       ),

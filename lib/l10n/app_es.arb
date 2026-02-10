@@ -12,7 +12,11 @@
   "onboardingSlide2Title": "Organiza tu negocio",
   "onboardingSlide2Description": "Gestiona productos, precios y movimientos en un solo lugar. Mantén el control sin procesos complicados.",
   "onboardingSlide3Title": "Entiende tus resultados",
-  "onboardingSlide3Description": "Consulta estadísticas claras sobre ingresos y ventas. Toma mejores decisiones con datos reales.",
+  "onboardingSlide3Description": "Personaliza tu inicio con widgets y plantillas para ver solo lo importante de tu negocio.",
+  "onboardingSlide4Title": "Analiza con reportes",
+  "onboardingSlide4Description": "Filtra por canal, producto, monto y cantidad para detectar cambios y oportunidades rapidamente.",
+  "onboardingSlide5Title": "Exporta a Excel",
+  "onboardingSlide5Description": "Configura modelos y campos a exportar. Por defecto puedes exportar todo con un solo toque.",
   "onboardingSkip": "Omitir",
   "onboardingNext": "Siguiente",
   "onboardingStart": "Comenzar",
@@ -100,6 +104,82 @@
   "homeQuickSale": "VENTA RÁPIDA",
   "homeAddSale": "Agregar venta",
   "homeRecentSales": "Ventas recientes",
+  "homeCustomizeTitle": "Personalizar widgets de inicio",
+  "homeCustomizePresetsTitle": "Plantillas",
+  "homePresetBasic": "Basico",
+  "homePresetCommercial": "Comercial",
+  "homePresetAnalytical": "Analitico",
+  "homeWidgetSalesGoal": "Meta de ventas",
+  "homeWidgetQuickActions": "Acciones rapidas",
+  "homeWidgetChannelMix": "Mix por canal",
+  "homeWidgetAvgTicketTrend": "Tendencia de ticket promedio",
+  "homeWidgetProductsAtRisk": "Productos en riesgo",
+  "homeWidgetWeeklyActivity": "Actividad semanal",
+  "homeWidgetWeeklyInsights": "Insights semanales",
+  "homeQuickActionsTitle": "Acciones rapidas",
+  "homeQuickActionsSubtitle": "Atajos para tareas frecuentes",
+  "homeActionNewSale": "Nueva venta",
+  "homeActionSalesHistory": "Historial",
+  "homeActionReports": "Reportes",
+  "homeActionBackup": "Respaldo",
+  "homeActionViewProducts": "Ver productos",
+  "homeSalesGoalTitle": "Avance de meta mensual",
+  "homeSalesGoalSubtitle": "Mes actual vs meta estimada",
+  "homeSalesGoalOf": "de {goal}",
+  "@homeSalesGoalOf": {
+    "placeholders": {
+      "goal": {}
+    }
+  },
+  "homeNoSalesData": "No hay datos de ventas disponibles.",
+  "homeChannelMixTitle": "Mix por canal",
+  "homeChannelMixSubtitle": "Distribucion de ventas en los ultimos 30 dias",
+  "homeAvgTicketTitle": "Ticket promedio",
+  "homeAvgTicketSubtitle": "Ultimos 7 dias vs 7 dias previos",
+  "homeAvgTicketTransactions": "{count} transacciones en el periodo",
+  "@homeAvgTicketTransactions": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "homeWeeklyActivityTitle": "Actividad semanal",
+  "homeWeeklyActivitySubtitle": "Transacciones por dia (ultimos 7 dias)",
+  "homeProductsAtRiskTitle": "Productos en riesgo",
+  "homeProductsAtRiskSubtitle": "Sin ventas en los ultimos 21 dias",
+  "homeProductsAtRiskEmpty": "No hay productos en riesgo actualmente.",
+  "homeProductsAtRiskNoSales": "Sin ventas registradas",
+  "homeProductsAtRiskDaysNoSales": "{days} dias sin ventas",
+  "@homeProductsAtRiskDaysNoSales": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "homeWeeklyInsightsTitle": "Insights semanales",
+  "homeWeeklyInsightsSubtitle": "Resumen automatico de los ultimos 7 dias",
+  "homeInsightDirectionUp": "Suben",
+  "homeInsightDirectionDown": "Bajan",
+  "homeInsightRevenueDelta": "{direction} ventas {percent} ({amount}) vs semana previa",
+  "@homeInsightRevenueDelta": {
+    "placeholders": {
+      "direction": {},
+      "percent": {},
+      "amount": {}
+    }
+  },
+  "homeInsightChannelShift": "Canal {channel} gana participacion ({percent})",
+  "@homeInsightChannelShift": {
+    "placeholders": {
+      "channel": {},
+      "percent": {}
+    }
+  },
+  "homeInsightTopProduct": "Top producto: {product}",
+  "@homeInsightTopProduct": {
+    "placeholders": {
+      "product": {}
+    }
+  },
+  "homeInsightNoSignificantChange": "Sin cambios relevantes esta semana.",
   "homeSeeHistory": "Ver historial",
   "homeHoursAgo": "HACE {hours} HORAS",
   "@homeHoursAgo": {
@@ -171,6 +251,7 @@
   "dataBackupPriceHistory": "Historial de precios",
   "dataBackupActionsTitle": "Acciones",
   "dataBackupExportExcel": "Exportar a Excel",
+  "dataBackupExportConfig": "Configurar exportacion Excel",
   "dataBackupExportEncrypted": "Exportar respaldo encriptado",
   "dataBackupRestore": "Restaurar respaldo",
   "dataBackupExportExcelSoon": "Exportar a Excel estará disponible pronto.",
@@ -222,7 +303,33 @@
   "settingsResetConfirmTitle": "Restablecer app",
   "settingsResetConfirmBody": "Esta acción eliminará todos tus datos. ¿Deseas continuar?",
   "reportsTitle": "Reportes",
+  "reportsCustomizeTitle": "Personalizar widgets",
+  "reportsCustomizePresetsTitle": "Plantillas",
+  "reportsPresetBasic": "Basico",
+  "reportsPresetCommercial": "Comercial",
+  "reportsPresetAnalytical": "Analitico",
+  "reportsWidgetExportTools": "Herramientas de exportacion",
+  "reportsWidgetSummary": "Resumen",
+  "reportsWidgetPeriodComparison": "Comparativo de periodo",
+  "reportsWidgetTotalSalesTrend": "Tendencia de ventas",
+  "reportsWidgetChannelMix": "Mix por canal",
+  "reportsWidgetMonthlySales": "Ventas mensuales",
+  "reportsWidgetDailyHeatmap": "Mapa de calor diario",
+  "reportsWidgetTopProducts": "Top productos",
+  "reportsWidgetBottomProducts": "Productos con menor venta",
+  "reportsPeriodComparisonTitle": "Comparativo de periodo",
+  "reportsPeriodComparisonSubtitle": "Rango actual vs rango anterior",
+  "reportsChannelMixTitle": "Ventas por canal",
+  "reportsChannelMixSubtitle": "Participacion por canal en el rango seleccionado",
+  "reportsChannelOther": "Otros",
+  "reportsExportToolsTitle": "Exportacion Excel",
+  "reportsExportToolsSubtitle": "Configura campos y exporta los datos actuales",
+  "reportsFilterAmountRange": "Rango de monto",
+  "reportsFilterMinAmount": "Monto minimo",
+  "reportsFilterMaxAmount": "Monto maximo",
+  "reportsFilterMinQuantity": "Cantidad minima",
   "reportsTopProducts": "Top productos",
+  "reportsBottomProducts": "Productos con menor venta",
   "reportsTopEmpty": "No hay ventas en este rango.",
   "reportsTotalSales": "Total ventas",
   "reportsMonthlySalesLast6": "Ventas mensuales (últimos 6 meses)",
@@ -230,4 +337,21 @@
   "reportsTransactions": "Transacciones",
   "reportsAvgTicket": "Ticket promedio",
   "reportsUnits": "unidades"
+  ,
+  "excelExportConfigTitle": "Configuracion de exportacion Excel",
+  "excelExportModelProducts": "Productos",
+  "excelExportModelSales": "Ventas",
+  "excelExportModelPriceHistory": "Historial de precios",
+  "excelExportFieldId": "ID",
+  "excelExportFieldName": "Nombre",
+  "excelExportFieldImageUrl": "URL de imagen",
+  "excelExportFieldCurrentPrice": "Precio actual",
+  "excelExportFieldProductId": "ID producto",
+  "excelExportFieldProductName": "Nombre producto",
+  "excelExportFieldAmount": "Monto",
+  "excelExportFieldQuantity": "Cantidad",
+  "excelExportFieldChannel": "Canal",
+  "excelExportFieldCreatedAt": "Fecha creacion",
+  "excelExportFieldPrice": "Precio",
+  "excelExportFieldRecordedAt": "Fecha registro"
 }

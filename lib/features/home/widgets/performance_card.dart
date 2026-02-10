@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class PerformanceCard extends StatelessWidget {
   const PerformanceCard({
+    super.key,
     required this.label,
     required this.amount,
     required this.delta,
@@ -28,7 +29,7 @@ class PerformanceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: shadowColor.withOpacity(0.05),
+            color: shadowColor.withValues(alpha: 0.05),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -40,7 +41,7 @@ class PerformanceCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(color: fg.withOpacity(0.7))),
+                Text(label, style: TextStyle(color: fg.withValues(alpha: 0.7))),
                 const SizedBox(height: 4),
                 Text(
                   amount,

@@ -83,7 +83,7 @@ class _ImagePickerFieldState extends State<ImagePickerField> {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = Theme.of(context).colorScheme.outline.withOpacity(0.4);
+    final borderColor = Theme.of(context).colorScheme.outline.withValues(alpha: 0.4);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

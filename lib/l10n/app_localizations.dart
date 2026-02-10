@@ -173,8 +173,32 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingSlide3Description.
   ///
   /// In es, this message translates to:
-  /// **'Consulta estadísticas claras sobre ingresos y ventas. Toma mejores decisiones con datos reales.'**
+  /// **'Personaliza tu inicio con widgets y plantillas para ver solo lo importante de tu negocio.'**
   String get onboardingSlide3Description;
+
+  /// No description provided for @onboardingSlide4Title.
+  ///
+  /// In es, this message translates to:
+  /// **'Analiza con reportes'**
+  String get onboardingSlide4Title;
+
+  /// No description provided for @onboardingSlide4Description.
+  ///
+  /// In es, this message translates to:
+  /// **'Filtra por canal, producto, monto y cantidad para detectar cambios y oportunidades rapidamente.'**
+  String get onboardingSlide4Description;
+
+  /// No description provided for @onboardingSlide5Title.
+  ///
+  /// In es, this message translates to:
+  /// **'Exporta a Excel'**
+  String get onboardingSlide5Title;
+
+  /// No description provided for @onboardingSlide5Description.
+  ///
+  /// In es, this message translates to:
+  /// **'Configura modelos y campos a exportar. Por defecto puedes exportar todo con un solo toque.'**
+  String get onboardingSlide5Description;
 
   /// No description provided for @onboardingSkip.
   ///
@@ -596,6 +620,268 @@ abstract class AppLocalizations {
   /// **'Ventas recientes'**
   String get homeRecentSales;
 
+  /// No description provided for @homeCustomizeTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Personalizar widgets de inicio'**
+  String get homeCustomizeTitle;
+
+  /// No description provided for @homeCustomizePresetsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Plantillas'**
+  String get homeCustomizePresetsTitle;
+
+  /// No description provided for @homePresetBasic.
+  ///
+  /// In es, this message translates to:
+  /// **'Basico'**
+  String get homePresetBasic;
+
+  /// No description provided for @homePresetCommercial.
+  ///
+  /// In es, this message translates to:
+  /// **'Comercial'**
+  String get homePresetCommercial;
+
+  /// No description provided for @homePresetAnalytical.
+  ///
+  /// In es, this message translates to:
+  /// **'Analitico'**
+  String get homePresetAnalytical;
+
+  /// No description provided for @homeWidgetSalesGoal.
+  ///
+  /// In es, this message translates to:
+  /// **'Meta de ventas'**
+  String get homeWidgetSalesGoal;
+
+  /// No description provided for @homeWidgetQuickActions.
+  ///
+  /// In es, this message translates to:
+  /// **'Acciones rapidas'**
+  String get homeWidgetQuickActions;
+
+  /// No description provided for @homeWidgetChannelMix.
+  ///
+  /// In es, this message translates to:
+  /// **'Mix por canal'**
+  String get homeWidgetChannelMix;
+
+  /// No description provided for @homeWidgetAvgTicketTrend.
+  ///
+  /// In es, this message translates to:
+  /// **'Tendencia de ticket promedio'**
+  String get homeWidgetAvgTicketTrend;
+
+  /// No description provided for @homeWidgetProductsAtRisk.
+  ///
+  /// In es, this message translates to:
+  /// **'Productos en riesgo'**
+  String get homeWidgetProductsAtRisk;
+
+  /// No description provided for @homeWidgetWeeklyActivity.
+  ///
+  /// In es, this message translates to:
+  /// **'Actividad semanal'**
+  String get homeWidgetWeeklyActivity;
+
+  /// No description provided for @homeWidgetWeeklyInsights.
+  ///
+  /// In es, this message translates to:
+  /// **'Insights semanales'**
+  String get homeWidgetWeeklyInsights;
+
+  /// No description provided for @homeQuickActionsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Acciones rapidas'**
+  String get homeQuickActionsTitle;
+
+  /// No description provided for @homeQuickActionsSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Atajos para tareas frecuentes'**
+  String get homeQuickActionsSubtitle;
+
+  /// No description provided for @homeActionNewSale.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva venta'**
+  String get homeActionNewSale;
+
+  /// No description provided for @homeActionSalesHistory.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial'**
+  String get homeActionSalesHistory;
+
+  /// No description provided for @homeActionReports.
+  ///
+  /// In es, this message translates to:
+  /// **'Reportes'**
+  String get homeActionReports;
+
+  /// No description provided for @homeActionBackup.
+  ///
+  /// In es, this message translates to:
+  /// **'Respaldo'**
+  String get homeActionBackup;
+
+  /// No description provided for @homeActionViewProducts.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver productos'**
+  String get homeActionViewProducts;
+
+  /// No description provided for @homeSalesGoalTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Avance de meta mensual'**
+  String get homeSalesGoalTitle;
+
+  /// No description provided for @homeSalesGoalSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Mes actual vs meta estimada'**
+  String get homeSalesGoalSubtitle;
+
+  /// No description provided for @homeSalesGoalOf.
+  ///
+  /// In es, this message translates to:
+  /// **'de {goal}'**
+  String homeSalesGoalOf(Object goal);
+
+  /// No description provided for @homeNoSalesData.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay datos de ventas disponibles.'**
+  String get homeNoSalesData;
+
+  /// No description provided for @homeChannelMixTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Mix por canal'**
+  String get homeChannelMixTitle;
+
+  /// No description provided for @homeChannelMixSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Distribucion de ventas en los ultimos 30 dias'**
+  String get homeChannelMixSubtitle;
+
+  /// No description provided for @homeAvgTicketTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Ticket promedio'**
+  String get homeAvgTicketTitle;
+
+  /// No description provided for @homeAvgTicketSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Ultimos 7 dias vs 7 dias previos'**
+  String get homeAvgTicketSubtitle;
+
+  /// No description provided for @homeAvgTicketTransactions.
+  ///
+  /// In es, this message translates to:
+  /// **'{count} transacciones en el periodo'**
+  String homeAvgTicketTransactions(Object count);
+
+  /// No description provided for @homeWeeklyActivityTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Actividad semanal'**
+  String get homeWeeklyActivityTitle;
+
+  /// No description provided for @homeWeeklyActivitySubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Transacciones por dia (ultimos 7 dias)'**
+  String get homeWeeklyActivitySubtitle;
+
+  /// No description provided for @homeProductsAtRiskTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Productos en riesgo'**
+  String get homeProductsAtRiskTitle;
+
+  /// No description provided for @homeProductsAtRiskSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin ventas en los ultimos 21 dias'**
+  String get homeProductsAtRiskSubtitle;
+
+  /// No description provided for @homeProductsAtRiskEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay productos en riesgo actualmente.'**
+  String get homeProductsAtRiskEmpty;
+
+  /// No description provided for @homeProductsAtRiskNoSales.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin ventas registradas'**
+  String get homeProductsAtRiskNoSales;
+
+  /// No description provided for @homeProductsAtRiskDaysNoSales.
+  ///
+  /// In es, this message translates to:
+  /// **'{days} dias sin ventas'**
+  String homeProductsAtRiskDaysNoSales(Object days);
+
+  /// No description provided for @homeWeeklyInsightsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Insights semanales'**
+  String get homeWeeklyInsightsTitle;
+
+  /// No description provided for @homeWeeklyInsightsSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Resumen automatico de los ultimos 7 dias'**
+  String get homeWeeklyInsightsSubtitle;
+
+  /// No description provided for @homeInsightDirectionUp.
+  ///
+  /// In es, this message translates to:
+  /// **'Suben'**
+  String get homeInsightDirectionUp;
+
+  /// No description provided for @homeInsightDirectionDown.
+  ///
+  /// In es, this message translates to:
+  /// **'Bajan'**
+  String get homeInsightDirectionDown;
+
+  /// No description provided for @homeInsightRevenueDelta.
+  ///
+  /// In es, this message translates to:
+  /// **'{direction} ventas {percent} ({amount}) vs semana previa'**
+  String homeInsightRevenueDelta(
+    Object direction,
+    Object percent,
+    Object amount,
+  );
+
+  /// No description provided for @homeInsightChannelShift.
+  ///
+  /// In es, this message translates to:
+  /// **'Canal {channel} gana participacion ({percent})'**
+  String homeInsightChannelShift(Object channel, Object percent);
+
+  /// No description provided for @homeInsightTopProduct.
+  ///
+  /// In es, this message translates to:
+  /// **'Top producto: {product}'**
+  String homeInsightTopProduct(Object product);
+
+  /// No description provided for @homeInsightNoSignificantChange.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin cambios relevantes esta semana.'**
+  String get homeInsightNoSignificantChange;
+
   /// No description provided for @homeSeeHistory.
   ///
   /// In es, this message translates to:
@@ -974,6 +1260,12 @@ abstract class AppLocalizations {
   /// **'Exportar a Excel'**
   String get dataBackupExportExcel;
 
+  /// No description provided for @dataBackupExportConfig.
+  ///
+  /// In es, this message translates to:
+  /// **'Configurar exportacion Excel'**
+  String get dataBackupExportConfig;
+
   /// No description provided for @dataBackupExportEncrypted.
   ///
   /// In es, this message translates to:
@@ -1280,11 +1572,167 @@ abstract class AppLocalizations {
   /// **'Reportes'**
   String get reportsTitle;
 
+  /// No description provided for @reportsCustomizeTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Personalizar widgets'**
+  String get reportsCustomizeTitle;
+
+  /// No description provided for @reportsCustomizePresetsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Plantillas'**
+  String get reportsCustomizePresetsTitle;
+
+  /// No description provided for @reportsPresetBasic.
+  ///
+  /// In es, this message translates to:
+  /// **'Basico'**
+  String get reportsPresetBasic;
+
+  /// No description provided for @reportsPresetCommercial.
+  ///
+  /// In es, this message translates to:
+  /// **'Comercial'**
+  String get reportsPresetCommercial;
+
+  /// No description provided for @reportsPresetAnalytical.
+  ///
+  /// In es, this message translates to:
+  /// **'Analitico'**
+  String get reportsPresetAnalytical;
+
+  /// No description provided for @reportsWidgetExportTools.
+  ///
+  /// In es, this message translates to:
+  /// **'Herramientas de exportacion'**
+  String get reportsWidgetExportTools;
+
+  /// No description provided for @reportsWidgetSummary.
+  ///
+  /// In es, this message translates to:
+  /// **'Resumen'**
+  String get reportsWidgetSummary;
+
+  /// No description provided for @reportsWidgetPeriodComparison.
+  ///
+  /// In es, this message translates to:
+  /// **'Comparativo de periodo'**
+  String get reportsWidgetPeriodComparison;
+
+  /// No description provided for @reportsWidgetTotalSalesTrend.
+  ///
+  /// In es, this message translates to:
+  /// **'Tendencia de ventas'**
+  String get reportsWidgetTotalSalesTrend;
+
+  /// No description provided for @reportsWidgetChannelMix.
+  ///
+  /// In es, this message translates to:
+  /// **'Mix por canal'**
+  String get reportsWidgetChannelMix;
+
+  /// No description provided for @reportsWidgetMonthlySales.
+  ///
+  /// In es, this message translates to:
+  /// **'Ventas mensuales'**
+  String get reportsWidgetMonthlySales;
+
+  /// No description provided for @reportsWidgetDailyHeatmap.
+  ///
+  /// In es, this message translates to:
+  /// **'Mapa de calor diario'**
+  String get reportsWidgetDailyHeatmap;
+
+  /// No description provided for @reportsWidgetTopProducts.
+  ///
+  /// In es, this message translates to:
+  /// **'Top productos'**
+  String get reportsWidgetTopProducts;
+
+  /// No description provided for @reportsWidgetBottomProducts.
+  ///
+  /// In es, this message translates to:
+  /// **'Productos con menor venta'**
+  String get reportsWidgetBottomProducts;
+
+  /// No description provided for @reportsPeriodComparisonTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Comparativo de periodo'**
+  String get reportsPeriodComparisonTitle;
+
+  /// No description provided for @reportsPeriodComparisonSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Rango actual vs rango anterior'**
+  String get reportsPeriodComparisonSubtitle;
+
+  /// No description provided for @reportsChannelMixTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Ventas por canal'**
+  String get reportsChannelMixTitle;
+
+  /// No description provided for @reportsChannelMixSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Participacion por canal en el rango seleccionado'**
+  String get reportsChannelMixSubtitle;
+
+  /// No description provided for @reportsChannelOther.
+  ///
+  /// In es, this message translates to:
+  /// **'Otros'**
+  String get reportsChannelOther;
+
+  /// No description provided for @reportsExportToolsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Exportacion Excel'**
+  String get reportsExportToolsTitle;
+
+  /// No description provided for @reportsExportToolsSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Configura campos y exporta los datos actuales'**
+  String get reportsExportToolsSubtitle;
+
+  /// No description provided for @reportsFilterAmountRange.
+  ///
+  /// In es, this message translates to:
+  /// **'Rango de monto'**
+  String get reportsFilterAmountRange;
+
+  /// No description provided for @reportsFilterMinAmount.
+  ///
+  /// In es, this message translates to:
+  /// **'Monto minimo'**
+  String get reportsFilterMinAmount;
+
+  /// No description provided for @reportsFilterMaxAmount.
+  ///
+  /// In es, this message translates to:
+  /// **'Monto maximo'**
+  String get reportsFilterMaxAmount;
+
+  /// No description provided for @reportsFilterMinQuantity.
+  ///
+  /// In es, this message translates to:
+  /// **'Cantidad minima'**
+  String get reportsFilterMinQuantity;
+
   /// No description provided for @reportsTopProducts.
   ///
   /// In es, this message translates to:
   /// **'Top productos'**
   String get reportsTopProducts;
+
+  /// No description provided for @reportsBottomProducts.
+  ///
+  /// In es, this message translates to:
+  /// **'Productos con menor venta'**
+  String get reportsBottomProducts;
 
   /// No description provided for @reportsTopEmpty.
   ///
@@ -1327,6 +1775,102 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'unidades'**
   String get reportsUnits;
+
+  /// No description provided for @excelExportConfigTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Configuracion de exportacion Excel'**
+  String get excelExportConfigTitle;
+
+  /// No description provided for @excelExportModelProducts.
+  ///
+  /// In es, this message translates to:
+  /// **'Productos'**
+  String get excelExportModelProducts;
+
+  /// No description provided for @excelExportModelSales.
+  ///
+  /// In es, this message translates to:
+  /// **'Ventas'**
+  String get excelExportModelSales;
+
+  /// No description provided for @excelExportModelPriceHistory.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial de precios'**
+  String get excelExportModelPriceHistory;
+
+  /// No description provided for @excelExportFieldId.
+  ///
+  /// In es, this message translates to:
+  /// **'ID'**
+  String get excelExportFieldId;
+
+  /// No description provided for @excelExportFieldName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre'**
+  String get excelExportFieldName;
+
+  /// No description provided for @excelExportFieldImageUrl.
+  ///
+  /// In es, this message translates to:
+  /// **'URL de imagen'**
+  String get excelExportFieldImageUrl;
+
+  /// No description provided for @excelExportFieldCurrentPrice.
+  ///
+  /// In es, this message translates to:
+  /// **'Precio actual'**
+  String get excelExportFieldCurrentPrice;
+
+  /// No description provided for @excelExportFieldProductId.
+  ///
+  /// In es, this message translates to:
+  /// **'ID producto'**
+  String get excelExportFieldProductId;
+
+  /// No description provided for @excelExportFieldProductName.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre producto'**
+  String get excelExportFieldProductName;
+
+  /// No description provided for @excelExportFieldAmount.
+  ///
+  /// In es, this message translates to:
+  /// **'Monto'**
+  String get excelExportFieldAmount;
+
+  /// No description provided for @excelExportFieldQuantity.
+  ///
+  /// In es, this message translates to:
+  /// **'Cantidad'**
+  String get excelExportFieldQuantity;
+
+  /// No description provided for @excelExportFieldChannel.
+  ///
+  /// In es, this message translates to:
+  /// **'Canal'**
+  String get excelExportFieldChannel;
+
+  /// No description provided for @excelExportFieldCreatedAt.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha creacion'**
+  String get excelExportFieldCreatedAt;
+
+  /// No description provided for @excelExportFieldPrice.
+  ///
+  /// In es, this message translates to:
+  /// **'Precio'**
+  String get excelExportFieldPrice;
+
+  /// No description provided for @excelExportFieldRecordedAt.
+  ///
+  /// In es, this message translates to:
+  /// **'Fecha registro'**
+  String get excelExportFieldRecordedAt;
 }
 
 class _AppLocalizationsDelegate

@@ -6,6 +6,7 @@ class RecentItem extends StatelessWidget {
   final String amount;
 
   const RecentItem({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.amount,
@@ -21,7 +22,7 @@ class RecentItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: shadowColor.withOpacity(0.04),
+            color: shadowColor.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -40,7 +41,7 @@ class RecentItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                     color: Theme.of(
                       context,
-                    ).colorScheme.onSurface.withOpacity(0.6),
+                    ).colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],

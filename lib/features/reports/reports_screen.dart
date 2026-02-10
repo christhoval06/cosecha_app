@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:share_plus/share_plus.dart';
-
-import '../../core/utils/formatters.dart';
 import '../../data/hive/boxes.dart';
 import '../../data/models/sale_transaction.dart';
-import '../../data/repositories/reports_repository.dart';
-import '../../core/services/backup_service.dart';
 import '../../l10n/app_localizations.dart';
 import '../products/widgets/segment_tabs.dart';
-import 'widgets/heatmap_card.dart';
-import 'widgets/monthly_sales_bar_chart.dart';
-import 'widgets/sparkline_card.dart';
-import 'widgets/summary_row.dart';
-import 'widgets/top_product_tile.dart';
+import 'dashboard/report_filters.dart';
+import 'dashboard/reports_dashboard_config.dart';
+import 'dashboard/reports_dashboard_customize_sheet.dart';
+import 'dashboard/reports_dashboard_registry.dart';
+import 'widgets/reports_filters_sheet.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -24,6 +19,15 @@ class ReportsScreen extends StatefulWidget {
 
 class _ReportsScreenState extends State<ReportsScreen> {
   String _range = '1W';
+  String? _channelFilter;
+  String? _productIdFilter;
+  double? _minAmountFilter;
+  double? _maxAmountFilter;
+  int? _minQuantityFilter;
+  late final ReportsDashboardConfigStore _configStore;
+  late final List<ReportsDashboardWidgetDef> _registry;
+  ReportsDashboardConfig? _layout;
+  bool _loadingLayout = true;
 
   DateTime _rangeStart(DateTime now) {
     switch (_range) {
@@ -44,147 +48,187 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _configStore = ReportsDashboardConfigStore();
+    _registry = reportsDashboardRegistry();
+    _loadLayout();
+  }
+
+  Future<void> _loadLayout() async {
+    final defaults = _registry.map((item) => item.id).toList();
+    const defaultEnabled = [
+      ReportsDashboardWidgetIds.exportTools,
+      ReportsDashboardWidgetIds.summary,
+      ReportsDashboardWidgetIds.periodComparison,
+      ReportsDashboardWidgetIds.totalSalesTrend,
+      ReportsDashboardWidgetIds.channelMix,
+      ReportsDashboardWidgetIds.monthlySales,
+      ReportsDashboardWidgetIds.topProducts,
+    ];
+    final loaded = await _configStore.load(
+      defaults,
+      defaultEnabledWidgetIds: defaultEnabled,
+    );
+    if (!mounted) return;
+    setState(() {
+      _layout = loaded;
+      _loadingLayout = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    final repo = ReportsRepository();
+    final now = DateTime.now();
+    final filters = ReportFilters(
+      range: _range,
+      from: _rangeStart(now),
+      to: now,
+      channel: _channelFilter,
+      productId: _productIdFilter,
+      minAmount: _minAmountFilter,
+      maxAmount: _maxAmountFilter,
+      minQuantity: _minQuantityFilter,
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.reportsTitle),
         actions: [
-          IconButton(
-            onPressed: () async {
-              final shareOrigin = _shareOrigin(context);
-              try {
-                final path = await BackupService.exportToExcel();
-                await Share.shareXFiles(
-                  [XFile(path)],
-                  sharePositionOrigin: shareOrigin,
-                );
-              } catch (error) {
-                if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.errorTitle),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                onPressed: _openAdvancedFilters,
+                icon: const Icon(Icons.filter_list),
+              ),
+              if (filters.activeCount > 0)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      filters.activeCount.toString(),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 10,
+                          ),
+                    ),
                   ),
-                );
-              }
-            },
-            icon: const Icon(Icons.table_view),
+                ),
+            ],
+          ),
+          IconButton(
+            onPressed: _layout == null ? null : _openCustomize,
+            icon: const Icon(Icons.tune),
           ),
         ],
       ),
       body: SafeArea(
-        child: ValueListenableBuilder<Box<SaleTransaction>>(
-          valueListenable:
-              Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
-          builder: (context, box, _) {
-            final now = DateTime.now();
-            final from = _rangeStart(now);
-            final to = now;
-
-            final total = repo.totalAmount(from, to);
-            final count = repo.totalCount(from, to);
-            final avg = count == 0 ? 0.0 : total / count;
-            final series = repo.dailySeries(from, to);
-            final monthlyTotals = repo.monthlyTotalsLastMonths(
-              months: 6,
-              reference: now,
-            );
-            final heatmap = repo.dailyTotals(from, to);
-            final top = repo.topProducts(from, to, limit: 5);
-            final rangeDuration = to.difference(from);
-            final prevFrom = from.subtract(rangeDuration);
-            final prevTo = from;
-            final prevTotal = repo.totalAmount(prevFrom, prevTo);
-            final changePercent =
-                prevTotal == 0 ? null : ((total - prevTotal) / prevTotal) * 100;
-
-            if (count == 0) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Text(
-                    l10n.reportsTopEmpty,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(
-                          color: colorScheme.onSurface.withValues(alpha: 0.6),
-                        ),
-                    textAlign: TextAlign.center,
+        child: _loadingLayout
+            ? const Center(child: CircularProgressIndicator())
+            : ListView(
+                padding: const EdgeInsets.all(20),
+                children: [
+                  SegmentTabs(
+                    value: _range,
+                    onChanged: (value) => setState(() => _range = value),
+                    options: const ['1D', '1W', '1M', '3M', '6M', '1Y'],
                   ),
-                ),
-              );
-            }
-
-            return ListView(
-              padding: const EdgeInsets.all(20),
-              children: [
-                SegmentTabs(
-                  value: _range,
-                  onChanged: (value) => setState(() => _range = value),
-                  options: const ['1D', '1W', '1M', '3M', '6M', '1Y'],
-                ),
-                const SizedBox(height: 16),
-                SummaryRow(
-                  total: total,
-                  count: count,
-                  avg: avg,
-                ),
-                const SizedBox(height: 16),
-                SparklineCard(
-                  title: l10n.reportsTotalSales,
-                  totalLabel: formatCurrency(total),
-                  changePercent: changePercent,
-                  values: series,
-                  from: from,
-                  to: to,
-                ),
-                const SizedBox(height: 16),
-                MonthlySalesBarChart(
-                  title: l10n.reportsMonthlySalesLast6,
-                  items: monthlyTotals,
-                ),
-                const SizedBox(height: 16),
-                HeatmapCard(
-                  title: l10n.reportsDailyHeatmap,
-                  totals: heatmap,
-                  to: to,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.reportsTopProducts,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 12),
-                if (top.isEmpty)
-                  Text(
-                    l10n.reportsTopEmpty,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(
-                          color: colorScheme.onSurface.withValues(alpha: 0.6),
-                        ),
-                  )
-                else
-                  ...top.map(
-                    (t) => TopProductTile(item: t),
-                  ),
-              ],
-            );
-          },
-        ),
+                  const SizedBox(height: 16),
+                  ..._buildDashboardWidgets(l10n, filters),
+                ],
+              ),
       ),
     );
   }
-}
 
-Rect _shareOrigin(BuildContext context) {
-  final box = context.findRenderObject() as RenderBox?;
-  if (box == null) return Rect.zero;
-  final origin = box.localToGlobal(Offset.zero) & box.size;
-  return origin;
+  List<Widget> _buildDashboardWidgets(
+    AppLocalizations l10n,
+    ReportFilters filters,
+  ) {
+    final layout = _layout;
+    if (layout == null) return const [SizedBox.shrink()];
+
+    final defsById = {
+      for (final def in _registry) def.id: def,
+    };
+
+    final widgets = <Widget>[];
+    for (final id in layout.orderedWidgetIds) {
+      if (!layout.enabledWidgetIds.contains(id)) continue;
+      final def = defsById[id];
+      if (def == null) continue;
+      widgets.add(def.builder(filters));
+      widgets.add(const SizedBox(height: 16));
+    }
+    if (widgets.isNotEmpty) {
+      widgets.removeLast();
+    }
+    if (widgets.isEmpty) {
+      widgets.add(
+        Text(
+          l10n.reportsTopEmpty,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      );
+    }
+    return widgets;
+  }
+
+  Future<void> _openCustomize() async {
+    final layout = _layout;
+    if (layout == null) return;
+    final updated = await showReportsDashboardCustomizeSheet(
+      context: context,
+      current: layout,
+      definitions: _registry,
+    );
+    if (updated == null) return;
+    await _configStore.save(updated);
+    if (!mounted) return;
+    setState(() => _layout = updated);
+  }
+
+  Future<void> _openAdvancedFilters() async {
+    final allItems = Hive.box<SaleTransaction>(HiveBoxes.transactions).values;
+    final products = <ReportsProductFilterOption>[
+      for (final entry in {
+        for (final item in allItems)
+          item.productId: ReportsProductFilterOption(
+            productId: item.productId,
+            productName: item.productName,
+          ),
+      }.entries)
+        if (entry.key.isNotEmpty) entry.value,
+    ]..sort((a, b) => a.productName.compareTo(b.productName));
+
+    final values = await showReportsFiltersSheet(
+      context: context,
+      initialChannel: _channelFilter,
+      initialProductId: _productIdFilter,
+      initialMinAmount: _minAmountFilter,
+      initialMaxAmount: _maxAmountFilter,
+      initialMinQuantity: _minQuantityFilter,
+      products: products,
+    );
+
+    if (values == null) return;
+    if (!mounted) return;
+    setState(() {
+      _channelFilter = values.channel;
+      _productIdFilter = values.productId;
+      _minAmountFilter = values.minAmount;
+      _maxAmountFilter = values.maxAmount;
+      _minQuantityFilter = values.minQuantity;
+    });
+  }
 }
