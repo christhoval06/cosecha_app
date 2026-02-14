@@ -35,6 +35,7 @@ Responsabilidad: infraestructura compartida de toda la app.
 - `constants`: rutas, canales, llaves de prefs, etc.
 - `router`: definición centralizada de rutas y navegación.
 - `services`: lógica transversal (reset app, backup, export excel, sesión).
+- `services/notifications`: programación, payloads y resolución de destinos de notificaciones.
 - `theme`: tokens y configuración visual global.
 - `utils`: formateadores, fechas, helpers utilitarios.
 - `widgets`: componentes reutilizables de múltiples features.
@@ -48,6 +49,7 @@ Responsabilidad: acceso y transformación de datos.
 - `models`: entidades persistidas (Hive types).
 - `hive`: cajas y setup de almacenamiento.
 - `repositories`: consultas/agregaciones para UI y reglas de negocio.
+- ejemplo nuevo: `ReminderItem` + `ReminderRepository` para recordatorios tipados en Hive.
 
 Patrón aplicado:
 - Los `repositories` exponen operaciones listas para consumo (totales, series, top/bottom, breakdowns).
@@ -95,6 +97,7 @@ Beneficio:
 4. Configuración persistida para preferencias de usuario.
 5. i18n obligatoria para textos (`arb` + `gen-l10n`).
 6. Navegación con rutas constantes centralizadas.
+7. Destinos de notificación centralizados en un registry (`ReminderDestinations`) para evitar rutas hardcodeadas en UI/servicios.
 
 ## Ejemplo de flujo (Reports)
 

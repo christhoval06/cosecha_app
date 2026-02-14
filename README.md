@@ -21,6 +21,10 @@ support: clear, practical, and designed for real-world selling.
 - Performance overview, trends, heatmap, and monthly bars
 - Configurable Excel export (models/fields), shared across Reports and Settings
 - Local-first storage with optional encrypted backups
+- Notification center with:
+  - backup reminders
+  - custom reminders (up to 10) with repeat days/time/label
+  - optional in-app destination when tapping notifications
 - Business profile with currency preferences
 - Multi-language support (EN/ES) with `gen-l10n`
 
@@ -45,6 +49,7 @@ lib/
     onboarding/
     products/
     reports/
+    reminders/
     settings/
     transactions/
   l10n/
@@ -77,6 +82,8 @@ lib/
 - Price changes create history records for trend charts.
 - i18n managed via `lib/l10n/*.arb` and `flutter gen-l10n`.
 - App routing is centralized in `lib/core/router/app_router.dart`.
+- Notification destination routing is centralized in
+  `lib/core/services/notifications/reminder_destinations.dart`.
 - Dashboard pattern used in Home and Reports:
   - `registry`: available widget definitions (`id/title/builder`)
   - `config`: persisted enabled/order state (`SharedPreferences`)
@@ -85,6 +92,9 @@ lib/
 - Excel export is centralized in `lib/core/services/excel_export_service.dart`:
   - Shared configuration (models + fields) with defaults to export all
   - Reused by Reports and Data Backup screens via a shared sheet
+- Reminders are persisted in typed Hive models/adapters:
+  - `lib/data/models/reminder_item.dart`
+  - `lib/data/repositories/reminder_repository.dart`
 
 ## Internal References
 
