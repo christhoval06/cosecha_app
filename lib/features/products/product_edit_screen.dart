@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/widgets/avatar_image_picker.dart';
+import '../../core/widgets/form_builder_currency_field.dart';
 import '../../core/utils/file.dart';
 import '../../data/hive/boxes.dart';
 import '../../data/models/product.dart';
@@ -13,12 +15,10 @@ import '../../l10n/app_localizations.dart';
 import '../../core/utils/formatters.dart';
 import 'product_pricing_insights.dart';
 import 'widgets/labelled_field.dart';
-import 'widgets/product_price_history_compact.dart';
-import 'widgets/product_price_impact_card.dart';
+import 'widgets/product_premium_insights_section.dart';
 import 'widgets/product_price_suggestion_card.dart';
+import 'widgets/product_sales_performance_section.dart';
 import 'widgets/product_strategy_tags_picker.dart';
-import 'widgets/price_performance_card.dart';
-import 'widgets/segment_tabs.dart';
 
 class ProductEditScreen extends StatefulWidget {
   const ProductEditScreen({super.key, this.product});
@@ -32,6 +32,9 @@ class ProductEditScreen extends StatefulWidget {
 class _ProductEditScreenState extends State<ProductEditScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final _repository = ProductRepository();
+  late final TextEditingController _priceController;
+  late final int _currencyDecimalDigits;
+  late final NumberFormat _priceNumberFormatter;
 
   String? _imagePath;
   String _range = '1M';
@@ -44,7 +47,23 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   void initState() {
     super.initState();
     _imagePath = widget.product?.imageUrl;
+    _currencyDecimalDigits = currencyDecimalDigitsForCurrentBusiness();
+    _priceNumberFormatter = NumberFormat.decimalPatternDigits(
+      locale: 'en_US',
+      decimalDigits: _currencyDecimalDigits,
+    );
+    _priceController = TextEditingController(
+      text: widget.product == null
+          ? ''
+          : _priceNumberFormatter.format(widget.product!.currentPrice),
+    );
     _priceDraft = widget.product?.currentPrice;
+  }
+
+  @override
+  void dispose() {
+    _priceController.dispose();
+    super.dispose();
   }
 
   @override
@@ -72,8 +91,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     final to = now;
     final filtered = history
         .where(
-          (item) => !item.recordedAt.isBefore(from) &&
-              !item.recordedAt.isAfter(to),
+          (item) =>
+              !item.recordedAt.isBefore(from) && !item.recordedAt.isAfter(to),
         )
         .toList();
     final values = filtered.map((item) => item.price).toList().cast<double>();
@@ -87,9 +106,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
             current: values.last,
           )
         : null;
-    final currentPrice =
-        _priceDraft ?? widget.product?.currentPrice ?? 0.0;
-
+    final currentPrice = _priceDraft ?? widget.product?.currentPrice ?? 0.0;
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -164,26 +181,21 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
               const SizedBox(height: 16),
               LabelledField(
                 label: l10n.productPriceLabel,
-                child: FormBuilderTextField(
+                child: FormBuilderCurrencyField(
                   name: 'price',
-                  initialValue: widget.product?.currentPrice.toString(),
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    prefixText: '\$ ',
-                    hintText: l10n.productPriceHint,
-                  ),
+                  labelText: l10n.productPriceLabel,
+                  controller: _priceController,
+                  hintText: l10n.productPriceHint,
                   onChanged: (value) {
                     setState(() {
-                      _priceDraft = double.tryParse(
-                        (value ?? '').replaceAll(',', '.'),
-                      );
+                      _priceDraft = _parsePriceInput(value);
                     });
                   },
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return l10n.productPriceRequired;
                     }
-                    final parsed = double.tryParse(value.replaceAll(',', '.'));
+                    final parsed = _parsePriceInput(value);
                     if (parsed == null || parsed <= 0) {
                       return l10n.productPriceInvalid;
                     }
@@ -197,8 +209,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   formatCurrency(currentPrice > 0 ? currentPrice : 0),
                 ),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
               const SizedBox(height: 16),
               FormBuilderField<List<String>>(
@@ -227,78 +239,65 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                 ),
               ),
               if (_isEdit)
-                ValueListenableBuilder<Box<SaleTransaction>>(
-                  valueListenable: Hive.box<SaleTransaction>(
-                    HiveBoxes.transactions,
-                  ).listenable(),
-                  builder: (context, box, _) {
-                    final suggested = ProductPricingInsights.suggestedPrice(
-                      productId: widget.product!.id,
-                      productName: widget.product!.name,
-                      currentPrice: widget.product!.currentPrice,
-                      sales: box.values,
-                    );
-                    if (suggested == null) return const SizedBox.shrink();
-                    return Column(
-                      children: [
-                        const SizedBox(height: 16),
-                        ProductPriceSuggestionCard(
-                          title: l10n.productSuggestedPriceTitle,
-                          subtitle: l10n.productSuggestedPriceSubtitle,
-                          currentPrice: widget.product!.currentPrice,
-                          suggestedPrice: suggested,
-                          applyLabel: l10n.productSuggestedPriceApply,
-                          onApply: () {
-                            _formKey.currentState?.fields['price']?.didChange(
-                              suggested.toStringAsFixed(2),
-                            );
-                            setState(() => _priceDraft = suggested);
-                          },
-                        ),
-                      ],
-                    );
-                  },
+                Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    ProductSalesPerformanceSection(
+                      product: widget.product!,
+                      range: _range,
+                      onRangeChanged: (value) => setState(() => _range = value),
+                      from: from,
+                      to: to,
+                    ),
+                    ProductPremiumInsightsSection(
+                      l10n: l10n,
+                      product: widget.product!,
+                      currentPrice: currentPrice,
+                      suggestedPriceCard: _buildSuggestedPriceCard(l10n),
+                      totalLabel: totalLabel,
+                      changePercent: changePercent,
+                      values: values,
+                      from: from,
+                      to: to,
+                      history: history,
+                    ),
+                  ],
                 ),
-              if (_isEdit) ...[
-                const SizedBox(height: 16),
-                ProductPriceImpactCard(
-                  title: l10n.productPriceImpactTitle,
-                  previousPrice: widget.product!.currentPrice,
-                  currentPrice: currentPrice,
-                  deltaLabel: l10n.productPriceImpactDelta,
-                  percentLabel: l10n.productPriceImpactPercent,
-                  unitsLabel: l10n.productPriceImpactUnits,
-                ),
-              ],
-              if (_isEdit) ...[
-                const SizedBox(height: 24),
-                PricePerformanceCard(
-                  title: l10n.productPricePerformanceTitle,
-                  totalLabel: totalLabel,
-                  changePercent: changePercent,
-                  values: values,
-                  from: from,
-                  to: to,
-                  showLabels: false,
-                ),
-                const SizedBox(height: 16),
-                SegmentTabs(
-                  value: _range,
-                  onChanged: (value) => setState(() => _range = value),
-                  options: const ['1M', '6M', '1Y'],
-                ),
-                const SizedBox(height: 16),
-                ProductPriceHistoryCompact(
-                  title: l10n.productPriceHistoryCompactTitle,
-                  entries: history,
-                  emptyLabel: l10n.productPriceHistoryCompactEmpty,
-                  deltaLabel: l10n.productPriceHistoryCompactDelta,
-                ),
-              ],
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSuggestedPriceCard(AppLocalizations l10n) {
+    return ValueListenableBuilder<Box<SaleTransaction>>(
+      valueListenable: Hive.box<SaleTransaction>(
+        HiveBoxes.transactions,
+      ).listenable(),
+      builder: (context, box, _) {
+        final suggested = ProductPricingInsights.suggestedPrice(
+          productId: widget.product!.id,
+          productName: widget.product!.name,
+          currentPrice: widget.product!.currentPrice,
+          sales: box.values,
+        );
+        if (suggested == null) return const SizedBox.shrink();
+        return ProductPriceSuggestionCard(
+          title: l10n.productSuggestedPriceTitle,
+          subtitle: l10n.productSuggestedPriceSubtitle,
+          currentPrice: widget.product!.currentPrice,
+          suggestedPrice: suggested,
+          applyLabel: l10n.productSuggestedPriceApply,
+          onApply: () {
+            _formKey.currentState?.fields['price']?.didChange(
+              _priceNumberFormatter.format(suggested),
+            );
+            _priceController.text = _priceNumberFormatter.format(suggested);
+            setState(() => _priceDraft = suggested);
+          },
+        );
+      },
     );
   }
 
@@ -314,10 +313,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     }
   }
 
-  double? _changePercent({
-    required double previous,
-    required double current,
-  }) {
+  double? _changePercent({required double previous, required double current}) {
     if (previous <= 0) return null;
     return ((current - previous) / previous) * 100;
   }
@@ -335,7 +331,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     final values = formState.value;
     final name = (values['name'] as String?)?.trim() ?? '';
     final priceRaw = (values['price'] as String?)?.trim() ?? '';
-    final price = double.tryParse(priceRaw.replaceAll(',', '.')) ?? 0;
+    final price = _parsePriceInput(priceRaw) ?? 0;
     final strategyTags = (values['strategy_tags'] as List<dynamic>? ?? const [])
         .map((e) => e.toString())
         .toList(growable: false);
@@ -357,10 +353,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     }
 
     try {
-      await _repository.save(
-        product,
-        priceChangeTags: strategyTags,
-      );
+      await _repository.save(product, priceChangeTags: strategyTags);
       if (!mounted) return;
       setState(() => _saving = false);
       Navigator.of(context).pop();
@@ -389,9 +382,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     try {
       await _repository.save(duplicated);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.productDuplicateSuccess)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.productDuplicateSuccess)));
       Navigator.of(context).pop();
     } catch (error) {
       if (!mounted) return;
@@ -438,5 +431,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       },
     );
     return confirmed == true;
+  }
+
+  double? _parsePriceInput(String? raw) {
+    return parseCurrencyInput(raw, decimalDigits: _currencyDecimalDigits);
   }
 }
