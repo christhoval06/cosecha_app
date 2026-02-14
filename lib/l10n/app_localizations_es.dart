@@ -297,6 +297,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get productPricePerformanceTitle => 'Rendimiento del precio';
 
   @override
+  String get productSalesPerformanceTitle => 'Rendimiento de ventas';
+
+  @override
   String productPricePerformanceChart(Object range) {
     return 'Gráfico ($range)';
   }
@@ -403,6 +406,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeActionBackup => 'Respaldo';
+
+  @override
+  String get homeActionAddProduct => 'Agregar producto';
 
   @override
   String get homeActionViewProducts => 'Ver productos';
@@ -634,6 +640,37 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeQuickAddProducts => 'Agregar productos';
+
+  @override
+  String get homePerformanceDetailPeriodSales => 'Ventas del período';
+
+  @override
+  String get homePerformanceDetailProductsTitle => 'Ventas por producto';
+
+  @override
+  String get homePerformanceDetailProductsSubtitle =>
+      'Comparado con el período anterior';
+
+  @override
+  String get homePerformanceDetailNoSales => 'No hay ventas en este período.';
+
+  @override
+  String get homePerformanceDetailPreviousPeriod => 'Período anterior';
+
+  @override
+  String get homePerformanceDetailQuantity => 'Cant.';
+
+  @override
+  String get homeLatestProductsTitle => 'Productos recientes';
+
+  @override
+  String get homeLatestProductsSubtitle => 'Últimos 3 productos agregados';
+
+  @override
+  String get homeLatestProductsEmpty => 'Aún no hay productos registrados.';
+
+  @override
+  String get homeLatestProductsAddButton => 'Agregar producto';
 
   @override
   String get salesProductSelect => 'Selecciona un producto';

@@ -9,6 +9,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/constants/app_prefs.dart';
+import '../../core/premium/premium_features.dart';
+import '../../core/premium/premium_guard.dart';
 import '../../core/services/backup_service.dart';
 import '../../core/services/excel_export_service.dart';
 import '../../core/services/app_services.dart';
@@ -242,6 +244,12 @@ class _SummaryCard extends StatelessWidget {
 }
 
 Future<void> _exportExcel(BuildContext context, AppLocalizations l10n) async {
+  final canUse = await guardPremiumAccess(
+    context,
+    feature: PremiumFeature.excelExport,
+  );
+  if (!canUse) return;
+
   try {
     final result = await _withLoader(
       context,
@@ -270,6 +278,12 @@ Future<void> _exportExcel(BuildContext context, AppLocalizations l10n) async {
 }
 
 Future<void> _configureExcelExport(BuildContext context) async {
+  final canUse = await guardPremiumAccess(
+    context,
+    feature: PremiumFeature.excelExport,
+  );
+  if (!canUse) return;
+
   final current = await ExcelExportService.loadConfig();
   if (!context.mounted) return;
   final updated = await showExcelExportConfigSheet(

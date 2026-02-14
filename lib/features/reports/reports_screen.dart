@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../data/hive/boxes.dart';
 import '../../data/models/sale_transaction.dart';
+import '../../core/premium/premium_access.dart';
+import '../../core/premium/premium_features.dart';
+import '../../core/premium/premium_guard.dart';
 import '../../l10n/app_localizations.dart';
 import '../products/widgets/segment_tabs.dart';
 import 'dashboard/report_filters.dart';
@@ -51,28 +54,39 @@ class _ReportsScreenState extends State<ReportsScreen> {
   void initState() {
     super.initState();
     _configStore = ReportsDashboardConfigStore();
-    _registry = reportsDashboardRegistry();
+    _registry = reportsDashboardRegistry(
+      includePremium: PremiumAccess.instance.isPremium,
+    );
     _loadLayout();
   }
 
   Future<void> _loadLayout() async {
     final defaults = _registry.map((item) => item.id).toList();
-    const defaultEnabled = [
-      ReportsDashboardWidgetIds.exportTools,
+    final defaultEnabled = <String>[
       ReportsDashboardWidgetIds.summary,
       ReportsDashboardWidgetIds.periodComparison,
       ReportsDashboardWidgetIds.totalSalesTrend,
       ReportsDashboardWidgetIds.channelMix,
       ReportsDashboardWidgetIds.monthlySales,
       ReportsDashboardWidgetIds.topProducts,
+      if (PremiumAccess.instance.isPremium) ReportsDashboardWidgetIds.exportTools,
     ];
     final loaded = await _configStore.load(
       defaults,
       defaultEnabledWidgetIds: defaultEnabled,
     );
+    final availableIds = defaults.toSet();
+    final sanitized = ReportsDashboardConfig(
+      enabledWidgetIds: loaded.enabledWidgetIds
+          .where(availableIds.contains)
+          .toList(growable: false),
+      orderedWidgetIds: loaded.orderedWidgetIds
+          .where(availableIds.contains)
+          .toList(growable: false),
+    );
     if (!mounted) return;
     setState(() {
-      _layout = loaded;
+      _layout = sanitized;
       _loadingLayout = false;
     });
   }
@@ -127,7 +141,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ],
           ),
           IconButton(
-            onPressed: _layout == null ? null : _openCustomize,
+            onPressed: _layout == null
+                ? null
+                : () async {
+                    final canUse = await guardPremiumAccess(
+                      context,
+                      feature: PremiumFeature.reportsDashboardCustomization,
+                    );
+                    if (!canUse) return;
+                    await _openCustomize();
+                  },
             icon: const Icon(Icons.tune),
           ),
         ],

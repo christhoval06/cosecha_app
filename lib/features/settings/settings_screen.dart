@@ -3,6 +3,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/constants/app_routes.dart';
+import '../../core/premium/premium_access.dart';
+import '../../core/premium/premium_features.dart';
+import '../../core/premium/premium_guard.dart';
 import '../../core/services/app_reset_service.dart';
 import '../../l10n/app_localizations.dart';
 import 'widgets/settings_brand_header.dart';
@@ -45,6 +48,37 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 28),
             SettingsSectionTitle(text: l10n.settingsSectionGeneral),
+            const SizedBox(height: 12),
+            ValueListenableBuilder<bool>(
+              valueListenable: PremiumAccess.instance.listenable,
+              builder: (context, isPremium, _) {
+                return SettingsTile(
+                  icon: isPremium
+                      ? Icons.workspace_premium
+                      : Icons.workspace_premium_outlined,
+                  iconBg: colorScheme.tertiaryContainer,
+                  iconColor: colorScheme.onTertiaryContainer,
+                  title: isPremium ? 'Plan Premium activo' : 'Volverse Premium',
+                  subtitle: isPremium
+                      ? 'Ya tienes todas las funciones premium desbloqueadas.'
+                      : 'Desbloquea ajustes avanzados, widgets premium y exportación Excel.',
+                  onTap: () async {
+                    if (isPremium) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Tu cuenta ya es Premium.'),
+                        ),
+                      );
+                      return;
+                    }
+                    await showPremiumUpsellModal(
+                      context,
+                      feature: PremiumFeature.homeDashboardCustomization,
+                    );
+                  },
+                );
+              },
+            ),
             const SizedBox(height: 12),
             SettingsTile(
               icon: Icons.storefront_outlined,

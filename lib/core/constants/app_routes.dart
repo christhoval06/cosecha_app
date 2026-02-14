@@ -9,6 +9,7 @@ class AppRoutes {
   static const reports = '/reports';
   static const salesHistory = '/sales-history';
   static const saleAdd = '/sale-add';
+  static const homePerformanceDetail = '/home-performance-detail';
   static const settings = '/settings';
   static const notificationSettings = '/notification-settings';
   static const developer = '/developer';

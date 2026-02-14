@@ -116,6 +116,7 @@
   "productDuplicateSuccess": "Product duplicated successfully.",
   "productUpdatePrice": "Update price",
   "productPricePerformanceTitle": "Price performance",
+  "productSalesPerformanceTitle": "Sales performance",
   "productPricePerformanceChart": "Chart ({range})",
   "@productPricePerformanceChart": {
     "placeholders": {
@@ -158,6 +159,7 @@
   "homeActionSalesHistory": "History",
   "homeActionReports": "Reports",
   "homeActionBackup": "Backup",
+  "homeActionAddProduct": "Add product",
   "homeActionViewProducts": "View products",
   "homeSalesGoalTitle": "Monthly goal progress",
   "homeSalesGoalSubtitle": "Current month vs estimated goal",
@@ -267,6 +269,10 @@
   "salesSaving": "Saving...",
   "salesSaveError": "Failed to save sale"
   ,
+  "homeLatestProductsTitle": "Recent products",
+  "homeLatestProductsSubtitle": "Last 3 products added",
+  "homeLatestProductsEmpty": "No products yet.",
+  "homeLatestProductsAddButton": "Add product",
   "salesProductSelect": "Select a product",
   "salesSearchHint": "Search products..."
   ,
@@ -413,5 +419,11 @@
   "excelExportFieldCreatedAt": "Created at",
   "excelExportFieldPrice": "Price",
   "excelExportFieldRecordedAt": "Recorded at",
-  "excelExportFieldStrategyTags": "Strategy tags"
+  "excelExportFieldStrategyTags": "Strategy tags",
+  "homePerformanceDetailPeriodSales": "Period sales",
+  "homePerformanceDetailProductsTitle": "Sales by product",
+  "homePerformanceDetailProductsSubtitle": "Compared to previous period",
+  "homePerformanceDetailNoSales": "No sales in this period.",
+  "homePerformanceDetailPreviousPeriod": "Previous period",
+  "homePerformanceDetailQuantity": "Qty."
 }

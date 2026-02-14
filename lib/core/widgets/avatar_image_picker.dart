@@ -30,7 +30,10 @@ class _AvatarImagePickerState extends State<AvatarImagePicker> {
     if (_loading || !widget.enabled) return;
     setState(() => _loading = true);
     final picker = ImagePicker();
-    final picked = await picker.pickImage(source: source);
+    final picked = await picker.pickImage(
+      source: source,
+      imageQuality: 60,
+    );
     final path = picked?.path;
     if (!mounted) return;
     setState(() => _loading = false);

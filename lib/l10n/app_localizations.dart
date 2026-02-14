@@ -638,6 +638,12 @@ abstract class AppLocalizations {
   /// **'Rendimiento del precio'**
   String get productPricePerformanceTitle;
 
+  /// No description provided for @productSalesPerformanceTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Rendimiento de ventas'**
+  String get productSalesPerformanceTitle;
+
   /// No description provided for @productPricePerformanceChart.
   ///
   /// In es, this message translates to:
@@ -847,6 +853,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Respaldo'**
   String get homeActionBackup;
+
+  /// No description provided for @homeActionAddProduct.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar producto'**
+  String get homeActionAddProduct;
 
   /// No description provided for @homeActionViewProducts.
   ///
@@ -1265,6 +1277,66 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Agregar productos'**
   String get homeQuickAddProducts;
+
+  /// No description provided for @homePerformanceDetailPeriodSales.
+  ///
+  /// In es, this message translates to:
+  /// **'Ventas del período'**
+  String get homePerformanceDetailPeriodSales;
+
+  /// No description provided for @homePerformanceDetailProductsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Ventas por producto'**
+  String get homePerformanceDetailProductsTitle;
+
+  /// No description provided for @homePerformanceDetailProductsSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Comparado con el período anterior'**
+  String get homePerformanceDetailProductsSubtitle;
+
+  /// No description provided for @homePerformanceDetailNoSales.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay ventas en este período.'**
+  String get homePerformanceDetailNoSales;
+
+  /// No description provided for @homePerformanceDetailPreviousPeriod.
+  ///
+  /// In es, this message translates to:
+  /// **'Período anterior'**
+  String get homePerformanceDetailPreviousPeriod;
+
+  /// No description provided for @homePerformanceDetailQuantity.
+  ///
+  /// In es, this message translates to:
+  /// **'Cant.'**
+  String get homePerformanceDetailQuantity;
+
+  /// No description provided for @homeLatestProductsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Productos recientes'**
+  String get homeLatestProductsTitle;
+
+  /// No description provided for @homeLatestProductsSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Últimos 3 productos agregados'**
+  String get homeLatestProductsSubtitle;
+
+  /// No description provided for @homeLatestProductsEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no hay productos registrados.'**
+  String get homeLatestProductsEmpty;
+
+  /// No description provided for @homeLatestProductsAddButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar producto'**
+  String get homeLatestProductsAddButton;
 
   /// No description provided for @salesProductSelect.
   ///

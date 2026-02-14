@@ -28,8 +28,10 @@ class ReportsDashboardWidgetIds {
   static const exportTools = 'export_tools';
 }
 
-List<ReportsDashboardWidgetDef> reportsDashboardRegistry() {
-  return const [
+List<ReportsDashboardWidgetDef> reportsDashboardRegistry({
+  bool includePremium = true,
+}) {
+  final widgets = <ReportsDashboardWidgetDef>[
     ReportsDashboardWidgetDef(
       id: ReportsDashboardWidgetIds.summary,
       title: _summaryTitle,
@@ -70,12 +72,17 @@ List<ReportsDashboardWidgetDef> reportsDashboardRegistry() {
       title: _bottomProductsTitle,
       builder: ReportsBottomProductsPanel.new,
     ),
-    ReportsDashboardWidgetDef(
-      id: ReportsDashboardWidgetIds.exportTools,
-      title: _exportToolsTitle,
-      builder: ReportsExportToolsPanel.new,
-    ),
   ];
+  if (includePremium) {
+    widgets.add(
+      const ReportsDashboardWidgetDef(
+        id: ReportsDashboardWidgetIds.exportTools,
+        title: _exportToolsTitle,
+        builder: ReportsExportToolsPanel.new,
+      ),
+    );
+  }
+  return widgets;
 }
 
 String _exportToolsTitle(AppLocalizations l10n) =>

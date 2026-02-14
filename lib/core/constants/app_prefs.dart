@@ -1,6 +1,7 @@
 class AppPrefs {
   static const onboardingComplete = 'hasCompletedOnboarding';
   static const profileSetupComplete = 'hasCompletedProfileSetup';
+  static const premiumEnabled = 'premium_enabled_v1';
 
   static const homeDashboardEnabledWidgets = 'home_dashboard_enabled_widgets';
   static const homeDashboardOrderWidgets = 'home_dashboard_order_widgets';

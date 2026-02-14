@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../features/business/profile_setup_screen.dart';
+import '../../features/home/home_performance_detail_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/products/product_edit_screen.dart';
@@ -35,6 +36,15 @@ class AppRouter {
         return AddSaleScreen(product: args);
       }
       return const AddSaleScreen();
+    },
+    AppRoutes.homePerformanceDetail: (context) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is HomePerformanceDetailArgs) {
+        return HomePerformanceDetailScreen(period: args.period);
+      }
+      return InvalidRouteArgsScreen(
+        message: AppLocalizations.of(context).invalidProductMessage,
+      );
     },
     AppRoutes.settings: (context) => const SettingsScreen(),
     AppRoutes.notificationSettings: (context) =>

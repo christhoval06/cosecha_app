@@ -1,0 +1,3 @@
+"NSCameraUsageDescription" = "Necesitamos acceso a la camara para tomar fotos.";
+"NSPhotoLibraryAddUsageDescription" = "Necesitamos permiso para guardar imagenes en tu biblioteca.";
+"NSPhotoLibraryUsageDescription" = "Necesitamos acceso a tus fotos para seleccionar imagenes.";

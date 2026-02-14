@@ -7,6 +7,7 @@ import '../../data/models/business.dart';
 import '../../data/models/product.dart';
 import '../../data/models/product_price_history.dart';
 import '../../data/models/sale_transaction.dart';
+import '../premium/premium_access.dart';
 import 'business_session.dart';
 
 class AppResetService {
@@ -20,6 +21,7 @@ class AppResetService {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    await PremiumAccess.instance.setPremium(false);
 
     BusinessSession.instance.setCurrent(null);
   }

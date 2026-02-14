@@ -295,6 +295,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productPricePerformanceTitle => 'Price performance';
 
   @override
+  String get productSalesPerformanceTitle => 'Sales performance';
+
+  @override
   String productPricePerformanceChart(Object range) {
     return 'Chart ($range)';
   }
@@ -401,6 +404,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeActionBackup => 'Backup';
+
+  @override
+  String get homeActionAddProduct => 'Add product';
 
   @override
   String get homeActionViewProducts => 'View products';
@@ -628,6 +634,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeQuickAddProducts => 'Add products';
+
+  @override
+  String get homePerformanceDetailPeriodSales => 'Period sales';
+
+  @override
+  String get homePerformanceDetailProductsTitle => 'Sales by product';
+
+  @override
+  String get homePerformanceDetailProductsSubtitle =>
+      'Compared to previous period';
+
+  @override
+  String get homePerformanceDetailNoSales => 'No sales in this period.';
+
+  @override
+  String get homePerformanceDetailPreviousPeriod => 'Previous period';
+
+  @override
+  String get homePerformanceDetailQuantity => 'Qty.';
+
+  @override
+  String get homeLatestProductsTitle => 'Recent products';
+
+  @override
+  String get homeLatestProductsSubtitle => 'Last 3 products added';
+
+  @override
+  String get homeLatestProductsEmpty => 'No products yet.';
+
+  @override
+  String get homeLatestProductsAddButton => 'Add product';
 
   @override
   String get salesProductSelect => 'Select a product';

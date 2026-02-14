@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../core/premium/premium_features.dart';
+import '../../../core/premium/premium_guard.dart';
 import '../../../core/services/excel_export_service.dart';
 import '../../../core/widgets/excel_export_config_sheet.dart';
 import '../../../core/utils/formatters.dart';
@@ -49,6 +51,11 @@ class ReportsExportToolsPanel extends StatelessWidget {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () async {
+                    final canUse = await guardPremiumAccess(
+                      context,
+                      feature: PremiumFeature.excelExport,
+                    );
+                    if (!canUse) return;
                     final current = await ExcelExportService.loadConfig();
                     if (!context.mounted) return;
                     final updated = await showExcelExportConfigSheet(
@@ -67,6 +74,11 @@ class ReportsExportToolsPanel extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: () async {
                     try {
+                      final canUse = await guardPremiumAccess(
+                        context,
+                        feature: PremiumFeature.excelExport,
+                      );
+                      if (!canUse) return;
                       final config = await ExcelExportService.loadConfig();
                       final path = await ExcelExportService.exportToExcel(
                         config: config,

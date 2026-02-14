@@ -116,6 +116,7 @@
   "productDuplicateSuccess": "Producto duplicado correctamente.",
   "productUpdatePrice": "Actualizar precio",
   "productPricePerformanceTitle": "Rendimiento del precio",
+  "productSalesPerformanceTitle": "Rendimiento de ventas",
   "productPricePerformanceChart": "Gráfico ({range})",
   "@productPricePerformanceChart": {
     "placeholders": {
@@ -158,6 +159,7 @@
   "homeActionSalesHistory": "Historial",
   "homeActionReports": "Reportes",
   "homeActionBackup": "Respaldo",
+  "homeActionAddProduct": "Agregar producto",
   "homeActionViewProducts": "Ver productos",
   "homeSalesGoalTitle": "Avance de meta mensual",
   "homeSalesGoalSubtitle": "Mes actual vs meta estimada",
@@ -265,7 +267,17 @@
   "salesSaving": "Guardando...",
   "salesSaveError": "Error al guardar la venta",
   "homeRecentEmpty": "Aún no hay ventas recientes.",
-  "homeQuickAddProducts": "Agregar productos"
+  "homeQuickAddProducts": "Agregar productos",
+  "homePerformanceDetailPeriodSales": "Ventas del período",
+  "homePerformanceDetailProductsTitle": "Ventas por producto",
+  "homePerformanceDetailProductsSubtitle": "Comparado con el período anterior",
+  "homePerformanceDetailNoSales": "No hay ventas en este período.",
+  "homePerformanceDetailPreviousPeriod": "Período anterior",
+  "homePerformanceDetailQuantity": "Cant.",
+  "homeLatestProductsTitle": "Productos recientes",
+  "homeLatestProductsSubtitle": "Últimos 3 productos agregados",
+  "homeLatestProductsEmpty": "Aún no hay productos registrados.",
+  "homeLatestProductsAddButton": "Agregar producto"
   ,
   "salesProductSelect": "Selecciona un producto",
   "salesSearchHint": "Buscar productos..."
