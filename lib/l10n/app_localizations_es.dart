@@ -759,6 +759,135 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudo enviar la notificación de prueba.';
 
   @override
+  String get settingsRemindersTitle => 'Recordatorios personalizados';
+
+  @override
+  String get settingsRemindersCardSubtitle =>
+      'Crea recordatorios con días, hora y destino opcional dentro de la app.';
+
+  @override
+  String get settingsRemindersCounterTitle => 'Recordatorios disponibles';
+
+  @override
+  String get settingsRemindersCounterSubtitle =>
+      'Puedes tener hasta 10 recordatorios activos o desactivados.';
+
+  @override
+  String get settingsRemindersViewAll => 'Ver todos';
+
+  @override
+  String get settingsRemindersAdd => 'Agregar';
+
+  @override
+  String get settingsRemindersLimit =>
+      'Límite alcanzado: solo puedes tener 10 recordatorios.';
+
+  @override
+  String get settingsRemindersEmpty =>
+      'Aún no tienes recordatorios. Agrega el primero para comenzar.';
+
+  @override
+  String get settingsRemindersNoDestination => 'Sin destino';
+
+  @override
+  String get settingsRemindersDeleteTitle => 'Eliminar recordatorio';
+
+  @override
+  String get settingsRemindersDeleteBody =>
+      'Este recordatorio se eliminará y dejará de notificarse.';
+
+  @override
+  String get settingsRemindersCreateTitle => 'Nuevo recordatorio';
+
+  @override
+  String get settingsRemindersEditTitle => 'Editar recordatorio';
+
+  @override
+  String get settingsRemindersFieldTitle => 'Título';
+
+  @override
+  String get settingsRemindersFieldDescription => 'Descripción';
+
+  @override
+  String get settingsRemindersFieldLabel => 'Etiqueta';
+
+  @override
+  String get settingsRemindersFieldTime => 'Hora';
+
+  @override
+  String get settingsRemindersFieldRepeat => 'Repetir';
+
+  @override
+  String get settingsRemindersFieldOpenDestination =>
+      'Abrir una sección al tocar la notificación';
+
+  @override
+  String get settingsRemindersFieldDestination => 'Destino';
+
+  @override
+  String get settingsRemindersRequired => 'Este campo es obligatorio.';
+
+  @override
+  String get settingsRemindersEnabled => 'Habilitado';
+
+  @override
+  String get settingsRemindersSaveAction => 'Guardar';
+
+  @override
+  String get settingsRemindersEditAction => 'Editar';
+
+  @override
+  String get settingsRemindersDeleteAction => 'Borrar';
+
+  @override
+  String get settingsReminderDestinationNewProduct => 'Nuevo producto';
+
+  @override
+  String get settingsReminderDestinationNewSale => 'Nueva venta';
+
+  @override
+  String get settingsReminderDestinationReports => 'Reportes';
+
+  @override
+  String get settingsReminderDestinationSalesHistory => 'Historial de ventas';
+
+  @override
+  String get settingsReminderDestinationProfile => 'Perfil';
+
+  @override
+  String get settingsReminderDestinationPerformanceToday =>
+      'Performance de ventas hoy';
+
+  @override
+  String get settingsReminderDestinationPerformanceWeek =>
+      'Performance de ventas semana';
+
+  @override
+  String get settingsReminderDestinationPerformanceMonth =>
+      'Performance de ventas mes';
+
+  @override
+  String get settingsWeekdaySunShort => 'D';
+
+  @override
+  String get settingsWeekdayMonShort => 'L';
+
+  @override
+  String get settingsWeekdayTueShort => 'M';
+
+  @override
+  String get settingsWeekdayWedShort => 'M';
+
+  @override
+  String get settingsWeekdayThuShort => 'J';
+
+  @override
+  String get settingsWeekdayFriShort => 'V';
+
+  @override
+  String get settingsWeekdaySatShort => 'S';
+
+  @override
   String get dataBackupTitle => 'Datos y Respaldo';
 
   @override

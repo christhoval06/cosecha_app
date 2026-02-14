@@ -6,6 +6,7 @@ import '../../data/hive/boxes.dart';
 import '../../data/models/business.dart';
 import '../../data/models/product.dart';
 import '../../data/models/product_price_history.dart';
+import '../../data/models/reminder_item.dart';
 import '../../data/models/sale_transaction.dart';
 import '../premium/premium_access.dart';
 import 'business_session.dart';
@@ -18,6 +19,7 @@ class AppResetService {
     await Hive.box<Product>(HiveBoxes.products).clear();
     await Hive.box<SaleTransaction>(HiveBoxes.transactions).clear();
     await Hive.box<ProductPriceHistory>(HiveBoxes.productPriceHistory).clear();
+    await Hive.box<ReminderItem>(HiveBoxes.reminders).clear();
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();

@@ -3,11 +3,11 @@ import 'dart:ui' as ui;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants/app_prefs.dart';
-import '../../constants/app_routes.dart';
 import '../logger_service.dart';
 import '../../../l10n/app_localizations.dart';
 import 'notification_payload.dart';
 import 'notification_service.dart';
+import 'reminder_destinations.dart';
 
 class BackupReminderNotificationService {
   BackupReminderNotificationService(this._notificationService);
@@ -19,10 +19,10 @@ class BackupReminderNotificationService {
   static const String _channelId = 'backup_reminders';
   static const String _testChannelId = 'backup_reminders_high';
 
-  static const List<String> availableTapRoutes = <String>[
-    AppRoutes.dataBackup,
-    AppRoutes.settings,
-    AppRoutes.notificationSettings,
+  static const List<String> availableTapDestinationIds = <String>[
+    ReminderDestinations.dataBackup,
+    ReminderDestinations.settings,
+    ReminderDestinations.notificationSettings,
   ];
 
   Future<void> ensureScheduled() async {
@@ -35,7 +35,7 @@ class BackupReminderNotificationService {
 
     final l10n = _localizedStrings();
     final repeat = _readFrequency(prefs);
-    final tapRoute = _readTapRoute(prefs);
+    final tapDestinationId = _readTapDestinationId(prefs);
     await _notificationService.showPeriodic(
       NotificationRequest(
         id: _notificationId,
@@ -46,9 +46,7 @@ class BackupReminderNotificationService {
           name: l10n.backupReminderNotificationChannelName,
           description: l10n.backupReminderNotificationChannelDescription,
         ),
-        payload: const NotificationPayload(
-          type: 'backup_reminder',
-        ).encodeWithRoute(tapRoute),
+        payload: _payloadForDestination(tapDestinationId),
       ),
       repeat: repeat,
     );
@@ -90,15 +88,15 @@ class BackupReminderNotificationService {
     await ensureScheduled();
   }
 
-  Future<String> getTapRoute() async {
+  Future<String> getTapDestinationId() async {
     final prefs = await SharedPreferences.getInstance();
-    return _readTapRoute(prefs);
+    return _readTapDestinationId(prefs);
   }
 
-  Future<void> setTapRoute(String route) async {
-    if (!availableTapRoutes.contains(route)) return;
+  Future<void> setTapDestinationId(String destinationId) async {
+    if (!availableTapDestinationIds.contains(destinationId)) return;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(AppPrefs.backupReminderTapRoute, route);
+    await prefs.setString(AppPrefs.backupReminderTapRoute, destinationId);
     await ensureScheduled();
   }
 
@@ -110,7 +108,7 @@ class BackupReminderNotificationService {
       }
       final l10n = _localizedStrings();
       final prefs = await SharedPreferences.getInstance();
-      final tapRoute = _readTapRoute(prefs);
+      final tapDestinationId = _readTapDestinationId(prefs);
       await _notificationService.show(
         NotificationRequest(
           id: _testNotificationId,
@@ -122,9 +120,7 @@ class BackupReminderNotificationService {
             description: l10n.backupReminderNotificationChannelDescription,
           ),
           highPriority: true,
-          payload: const NotificationPayload(
-            type: 'backup_reminder',
-          ).encodeWithRoute(tapRoute),
+          payload: _payloadForDestination(tapDestinationId),
         ),
       );
     } catch (error, stackTrace) {
@@ -153,21 +149,27 @@ class BackupReminderNotificationService {
     };
   }
 
-  String _readTapRoute(SharedPreferences prefs) {
+  String _readTapDestinationId(SharedPreferences prefs) {
     final raw = prefs.getString(AppPrefs.backupReminderTapRoute);
-    if (raw != null && availableTapRoutes.contains(raw)) {
+
+    if (raw != null && availableTapDestinationIds.contains(raw)) {
       return raw;
     }
-    return AppRoutes.dataBackup;
-  }
-}
 
-extension on NotificationPayload {
-  String encodeWithRoute(String route) {
+    return switch (raw) {
+      '/data-backup' => ReminderDestinations.dataBackup,
+      '/settings' => ReminderDestinations.settings,
+      '/notification-settings' => ReminderDestinations.notificationSettings,
+      _ => ReminderDestinations.dataBackup,
+    };
+  }
+
+  String _payloadForDestination(String destinationId) {
+    final spec = ReminderDestinations.specs[destinationId];
     return NotificationPayload(
-      type: type,
-      route: route,
-      arguments: arguments,
+      type: 'backup_reminder',
+      route: spec?.route,
+      arguments: spec?.arguments,
     ).encode();
   }
 }

@@ -10,6 +10,7 @@ class FlutterLocalNotificationService implements NotificationService {
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin get plugin => _plugin;
 
   bool _initialized = false;
 

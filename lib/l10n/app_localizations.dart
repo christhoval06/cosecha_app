@@ -1500,6 +1500,246 @@ abstract class AppLocalizations {
   /// **'No se pudo enviar la notificación de prueba.'**
   String get settingsBackupReminderTestError;
 
+  /// No description provided for @settingsRemindersTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Recordatorios personalizados'**
+  String get settingsRemindersTitle;
+
+  /// No description provided for @settingsRemindersCardSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Crea recordatorios con días, hora y destino opcional dentro de la app.'**
+  String get settingsRemindersCardSubtitle;
+
+  /// No description provided for @settingsRemindersCounterTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Recordatorios disponibles'**
+  String get settingsRemindersCounterTitle;
+
+  /// No description provided for @settingsRemindersCounterSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes tener hasta 10 recordatorios activos o desactivados.'**
+  String get settingsRemindersCounterSubtitle;
+
+  /// No description provided for @settingsRemindersViewAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver todos'**
+  String get settingsRemindersViewAll;
+
+  /// No description provided for @settingsRemindersAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar'**
+  String get settingsRemindersAdd;
+
+  /// No description provided for @settingsRemindersLimit.
+  ///
+  /// In es, this message translates to:
+  /// **'Límite alcanzado: solo puedes tener 10 recordatorios.'**
+  String get settingsRemindersLimit;
+
+  /// No description provided for @settingsRemindersEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Aún no tienes recordatorios. Agrega el primero para comenzar.'**
+  String get settingsRemindersEmpty;
+
+  /// No description provided for @settingsRemindersNoDestination.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin destino'**
+  String get settingsRemindersNoDestination;
+
+  /// No description provided for @settingsRemindersDeleteTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Eliminar recordatorio'**
+  String get settingsRemindersDeleteTitle;
+
+  /// No description provided for @settingsRemindersDeleteBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Este recordatorio se eliminará y dejará de notificarse.'**
+  String get settingsRemindersDeleteBody;
+
+  /// No description provided for @settingsRemindersCreateTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo recordatorio'**
+  String get settingsRemindersCreateTitle;
+
+  /// No description provided for @settingsRemindersEditTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar recordatorio'**
+  String get settingsRemindersEditTitle;
+
+  /// No description provided for @settingsRemindersFieldTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Título'**
+  String get settingsRemindersFieldTitle;
+
+  /// No description provided for @settingsRemindersFieldDescription.
+  ///
+  /// In es, this message translates to:
+  /// **'Descripción'**
+  String get settingsRemindersFieldDescription;
+
+  /// No description provided for @settingsRemindersFieldLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Etiqueta'**
+  String get settingsRemindersFieldLabel;
+
+  /// No description provided for @settingsRemindersFieldTime.
+  ///
+  /// In es, this message translates to:
+  /// **'Hora'**
+  String get settingsRemindersFieldTime;
+
+  /// No description provided for @settingsRemindersFieldRepeat.
+  ///
+  /// In es, this message translates to:
+  /// **'Repetir'**
+  String get settingsRemindersFieldRepeat;
+
+  /// No description provided for @settingsRemindersFieldOpenDestination.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir una sección al tocar la notificación'**
+  String get settingsRemindersFieldOpenDestination;
+
+  /// No description provided for @settingsRemindersFieldDestination.
+  ///
+  /// In es, this message translates to:
+  /// **'Destino'**
+  String get settingsRemindersFieldDestination;
+
+  /// No description provided for @settingsRemindersRequired.
+  ///
+  /// In es, this message translates to:
+  /// **'Este campo es obligatorio.'**
+  String get settingsRemindersRequired;
+
+  /// No description provided for @settingsRemindersEnabled.
+  ///
+  /// In es, this message translates to:
+  /// **'Habilitado'**
+  String get settingsRemindersEnabled;
+
+  /// No description provided for @settingsRemindersSaveAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar'**
+  String get settingsRemindersSaveAction;
+
+  /// No description provided for @settingsRemindersEditAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Editar'**
+  String get settingsRemindersEditAction;
+
+  /// No description provided for @settingsRemindersDeleteAction.
+  ///
+  /// In es, this message translates to:
+  /// **'Borrar'**
+  String get settingsRemindersDeleteAction;
+
+  /// No description provided for @settingsReminderDestinationNewProduct.
+  ///
+  /// In es, this message translates to:
+  /// **'Nuevo producto'**
+  String get settingsReminderDestinationNewProduct;
+
+  /// No description provided for @settingsReminderDestinationNewSale.
+  ///
+  /// In es, this message translates to:
+  /// **'Nueva venta'**
+  String get settingsReminderDestinationNewSale;
+
+  /// No description provided for @settingsReminderDestinationReports.
+  ///
+  /// In es, this message translates to:
+  /// **'Reportes'**
+  String get settingsReminderDestinationReports;
+
+  /// No description provided for @settingsReminderDestinationSalesHistory.
+  ///
+  /// In es, this message translates to:
+  /// **'Historial de ventas'**
+  String get settingsReminderDestinationSalesHistory;
+
+  /// No description provided for @settingsReminderDestinationProfile.
+  ///
+  /// In es, this message translates to:
+  /// **'Perfil'**
+  String get settingsReminderDestinationProfile;
+
+  /// No description provided for @settingsReminderDestinationPerformanceToday.
+  ///
+  /// In es, this message translates to:
+  /// **'Performance de ventas hoy'**
+  String get settingsReminderDestinationPerformanceToday;
+
+  /// No description provided for @settingsReminderDestinationPerformanceWeek.
+  ///
+  /// In es, this message translates to:
+  /// **'Performance de ventas semana'**
+  String get settingsReminderDestinationPerformanceWeek;
+
+  /// No description provided for @settingsReminderDestinationPerformanceMonth.
+  ///
+  /// In es, this message translates to:
+  /// **'Performance de ventas mes'**
+  String get settingsReminderDestinationPerformanceMonth;
+
+  /// No description provided for @settingsWeekdaySunShort.
+  ///
+  /// In es, this message translates to:
+  /// **'D'**
+  String get settingsWeekdaySunShort;
+
+  /// No description provided for @settingsWeekdayMonShort.
+  ///
+  /// In es, this message translates to:
+  /// **'L'**
+  String get settingsWeekdayMonShort;
+
+  /// No description provided for @settingsWeekdayTueShort.
+  ///
+  /// In es, this message translates to:
+  /// **'M'**
+  String get settingsWeekdayTueShort;
+
+  /// No description provided for @settingsWeekdayWedShort.
+  ///
+  /// In es, this message translates to:
+  /// **'M'**
+  String get settingsWeekdayWedShort;
+
+  /// No description provided for @settingsWeekdayThuShort.
+  ///
+  /// In es, this message translates to:
+  /// **'J'**
+  String get settingsWeekdayThuShort;
+
+  /// No description provided for @settingsWeekdayFriShort.
+  ///
+  /// In es, this message translates to:
+  /// **'V'**
+  String get settingsWeekdayFriShort;
+
+  /// No description provided for @settingsWeekdaySatShort.
+  ///
+  /// In es, this message translates to:
+  /// **'S'**
+  String get settingsWeekdaySatShort;
+
   /// No description provided for @dataBackupTitle.
   ///
   /// In es, this message translates to:

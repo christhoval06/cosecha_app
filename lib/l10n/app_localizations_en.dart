@@ -752,6 +752,135 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not send test notification.';
 
   @override
+  String get settingsRemindersTitle => 'Custom reminders';
+
+  @override
+  String get settingsRemindersCardSubtitle =>
+      'Create reminders with repeat days, time, and optional in-app destination.';
+
+  @override
+  String get settingsRemindersCounterTitle => 'Available reminders';
+
+  @override
+  String get settingsRemindersCounterSubtitle =>
+      'You can keep up to 10 reminders (enabled or disabled).';
+
+  @override
+  String get settingsRemindersViewAll => 'View all';
+
+  @override
+  String get settingsRemindersAdd => 'Add';
+
+  @override
+  String get settingsRemindersLimit =>
+      'Limit reached: you can only keep 10 reminders.';
+
+  @override
+  String get settingsRemindersEmpty =>
+      'You don\'t have reminders yet. Add the first one to start.';
+
+  @override
+  String get settingsRemindersNoDestination => 'No destination';
+
+  @override
+  String get settingsRemindersDeleteTitle => 'Delete reminder';
+
+  @override
+  String get settingsRemindersDeleteBody =>
+      'This reminder will be deleted and no longer notified.';
+
+  @override
+  String get settingsRemindersCreateTitle => 'New reminder';
+
+  @override
+  String get settingsRemindersEditTitle => 'Edit reminder';
+
+  @override
+  String get settingsRemindersFieldTitle => 'Title';
+
+  @override
+  String get settingsRemindersFieldDescription => 'Description';
+
+  @override
+  String get settingsRemindersFieldLabel => 'Label';
+
+  @override
+  String get settingsRemindersFieldTime => 'Time';
+
+  @override
+  String get settingsRemindersFieldRepeat => 'Repeat';
+
+  @override
+  String get settingsRemindersFieldOpenDestination =>
+      'Open a section when notification is tapped';
+
+  @override
+  String get settingsRemindersFieldDestination => 'Destination';
+
+  @override
+  String get settingsRemindersRequired => 'This field is required.';
+
+  @override
+  String get settingsRemindersEnabled => 'Enabled';
+
+  @override
+  String get settingsRemindersSaveAction => 'Save';
+
+  @override
+  String get settingsRemindersEditAction => 'Edit';
+
+  @override
+  String get settingsRemindersDeleteAction => 'Delete';
+
+  @override
+  String get settingsReminderDestinationNewProduct => 'New product';
+
+  @override
+  String get settingsReminderDestinationNewSale => 'New sale';
+
+  @override
+  String get settingsReminderDestinationReports => 'Reports';
+
+  @override
+  String get settingsReminderDestinationSalesHistory => 'Sales history';
+
+  @override
+  String get settingsReminderDestinationProfile => 'Profile';
+
+  @override
+  String get settingsReminderDestinationPerformanceToday =>
+      'Sales performance today';
+
+  @override
+  String get settingsReminderDestinationPerformanceWeek =>
+      'Sales performance this week';
+
+  @override
+  String get settingsReminderDestinationPerformanceMonth =>
+      'Sales performance this month';
+
+  @override
+  String get settingsWeekdaySunShort => 'S';
+
+  @override
+  String get settingsWeekdayMonShort => 'M';
+
+  @override
+  String get settingsWeekdayTueShort => 'T';
+
+  @override
+  String get settingsWeekdayWedShort => 'W';
+
+  @override
+  String get settingsWeekdayThuShort => 'T';
+
+  @override
+  String get settingsWeekdayFriShort => 'F';
+
+  @override
+  String get settingsWeekdaySatShort => 'S';
+
+  @override
   String get dataBackupTitle => 'Data & Backup';
 
   @override

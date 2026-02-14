@@ -12,6 +12,7 @@ class AppRoutes {
   static const homePerformanceDetail = '/home-performance-detail';
   static const settings = '/settings';
   static const notificationSettings = '/notification-settings';
+  static const notificationReminders = '/notification-reminders';
   static const developer = '/developer';
   static const dataBackup = '/data-backup';
 }

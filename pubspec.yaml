@@ -60,6 +60,7 @@ dependencies:
   flutter_native_splash: ^2.4.4
   package_rename: ^1.10.1
   flutter_local_notifications: ^20.0.0
+  timezone: ^0.10.1
 
 dev_dependencies:
   flutter_test:

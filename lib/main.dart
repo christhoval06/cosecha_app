@@ -9,13 +9,16 @@ import 'core/router/app_navigator.dart';
 import 'core/router/app_router.dart';
 import 'core/services/business_session.dart';
 import 'core/services/app_services.dart';
+import 'core/services/image_path_repair_service.dart';
 import 'core/services/notifications/notification_payload.dart';
+import 'core/services/notifications/reminder_destinations.dart';
 import 'core/theme/app_theme.dart';
 import 'data/hive/hive_init.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await HiveInitializer.init();
+  await ImagePathRepairService.repairIfNeeded();
   await BusinessSession.instance.load();
   final prefs = await SharedPreferences.getInstance();
   final hasCompletedOnboarding =
@@ -24,6 +27,8 @@ Future<void> main() async {
       prefs.getBool(AppPrefs.profileSetupComplete) ?? false;
   await PremiumAccess.instance.ensureLoaded();
   await AppServices.notifications.initialize(onTap: _handleNotificationTap);
+  await AppServices.backupReminders.ensureScheduled();
+  await AppServices.userReminders.syncAllScheduled();
 
   String initialRoute = AppRoutes.onboarding;
   if (hasCompletedOnboarding) {
@@ -69,7 +74,8 @@ String? _resolveNotificationRoute(NotificationPayload? payload) {
   }
 
   return switch (payload?.type) {
-    'backup_reminder' => AppRoutes.dataBackup,
+    'backup_reminder' =>
+      ReminderDestinations.specs[ReminderDestinations.dataBackup]?.route,
     _ => null,
   };
 }
