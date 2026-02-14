@@ -42,6 +42,11 @@ List<HomeDashboardWidgetDef> homeDashboardRegistry() {
       builder: _buildQuickActionsPanel,
     ),
     HomeDashboardWidgetDef(
+      id: HomeDashboardWidgetIds.latestProducts,
+      title: _latestProductsTitle,
+      builder: _buildLatestProductsPanel,
+    ),
+    HomeDashboardWidgetDef(
       id: HomeDashboardWidgetIds.salesGoal,
       title: _salesGoalTitle,
       builder: _buildSalesGoalPanel,
@@ -75,11 +80,6 @@ List<HomeDashboardWidgetDef> homeDashboardRegistry() {
       id: HomeDashboardWidgetIds.quickSale,
       title: _quickSaleTitle,
       builder: _buildQuickSalePanel,
-    ),
-    HomeDashboardWidgetDef(
-      id: HomeDashboardWidgetIds.latestProducts,
-      title: _latestProductsTitle,
-      builder: _buildLatestProductsPanel,
     ),
     HomeDashboardWidgetDef(
       id: HomeDashboardWidgetIds.recentSales,

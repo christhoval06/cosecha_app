@@ -240,6 +240,9 @@ class _ProductSelectorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final label = product?.name ?? emptyLabel;
+    final productImagePath = product?.imageUrl ?? '';
+    final hasValidImage =
+        productImagePath.isNotEmpty && File(productImagePath).existsSync();
     return Card(
       elevation: 0,
       color: colorScheme.surface,
@@ -257,10 +260,10 @@ class _ProductSelectorCard extends StatelessWidget {
               CircleAvatar(
                 radius: 24,
                 backgroundColor: colorScheme.primaryContainer,
-                backgroundImage: product != null && product!.imageUrl.isNotEmpty
-                    ? FileImage(File(product!.imageUrl))
+                backgroundImage: hasValidImage
+                    ? FileImage(File(productImagePath))
                     : null,
-                child: product == null || product!.imageUrl.isEmpty
+                child: !hasValidImage
                     ? const Icon(Icons.inventory_2_outlined)
                     : null,
               ),

@@ -165,15 +165,15 @@ class _HomeScreenState extends State<HomeScreen> {
       valueListenable: BusinessRepository().listenable(),
       builder: (context, box, _) {
         final business = box.get(BusinessRepository.currentKey);
+        final logoPath = business?.logoPath?.trim() ?? '';
+        final hasValidLogo = logoPath.isNotEmpty && File(logoPath).existsSync();
         return Row(
           children: [
             CircleAvatar(
               radius: 22,
               backgroundColor: colorScheme.primaryContainer,
-              backgroundImage: business?.logoPath != null
-                  ? FileImage(File(business!.logoPath!))
-                  : null,
-              child: business?.logoPath == null
+              backgroundImage: hasValidLogo ? FileImage(File(logoPath)) : null,
+              child: !hasValidLogo
                   ? const Icon(Icons.storefront, size: 22)
                   : null,
             ),
@@ -206,16 +206,16 @@ class _HomeScreenState extends State<HomeScreen> {
       valueListenable: BusinessRepository().listenable(),
       builder: (context, box, _) {
         final business = box.get(BusinessRepository.currentKey);
+        final logoPath = business?.logoPath?.trim() ?? '';
+        final hasValidLogo = logoPath.isNotEmpty && File(logoPath).existsSync();
         final colorScheme = Theme.of(context).colorScheme;
         return Row(
           children: [
             CircleAvatar(
               radius: 14,
               backgroundColor: colorScheme.primaryContainer,
-              backgroundImage: business?.logoPath != null
-                  ? FileImage(File(business!.logoPath!))
-                  : null,
-              child: business?.logoPath == null
+              backgroundImage: hasValidLogo ? FileImage(File(logoPath)) : null,
+              child: !hasValidLogo
                   ? const Icon(Icons.storefront, size: 14)
                   : null,
             ),

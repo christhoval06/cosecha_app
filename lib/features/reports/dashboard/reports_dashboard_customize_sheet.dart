@@ -99,7 +99,18 @@ Future<ReportsDashboardConfig?> showReportsDashboardCustomizeSheet({
                         return SwitchListTile(
                           key: ValueKey(id),
                           value: enabled,
-                          title: Text(def.title(l10n)),
+                          title: Row(
+                            children: [
+                              Icon(
+                                Icons.drag_indicator,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(child: Text(def.title(l10n))),
+                            ],
+                          ),
                           onChanged: (value) {
                             setModalState(() {
                               selectedPresetId = null;

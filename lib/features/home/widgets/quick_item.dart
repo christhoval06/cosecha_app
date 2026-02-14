@@ -7,16 +7,14 @@ class QuickItem extends StatelessWidget {
   final String? imagePath;
   final VoidCallback? onTap;
 
-  const QuickItem({
-    super.key,
-    required this.label,
-    this.imagePath,
-    this.onTap,
-  });
+  const QuickItem({super.key, required this.label, this.imagePath, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final safeImagePath = imagePath?.trim() ?? '';
+    final hasValidImage =
+        safeImagePath.isNotEmpty && File(safeImagePath).existsSync();
     return InkWell(
       borderRadius: BorderRadius.circular(40),
       onTap: onTap,
@@ -28,14 +26,14 @@ class QuickItem extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: colorScheme.primaryContainer,
-              image: imagePath != null && imagePath!.isNotEmpty
+              image: hasValidImage
                   ? DecorationImage(
-                      image: FileImage(File(imagePath!)),
+                      image: FileImage(File(safeImagePath)),
                       fit: BoxFit.cover,
                     )
                   : null,
             ),
-            child: imagePath == null || imagePath!.isEmpty
+            child: !hasValidImage
                 ? const Icon(Icons.inventory_2_outlined)
                 : null,
           ),

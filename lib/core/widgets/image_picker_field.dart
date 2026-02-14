@@ -83,7 +83,11 @@ class _ImagePickerFieldState extends State<ImagePickerField> {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = Theme.of(context).colorScheme.outline.withValues(alpha: 0.4);
+    final borderColor = Theme.of(
+      context,
+    ).colorScheme.outline.withValues(alpha: 0.4);
+    final imagePath = widget.value?.trim() ?? '';
+    final hasValidImage = imagePath.isNotEmpty && File(imagePath).existsSync();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -100,13 +104,13 @@ class _ImagePickerFieldState extends State<ImagePickerField> {
             ),
             child: _loading
                 ? const Center(child: CircularProgressIndicator())
-                : widget.value == null
+                : !hasValidImage
                 ? const Center(
                     child: Icon(Icons.add_a_photo_outlined, size: 32),
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: Image.file(File(widget.value!), fit: BoxFit.cover),
+                    child: Image.file(File(imagePath), fit: BoxFit.cover),
                   ),
           ),
         ),

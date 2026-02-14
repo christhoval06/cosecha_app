@@ -336,14 +336,27 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         .map((e) => e.toString())
         .toList(growable: false);
     final image = values['image'] as String?;
-    final savedImagePath = image == null
-        ? null
-        : await saveLocallyFromPath(image);
+    final productId = widget.product?.id.isNotEmpty == true
+        ? widget.product!.id
+        : DateTime.now().millisecondsSinceEpoch.toString();
+    String resolvedImagePath = '';
+    if (image != null && image.isNotEmpty) {
+      final isSamePathAsCurrent = _isEdit && image == widget.product?.imageUrl;
+      if (isSamePathAsCurrent) {
+        resolvedImagePath = image;
+      } else {
+        final savedImagePath = await saveLocallyFromPath(
+          image,
+          fileNamePrefix: 'product_$productId',
+        );
+        resolvedImagePath = savedImagePath ?? (widget.product?.imageUrl ?? '');
+      }
+    }
 
     final product = Product(
-      id: widget.product?.id ?? '',
+      id: productId,
       name: name,
-      imageUrl: savedImagePath ?? '',
+      imageUrl: resolvedImagePath,
       currentPrice: price,
     );
 

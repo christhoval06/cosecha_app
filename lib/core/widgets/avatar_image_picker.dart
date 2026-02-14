@@ -30,10 +30,7 @@ class _AvatarImagePickerState extends State<AvatarImagePicker> {
     if (_loading || !widget.enabled) return;
     setState(() => _loading = true);
     final picker = ImagePicker();
-    final picked = await picker.pickImage(
-      source: source,
-      imageQuality: 60,
-    );
+    final picked = await picker.pickImage(source: source, imageQuality: 60);
     final path = picked?.path;
     if (!mounted) return;
     setState(() => _loading = false);
@@ -87,6 +84,8 @@ class _AvatarImagePickerState extends State<AvatarImagePicker> {
     final shadowColor = Theme.of(context).shadowColor;
     final avatarSize = widget.size;
     final badgeSize = avatarSize * 0.28;
+    final imagePath = widget.value?.trim() ?? '';
+    final hasValidImage = imagePath.isNotEmpty && File(imagePath).existsSync();
 
     return SizedBox(
       width: avatarSize + badgeSize * 0.3,
@@ -107,26 +106,23 @@ class _AvatarImagePickerState extends State<AvatarImagePicker> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: colorScheme.surface,
-                  border: Border.all(
-                    color: colorScheme.surface,
-                    width: 6,
-                  ),
-                  image: widget.value != null && widget.value!.isNotEmpty
+                  border: Border.all(color: colorScheme.surface, width: 6),
+                  image: hasValidImage
                       ? DecorationImage(
-                          image: FileImage(File(widget.value!)),
+                          image: FileImage(File(imagePath)),
                           fit: BoxFit.cover,
                         )
                       : null,
                 ),
                 child: _loading
                     ? const Center(child: CircularProgressIndicator())
-                    : widget.value == null || widget.value!.isEmpty
-                        ? Icon(
-                            Icons.storefront,
-                            size: avatarSize * 0.4,
-                            color: colorScheme.primary,
-                          )
-                        : null,
+                    : !hasValidImage
+                    ? Icon(
+                        Icons.storefront,
+                        size: avatarSize * 0.4,
+                        color: colorScheme.primary,
+                      )
+                    : null,
               ),
             ),
           ),
@@ -145,10 +141,7 @@ class _AvatarImagePickerState extends State<AvatarImagePicker> {
                   height: badgeSize,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: colorScheme.surface,
-                      width: 4,
-                    ),
+                    border: Border.all(color: colorScheme.surface, width: 4),
                   ),
                   child: Icon(
                     Icons.photo_camera,

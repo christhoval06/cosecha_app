@@ -192,9 +192,11 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: _saveProfileAndNavigate,
-                child: Text(widget.isEdit
-                    ? l10n.profileSave
-                    : l10n.profileSetupSaveContinue),
+                child: Text(
+                  widget.isEdit
+                      ? l10n.profileSave
+                      : l10n.profileSetupSaveContinue,
+                ),
               ),
             ],
           ),
@@ -235,7 +237,19 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
       final formData = _formKey.currentState!.value;
       final businessRepo = BusinessRepository();
 
-      String? logoPath = await saveLocallyFromPath(formData['logoPath']!);
+      final String selectedLogoPath = (formData['logoPath'] as String?) ?? '';
+      final String? currentLogoPath = _currentBusiness?.logoPath;
+      final bool isSameLogoPath =
+          widget.isEdit && selectedLogoPath == currentLogoPath;
+      String? logoPath;
+      if (selectedLogoPath.isNotEmpty) {
+        logoPath = isSameLogoPath
+            ? selectedLogoPath
+            : await saveLocallyFromPath(
+                selectedLogoPath,
+                fileNamePrefix: 'business_current_profile',
+              );
+      }
 
       final String businessName = formData['business_name'];
       final Currency? selectedCurrency = formData['currency'];

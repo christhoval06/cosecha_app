@@ -21,8 +21,7 @@ class ProductPriceHistoryAdapter extends TypeAdapter<ProductPriceHistory> {
       productId: fields[1] as String,
       price: fields[2] as double,
       recordedAt: fields[3] as DateTime,
-      strategyTags:
-          (fields[4] as List?)?.cast<String>() ?? const <String>[],
+      strategyTags: fields[4] == null ? [] : (fields[4] as List).cast<String>(),
     );
   }
 

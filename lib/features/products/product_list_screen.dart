@@ -67,6 +67,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     padding: const EdgeInsets.all(20),
                     itemBuilder: (context, index) {
                       final product = filtered[index];
+                      final hasValidImage =
+                          product.imageUrl.isNotEmpty &&
+                          File(product.imageUrl).existsSync();
                       return ListTile(
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,
@@ -78,25 +81,26 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         tileColor: colorScheme.surface,
                         leading: CircleAvatar(
                           backgroundColor: colorScheme.primaryContainer,
-                          backgroundImage: product.imageUrl.isNotEmpty
+                          backgroundImage: hasValidImage
                               ? FileImage(File(product.imageUrl))
                               : null,
-                          child: product.imageUrl.isEmpty
+                          child: !hasValidImage
                               ? const Icon(Icons.inventory_2_outlined)
                               : null,
                         ),
                         title: Text(product.name),
-                  subtitle: Text(
-                    product.formatAmount(),
-                    style: TextStyle(
-                      color: colorScheme.onSurface.withValues(alpha: 0.6),
-                    ),
-                  ),
+                        subtitle: Text(
+                          product.formatAmount(),
+                          style: TextStyle(
+                            color: colorScheme.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
-                          Navigator.of(
-                            context,
-                          ).pushNamed(AppRoutes.productEdit, arguments: product);
+                          Navigator.of(context).pushNamed(
+                            AppRoutes.productEdit,
+                            arguments: product,
+                          );
                         },
                       );
                     },
@@ -114,10 +118,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
 }
 
 class _Filters extends StatelessWidget {
-  const _Filters({
-    required this.query,
-    required this.onQueryChanged,
-  });
+  const _Filters({required this.query, required this.onQueryChanged});
 
   final String query;
   final ValueChanged<String> onQueryChanged;
