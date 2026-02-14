@@ -46,6 +46,13 @@ class _AvatarImagePickerState extends State<AvatarImagePicker> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
+                ),
+              ),
               ListTile(
                 leading: const Icon(Icons.photo_camera_outlined),
                 title: Text(l10n.imagePickerCamera),

@@ -7,6 +7,7 @@ import '../../core/premium/premium_access.dart';
 import '../../core/premium/premium_features.dart';
 import '../../core/premium/premium_guard.dart';
 import '../../core/services/app_reset_service.dart';
+import '../../core/widgets/app_sheet.dart';
 import '../../l10n/app_localizations.dart';
 import 'widgets/settings_brand_header.dart';
 import 'widgets/settings_section_title.dart';
@@ -251,51 +252,32 @@ Future<void> _showOurStorySheet(
   BuildContext context,
   AppLocalizations l10n,
 ) async {
-  await showModalBottomSheet<void>(
+  await showAppSheet<void>(
     context: context,
+    title: l10n.settingsOriginTitle,
     isScrollControlled: true,
     useSafeArea: true,
-    builder: (context) {
-      return SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l10n.settingsOriginTitle,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close),
-                  ),
-                ],
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
-                    child: Text(
-                      l10n.settingsOriginBody,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        height: 1.45,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.onSurface.withValues(alpha: 0.78),
-                      ),
-                    ),
-                  ),
+    mainAxisSize: MainAxisSize.max,
+    paddingBuilder: (_) => const EdgeInsets.fromLTRB(20, 12, 20, 20),
+    contentBuilder: (context) {
+      return [
+        Flexible(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),
+              child: Text(
+                l10n.settingsOriginBody,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  height: 1.45,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.78),
                 ),
               ),
-            ],
+            ),
           ),
         ),
-      );
+      ];
     },
   );
 }

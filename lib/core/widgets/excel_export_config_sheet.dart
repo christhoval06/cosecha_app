@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../services/excel_export_service.dart';
+import 'app_sheet.dart';
 
 Future<ExcelExportConfig?> showExcelExportConfigSheet({
   required BuildContext context,
@@ -17,78 +18,73 @@ Future<ExcelExportConfig?> showExcelExportConfigSheet({
       final l10n = AppLocalizations.of(context);
       return StatefulBuilder(
         builder: (context, setModalState) {
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-            child: Column(
-              children: [
-                Row(
+          return AppSheetLayout(
+            title: l10n.excelExportConfigTitle,
+            mainAxisSize: MainAxisSize.max,
+            trailing: TextButton(
+              onPressed: () {
+                setModalState(() {
+                  temp = ExcelExportConfig.all();
+                });
+              },
+              child: Text(l10n.salesFiltersClear),
+            ),
+            children: [
+              Expanded(
+                child: ListView(
                   children: [
-                    Expanded(
-                      child: Text(
-                        l10n.excelExportConfigTitle,
-                        style: Theme.of(context).textTheme.titleMedium,
+                    for (final model in ExcelExportService.models)
+                      _ModelSection(
+                        model: model,
+                        config: temp,
+                        l10n: l10n,
+                        onToggleModel: (enabled) {
+                          setModalState(() {
+                            final enabledModels = Set<String>.from(
+                              temp.enabledModels,
+                            );
+                            if (enabled) {
+                              enabledModels.add(model);
+                            } else {
+                              enabledModels.remove(model);
+                            }
+                            temp = temp
+                                .copyWith(enabledModels: enabledModels)
+                                .sanitize();
+                          });
+                        },
+                        onToggleField: (field, enabled) {
+                          setModalState(() {
+                            final fields = {
+                              for (final entry
+                                  in temp.enabledFieldsByModel.entries)
+                                entry.key: Set<String>.from(entry.value),
+                            };
+                            final modelFields = fields[model] ?? <String>{};
+                            if (enabled) {
+                              modelFields.add(field);
+                            } else {
+                              modelFields.remove(field);
+                            }
+                            fields[model] = modelFields;
+                            temp = temp
+                                .copyWith(enabledFieldsByModel: fields)
+                                .sanitize();
+                          });
+                        },
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        setModalState(() {
-                          temp = ExcelExportConfig.all();
-                        });
-                      },
-                      child: Text(l10n.salesFiltersClear),
-                    ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      for (final model in ExcelExportService.models)
-                        _ModelSection(
-                          model: model,
-                          config: temp,
-                          l10n: l10n,
-                          onToggleModel: (enabled) {
-                            setModalState(() {
-                              final enabledModels = Set<String>.from(temp.enabledModels);
-                              if (enabled) {
-                                enabledModels.add(model);
-                              } else {
-                                enabledModels.remove(model);
-                              }
-                              temp = temp.copyWith(enabledModels: enabledModels).sanitize();
-                            });
-                          },
-                          onToggleField: (field, enabled) {
-                            setModalState(() {
-                              final fields = {
-                                for (final entry in temp.enabledFieldsByModel.entries)
-                                  entry.key: Set<String>.from(entry.value),
-                              };
-                              final modelFields = fields[model] ?? <String>{};
-                              if (enabled) {
-                                modelFields.add(field);
-                              } else {
-                                modelFields.remove(field);
-                              }
-                              fields[model] = modelFields;
-                              temp = temp.copyWith(enabledFieldsByModel: fields).sanitize();
-                            });
-                          },
-                        ),
-                    ],
-                  ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(temp.sanitize()),
+                  child: Text(l10n.salesFiltersApply),
                 ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: () => Navigator.of(context).pop(temp.sanitize()),
-                    child: Text(l10n.salesFiltersApply),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       );
@@ -114,7 +110,8 @@ class _ModelSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = config.enabledModels.contains(model);
-    final availableFields = ExcelExportService.modelFields[model] ?? const <String>[];
+    final availableFields =
+        ExcelExportService.modelFields[model] ?? const <String>[];
     final selectedFields = config.enabledFieldsByModel[model] ?? <String>{};
     return Card(
       child: Padding(

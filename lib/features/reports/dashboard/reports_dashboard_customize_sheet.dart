@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/widgets/app_sheet.dart';
 import '../../../l10n/app_localizations.dart';
 import 'reports_dashboard_config.dart';
 import 'reports_dashboard_registry.dart';
@@ -27,124 +28,110 @@ Future<ReportsDashboardConfig?> showReportsDashboardCustomizeSheet({
       );
       return StatefulBuilder(
         builder: (context, setModalState) {
-          return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-              child: Column(
+          return AppSheetLayout(
+            title: l10n.reportsCustomizeTitle,
+            mainAxisSize: MainAxisSize.max,
+            trailing: TextButton(
+              onPressed: () {
+                setModalState(() {
+                  tempOrder = definitions.map((d) => d.id).toList();
+                  tempEnabled = definitions.map((d) => d.id).toList();
+                });
+              },
+              child: Text(l10n.salesFiltersClear),
+            ),
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  l10n.reportsCustomizePresetsTitle,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l10n.reportsCustomizeTitle,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          setModalState(() {
-                            tempOrder = definitions.map((d) => d.id).toList();
-                            tempEnabled = definitions.map((d) => d.id).toList();
-                          });
-                        },
-                        child: Text(l10n.salesFiltersClear),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      l10n.reportsCustomizePresetsTitle,
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final preset in presets)
-                        ChoiceChip(
-                          label: Text(preset.label(l10n)),
-                          selected: selectedPresetId == preset.id,
-                          onSelected: (_) {
-                            setModalState(() {
-                              selectedPresetId = preset.id;
-                              tempOrder = List<String>.from(defaultOrder);
-                              tempEnabled = defaultOrder
-                                  .where(preset.enabledIds.contains)
-                                  .toList();
-                            });
-                          },
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: ReorderableListView.builder(
-                      itemCount: tempOrder.length,
-                      onReorder: (oldIndex, newIndex) {
+                  for (final preset in presets)
+                    ChoiceChip(
+                      label: Text(preset.label(l10n)),
+                      selected: selectedPresetId == preset.id,
+                      onSelected: (_) {
                         setModalState(() {
-                          selectedPresetId = null;
-                          if (newIndex > oldIndex) newIndex--;
-                          final moved = tempOrder.removeAt(oldIndex);
-                          tempOrder.insert(newIndex, moved);
+                          selectedPresetId = preset.id;
+                          tempOrder = List<String>.from(defaultOrder);
+                          tempEnabled = defaultOrder
+                              .where(preset.enabledIds.contains)
+                              .toList();
                         });
                       },
-                      itemBuilder: (context, index) {
-                        final id = tempOrder[index];
-                        final def = definitions.firstWhere((d) => d.id == id);
-                        final enabled = tempEnabled.contains(id);
-                        return SwitchListTile(
-                          key: ValueKey(id),
-                          value: enabled,
-                          title: Row(
-                            children: [
-                              Icon(
-                                Icons.drag_indicator,
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(child: Text(def.title(l10n))),
-                            ],
-                          ),
-                          onChanged: (value) {
-                            setModalState(() {
-                              selectedPresetId = null;
-                              if (value) {
-                                if (!tempEnabled.contains(id)) {
-                                  tempEnabled.add(id);
-                                }
-                              } else {
-                                tempEnabled.remove(id);
-                              }
-                            });
-                          },
-                        );
-                      },
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(
-                          ReportsDashboardConfig(
-                            enabledWidgetIds: tempEnabled,
-                            orderedWidgetIds: tempOrder,
-                          ),
-                        );
-                      },
-                      child: Text(l10n.salesFiltersApply),
-                    ),
-                  ),
                 ],
               ),
-            ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: ReorderableListView.builder(
+                  itemCount: tempOrder.length,
+                  onReorder: (oldIndex, newIndex) {
+                    setModalState(() {
+                      selectedPresetId = null;
+                      if (newIndex > oldIndex) newIndex--;
+                      final moved = tempOrder.removeAt(oldIndex);
+                      tempOrder.insert(newIndex, moved);
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    final id = tempOrder[index];
+                    final def = definitions.firstWhere((d) => d.id == id);
+                    final enabled = tempEnabled.contains(id);
+                    return SwitchListTile(
+                      key: ValueKey(id),
+                      value: enabled,
+                      title: Row(
+                        children: [
+                          Icon(
+                            Icons.drag_indicator,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text(def.title(l10n))),
+                        ],
+                      ),
+                      onChanged: (value) {
+                        setModalState(() {
+                          selectedPresetId = null;
+                          if (value) {
+                            if (!tempEnabled.contains(id)) {
+                              tempEnabled.add(id);
+                            }
+                          } else {
+                            tempEnabled.remove(id);
+                          }
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(
+                      ReportsDashboardConfig(
+                        enabledWidgetIds: tempEnabled,
+                        orderedWidgetIds: tempOrder,
+                      ),
+                    );
+                  },
+                  child: Text(l10n.salesFiltersApply),
+                ),
+              ),
+            ],
           );
         },
       );
@@ -208,8 +195,10 @@ List<_ReportsPreset> _buildPresets() {
 }
 
 String _basicPresetLabel(AppLocalizations l10n) => l10n.reportsPresetBasic;
-String _commercialPresetLabel(AppLocalizations l10n) => l10n.reportsPresetCommercial;
-String _analyticalPresetLabel(AppLocalizations l10n) => l10n.reportsPresetAnalytical;
+String _commercialPresetLabel(AppLocalizations l10n) =>
+    l10n.reportsPresetCommercial;
+String _analyticalPresetLabel(AppLocalizations l10n) =>
+    l10n.reportsPresetAnalytical;
 
 String? _resolvePresetId({
   required List<_ReportsPreset> presets,
