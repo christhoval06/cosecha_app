@@ -4,8 +4,12 @@ import 'package:cosecha_app/l10n/app_localizations.dart';
 
 import 'core/constants/app_prefs.dart';
 import 'core/constants/app_routes.dart';
+import 'core/premium/premium_access.dart';
+import 'core/router/app_navigator.dart';
 import 'core/router/app_router.dart';
 import 'core/services/business_session.dart';
+import 'core/services/app_services.dart';
+import 'core/services/notifications/notification_payload.dart';
 import 'core/theme/app_theme.dart';
 import 'data/hive/hive_init.dart';
 
@@ -18,6 +22,8 @@ Future<void> main() async {
       prefs.getBool(AppPrefs.onboardingComplete) ?? false;
   final hasCompletedProfileSetup =
       prefs.getBool(AppPrefs.profileSetupComplete) ?? false;
+  await PremiumAccess.instance.ensureLoaded();
+  await AppServices.notifications.initialize(onTap: _handleNotificationTap);
 
   String initialRoute = AppRoutes.onboarding;
   if (hasCompletedOnboarding) {
@@ -38,6 +44,7 @@ class CosechaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: AppNavigator.navigatorKey,
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: AppTheme.lightTheme,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -46,4 +53,23 @@ class CosechaApp extends StatelessWidget {
       routes: AppRouter.routes,
     );
   }
+}
+
+Future<void> _handleNotificationTap(String? rawPayload) async {
+  final payload = NotificationPayload.tryDecode(rawPayload);
+  final route = _resolveNotificationRoute(payload);
+  if (route == null || !AppRouter.routes.containsKey(route)) return;
+  AppNavigator.pushNamed(route, arguments: payload?.arguments);
+}
+
+String? _resolveNotificationRoute(NotificationPayload? payload) {
+  final directRoute = payload?.route;
+  if (directRoute != null && directRoute.isNotEmpty) {
+    return directRoute;
+  }
+
+  return switch (payload?.type) {
+    'backup_reminder' => AppRoutes.dataBackup,
+    _ => null,
+  };
 }

@@ -36,7 +36,12 @@ class AppNavigator {
     if (route == null) return;
 
     final state = navigatorKey.currentState;
-    if (!_canNavigate(state)) return;
+    if (!_canNavigate(state)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        flushPendingRoute();
+      });
+      return;
+    }
 
     try {
       state!.pushNamed(route, arguments: _pendingArguments);
