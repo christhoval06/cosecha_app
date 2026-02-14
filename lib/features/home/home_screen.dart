@@ -7,8 +7,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:cosecha_app/l10n/app_localizations.dart';
 
 import 'package:cosecha_app/data/models/business.dart';
-import 'package:cosecha_app/core/services/business_session.dart';
 import 'package:cosecha_app/core/constants/app_routes.dart';
+import '../../core/premium/premium_features.dart';
+import '../../core/premium/premium_guard.dart';
 import 'dashboard/home_dashboard_config.dart';
 import 'dashboard/home_dashboard_customize_sheet.dart';
 import 'dashboard/home_dashboard_registry.dart';
@@ -24,15 +25,34 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   late final HomeDashboardConfigStore _homeConfigStore;
   late final List<HomeDashboardWidgetDef> _homeRegistry;
+  late final ScrollController _scrollController;
   HomeDashboardConfig? _homeLayout;
   bool _loadingHomeLayout = true;
+  bool _isHeaderCollapsed = false;
 
   @override
   void initState() {
     super.initState();
     _homeConfigStore = HomeDashboardConfigStore();
     _homeRegistry = homeDashboardRegistry();
+    _scrollController = ScrollController()..addListener(_onScroll);
     _loadHomeLayout();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    const collapseOffset = 72.0;
+    final collapsed =
+        _scrollController.hasClients &&
+        _scrollController.offset > collapseOffset;
+    if (collapsed == _isHeaderCollapsed) return;
+    setState(() => _isHeaderCollapsed = collapsed);
   }
 
   void _onTap(int index) {
@@ -72,31 +92,59 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
-    final business = BusinessSession.instance.current;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(business?.name ?? l10n.homeTitle),
-        actions: [
-          IconButton(
-            onPressed: _homeLayout == null ? null : _openCustomize,
-            icon: const Icon(Icons.tune),
+      body: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 128,
+            title: AnimatedOpacity(
+              opacity: _isHeaderCollapsed ? 1 : 0,
+              duration: const Duration(milliseconds: 180),
+              child: _buildCollapsedTitle(l10n),
+            ),
+            titleSpacing: 8,
+            actions: [
+              IconButton(
+                onPressed: _homeLayout == null
+                    ? null
+                    : () async {
+                        final canUse = await guardPremiumAccess(
+                          context,
+                          feature: PremiumFeature.homeDashboardCustomization,
+                        );
+                        if (!canUse) return;
+                        await _openCustomize();
+                      },
+                icon: const Icon(Icons.tune),
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              background: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    20,
+                    kToolbarHeight + 8,
+                    20,
+                    12,
+                  ),
+                  child: _buildHeader(context, l10n),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            sliver: SliverToBoxAdapter(
+              child: _loadingHomeLayout
+                  ? const Center(child: CircularProgressIndicator())
+                  : Column(children: _buildDashboardWidgets(l10n)),
+            ),
           ),
         ],
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            _buildHeader(context, l10n, colorScheme),
-            const SizedBox(height: 24),
-            if (_loadingHomeLayout)
-              const Center(child: CircularProgressIndicator())
-            else
-              ..._buildDashboardWidgets(l10n),
-          ],
-        ),
       ),
       bottomNavigationBar: NotchedBottomNav(
         currentIndex: _currentIndex,
@@ -111,11 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildHeader(
-    BuildContext context,
-    AppLocalizations l10n,
-    ColorScheme colorScheme,
-  ) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n) {
+    final colorScheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Box<Business>>(
       valueListenable: BusinessRepository().listenable(),
       builder: (context, box, _) {
@@ -150,9 +195,37 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.notifications_none),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildCollapsedTitle(AppLocalizations l10n) {
+    return ValueListenableBuilder<Box<Business>>(
+      valueListenable: BusinessRepository().listenable(),
+      builder: (context, box, _) {
+        final business = box.get(BusinessRepository.currentKey);
+        final colorScheme = Theme.of(context).colorScheme;
+        return Row(
+          children: [
+            CircleAvatar(
+              radius: 14,
+              backgroundColor: colorScheme.primaryContainer,
+              backgroundImage: business?.logoPath != null
+                  ? FileImage(File(business!.logoPath!))
+                  : null,
+              child: business?.logoPath == null
+                  ? const Icon(Icons.storefront, size: 14)
+                  : null,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                business?.name ?? l10n.homeTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         );

@@ -5,11 +5,12 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/services.dart';
 
+import '../../core/widgets/form_builder_currency_field.dart';
 import '../../core/widgets/list_empty_state.dart';
 import '../../core/widgets/list_picker_sheet.dart';
-import '../../core/utils/formatters.dart';
 import '../../core/constants/app_routes.dart';
 import '../../core/constants/sales_channels.dart';
+import '../../core/utils/formatters.dart';
 import '../../data/hive/boxes.dart';
 import '../../data/models/product.dart';
 import '../../data/models/sale_transaction.dart';
@@ -93,9 +94,7 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
                             searchHint: l10n.salesSearchHint,
                           );
                           if (picked != null) {
-                            setState(
-                              () => _selectedProductId = picked.id,
-                            );
+                            setState(() => _selectedProductId = picked.id);
                             field.didChange(picked.id);
                           }
                         },
@@ -117,19 +116,11 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  FormBuilderTextField(
+                  FormBuilderCurrencyField(
                     name: 'amount',
-                    decoration: InputDecoration(labelText: l10n.salesAmount),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp(r'[0-9.,]'),
-                      ),
-                    ],
+                    labelText: l10n.salesAmount,
                     validator: (value) {
-                      final parsed = double.tryParse(
-                        (value ?? '').replaceAll(',', '.'),
-                      );
+                      final parsed = _parseAmountInput(value);
                       if (parsed == null || parsed <= 0) {
                         return l10n.salesAmountRequired;
                       }
@@ -139,6 +130,7 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
                   const SizedBox(height: 16),
                   FormBuilderDropdown<String>(
                     name: 'channel',
+                    initialValue: SalesChannels.retail,
                     decoration: InputDecoration(labelText: l10n.salesChannel),
                     items: [
                       DropdownMenuItem(
@@ -204,7 +196,7 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
       id: '',
       productId: selectedProduct.id,
       productName: selectedProduct.name,
-      amount: double.parse((values['amount'] as String).replaceAll(',', '.')),
+      amount: _parseAmountInput(values['amount'] as String?) ?? 0,
       quantity: int.parse(values['quantity'] as String),
       channel: values['channel'] as String,
       createdAt: DateTime.now(),
@@ -222,6 +214,10 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
         context,
       ).showSnackBar(SnackBar(content: Text('${l10n.salesSaveError}: $e')));
     }
+  }
+
+  double? _parseAmountInput(String? raw) {
+    return parseCurrencyInput(raw);
   }
 }
 
@@ -249,9 +245,7 @@ class _ProductSelectorCard extends StatelessWidget {
       color: colorScheme.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: colorScheme.outline.withValues(alpha: 0.2),
-        ),
+        side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.2)),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -263,10 +257,9 @@ class _ProductSelectorCard extends StatelessWidget {
               CircleAvatar(
                 radius: 24,
                 backgroundColor: colorScheme.primaryContainer,
-                backgroundImage:
-                    product != null && product!.imageUrl.isNotEmpty
-                        ? FileImage(File(product!.imageUrl))
-                        : null,
+                backgroundImage: product != null && product!.imageUrl.isNotEmpty
+                    ? FileImage(File(product!.imageUrl))
+                    : null,
                 child: product == null || product!.imageUrl.isEmpty
                     ? const Icon(Icons.inventory_2_outlined)
                     : null,
@@ -276,16 +269,13 @@ class _ProductSelectorCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      label,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
+                    Text(label, style: Theme.of(context).textTheme.titleSmall),
                     const SizedBox(height: 4),
                     Text(
                       title,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: colorScheme.onSurface.withValues(alpha: 0.6),
-                          ),
+                        color: colorScheme.onSurface.withValues(alpha: 0.6),
+                      ),
                     ),
                   ],
                 ),
@@ -293,19 +283,17 @@ class _ProductSelectorCard extends StatelessWidget {
               if (product != null) ...[
                 Text(
                   product!.formatAmount(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(color: colorScheme.primary),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(color: colorScheme.primary),
                 ),
                 if (onTap != null && changeLabel != null) ...[
                   const SizedBox(width: 8),
                   Text(
                     changeLabel!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.copyWith(color: colorScheme.primary),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: colorScheme.primary,
+                    ),
                   ),
                 ],
               ],

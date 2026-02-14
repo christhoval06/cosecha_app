@@ -24,15 +24,20 @@ const Set<String> _zeroDecimalCurrencyCodes = {
   'XPF',
 };
 
-int _currencyDecimalDigits(String code) {
+int currencyDecimalDigitsForCode(String code) {
   if (_zeroDecimalCurrencyCodes.contains(code.toUpperCase())) return 0;
   return 2;
+}
+
+int currencyDecimalDigitsForCurrentBusiness() {
+  final code = BusinessSession.instance.current?.currencyCode.trim() ?? '';
+  return currencyDecimalDigitsForCode(code);
 }
 
 String formatCurrency(double amount) {
   final profile = BusinessSession.instance.current;
   final code = profile?.currencyCode.trim() ?? '';
-  final decimalDigits = _currencyDecimalDigits(code);
+  final decimalDigits = currencyDecimalDigitsForCode(code);
   final formatter = NumberFormat.decimalPatternDigits(
     locale: 'en_US',
     decimalDigits: decimalDigits,
@@ -47,13 +52,10 @@ String formatCurrency(double amount) {
       : '$prefix ${formatter.format(amount)}';
 }
 
-String formatCurrencyCompact(
-  double amount, {
-  int? decimalDigits,
-}) {
+String formatCurrencyCompact(double amount, {int? decimalDigits}) {
   final profile = BusinessSession.instance.current;
   final code = profile?.currencyCode.trim() ?? '';
-  final currencyDigits = _currencyDecimalDigits(code);
+  final currencyDigits = currencyDecimalDigitsForCode(code);
   final resolvedDigits = decimalDigits ?? currencyDigits;
 
   final formatter = NumberFormat.compact(locale: 'en_US')

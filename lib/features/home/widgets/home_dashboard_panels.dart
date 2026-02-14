@@ -1,5 +1,6 @@
 import 'package:cosecha_app/data/models/product.dart';
 import 'package:cosecha_app/data/models/sale_transaction.dart';
+import 'package:cosecha_app/data/repositories/performance_period_repository.dart';
 import 'package:cosecha_app/data/repositories/sales_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,6 +12,7 @@ import '../../../core/utils/formatters.dart';
 import '../../../core/utils/time_utils.dart';
 import '../../../data/hive/boxes.dart';
 import '../../../l10n/app_localizations.dart';
+import '../home_performance_detail_screen.dart';
 import 'dashboard_card.dart';
 import 'performance_card.dart';
 import 'quick_item.dart';
@@ -28,13 +30,15 @@ class HomePerformancePanel extends StatelessWidget {
       children: [
         Text(
           l10n.homePerformanceOverview,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                letterSpacing: 1.2,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(letterSpacing: 1.2),
         ),
         const SizedBox(height: 12),
         ValueListenableBuilder<Box<SaleTransaction>>(
-          valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
+          valueListenable: Hive.box<SaleTransaction>(
+            HiveBoxes.transactions,
+          ).listenable(),
           builder: (context, box, _) {
             final repo = SalesRepository();
             final now = DateTime.now();
@@ -54,6 +58,12 @@ class HomePerformancePanel extends StatelessWidget {
                   delta: formatPercentDelta(today.deltaPercent),
                   deltaPositive: today.deltaPercent >= 0,
                   background: colorScheme.surface,
+                  onTap: () => Navigator.of(context).pushNamed(
+                    AppRoutes.homePerformanceDetail,
+                    arguments: const HomePerformanceDetailArgs(
+                      period: PerformancePeriod.daily,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 PerformanceCard(
@@ -62,6 +72,12 @@ class HomePerformancePanel extends StatelessWidget {
                   delta: formatPercentDelta(week.deltaPercent),
                   deltaPositive: week.deltaPercent >= 0,
                   background: colorScheme.surface,
+                  onTap: () => Navigator.of(context).pushNamed(
+                    AppRoutes.homePerformanceDetail,
+                    arguments: const HomePerformanceDetailArgs(
+                      period: PerformancePeriod.weekly,
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 PerformanceCard(
@@ -70,6 +86,12 @@ class HomePerformancePanel extends StatelessWidget {
                   delta: formatPercentDelta(month.deltaPercent),
                   deltaPositive: month.deltaPercent >= 0,
                   background: colorScheme.surface,
+                  onTap: () => Navigator.of(context).pushNamed(
+                    AppRoutes.homePerformanceDetail,
+                    arguments: const HomePerformanceDetailArgs(
+                      period: PerformancePeriod.monthly,
+                    ),
+                  ),
                 ),
               ],
             );
@@ -88,19 +110,26 @@ class HomeSalesGoalPanel extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Box<SaleTransaction>>(
-      valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
+      valueListenable: Hive.box<SaleTransaction>(
+        HiveBoxes.transactions,
+      ).listenable(),
       builder: (context, box, _) {
         final now = DateTime.now();
         final monthStart = DateTime(now.year, now.month, 1);
         final prevMonthStart = DateTime(now.year, now.month - 1, 1);
         final currentMonth = _sumBetween(box.values, monthStart, now);
-        final previousMonth = _sumBetween(box.values, prevMonthStart, monthStart);
+        final previousMonth = _sumBetween(
+          box.values,
+          prevMonthStart,
+          monthStart,
+        );
         final estimatedGoal = previousMonth > 0
             ? previousMonth
             : (currentMonth > 0 ? currentMonth * 1.15 : 0.0);
 
-        final progress =
-            estimatedGoal <= 0 ? 0.0 : (currentMonth / estimatedGoal).clamp(0.0, 1.0);
+        final progress = estimatedGoal <= 0
+            ? 0.0
+            : (currentMonth / estimatedGoal).clamp(0.0, 1.0);
         final overGoal = estimatedGoal > 0 && currentMonth > estimatedGoal;
 
         return DashboardCard(
@@ -115,16 +144,16 @@ class HomeSalesGoalPanel extends StatelessWidget {
               Text(
                 l10n.homeSalesGoalSubtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
               const SizedBox(height: 12),
               if (estimatedGoal <= 0)
                 Text(
                   l10n.homeNoSalesData,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.7),
-                      ),
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
                 )
               else ...[
                 ClipRRect(
@@ -145,14 +174,16 @@ class HomeSalesGoalPanel extends StatelessWidget {
                     Text(
                       formatCurrencyCompact(currentMonth),
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     Text(
-                      l10n.homeSalesGoalOf(formatCurrencyCompact(estimatedGoal)),
+                      l10n.homeSalesGoalOf(
+                        formatCurrencyCompact(estimatedGoal),
+                      ),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurface.withValues(alpha: 0.7),
-                          ),
+                        color: colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
                     ),
                   ],
                 ),
@@ -172,6 +203,11 @@ class HomeQuickActionsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final actions = [
+      _QuickActionDef(
+        icon: Icons.inventory_2_outlined,
+        label: l10n.homeActionAddProduct,
+        route: AppRoutes.productEdit,
+      ),
       _QuickActionDef(
         icon: Icons.point_of_sale,
         label: l10n.homeActionNewSale,
@@ -206,8 +242,10 @@ class HomeQuickActionsPanel extends StatelessWidget {
           Text(
             l10n.homeQuickActionsSubtitle,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                ),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
           ),
           const SizedBox(height: 12),
           Row(
@@ -216,15 +254,10 @@ class HomeQuickActionsPanel extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: FilledButton.tonalIcon(
+                    child: IconButton.filled(
                       onPressed: () =>
                           Navigator.of(context).pushNamed(action.route),
                       icon: Icon(action.icon, size: 18),
-                      label: Text(
-                        action.label,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
                     ),
                   ),
                 ),
@@ -244,7 +277,9 @@ class HomeChannelMixPanel extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Box<SaleTransaction>>(
-      valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
+      valueListenable: Hive.box<SaleTransaction>(
+        HiveBoxes.transactions,
+      ).listenable(),
       builder: (context, box, _) {
         final now = DateTime.now();
         final from = now.subtract(const Duration(days: 30));
@@ -279,16 +314,16 @@ class HomeChannelMixPanel extends StatelessWidget {
               Text(
                 l10n.homeChannelMixSubtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
               const SizedBox(height: 12),
               if (total <= 0)
                 Text(
                   l10n.homeNoSalesData,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.7),
-                      ),
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
                 )
               else ...[
                 _ChannelMixRow(
@@ -339,8 +374,8 @@ class _ChannelMixRow extends StatelessWidget {
             Text(
               '${(share * 100).toStringAsFixed(0)}% · $totalLabel',
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: colorScheme.onSurface.withValues(alpha: 0.75),
-                  ),
+                color: colorScheme.onSurface.withValues(alpha: 0.75),
+              ),
             ),
           ],
         ),
@@ -371,7 +406,9 @@ class HomeProductsAtRiskPanel extends StatelessWidget {
       valueListenable: Hive.box<Product>(HiveBoxes.products).listenable(),
       builder: (context, productBox, _) {
         return ValueListenableBuilder<Box<SaleTransaction>>(
-          valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
+          valueListenable: Hive.box<SaleTransaction>(
+            HiveBoxes.transactions,
+          ).listenable(),
           builder: (context, salesBox, child) {
             final now = DateTime.now();
             final threshold = now.subtract(const Duration(days: 21));
@@ -421,16 +458,16 @@ class HomeProductsAtRiskPanel extends StatelessWidget {
                   Text(
                     l10n.homeProductsAtRiskSubtitle,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurface.withValues(alpha: 0.7),
-                        ),
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
                   ),
                   const SizedBox(height: 12),
                   if (risk.isEmpty)
                     Text(
                       l10n.homeProductsAtRiskEmpty,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.onSurface.withValues(alpha: 0.7),
-                          ),
+                        color: colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
                     )
                   else
                     ...risk.take(3).map((item) {
@@ -451,9 +488,11 @@ class HomeProductsAtRiskPanel extends StatelessWidget {
                             ),
                             Text(
                               subtitle,
-                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: colorScheme.onSurface
-                                        .withValues(alpha: 0.7),
+                              style: Theme.of(context).textTheme.labelSmall
+                                  ?.copyWith(
+                                    color: colorScheme.onSurface.withValues(
+                                      alpha: 0.7,
+                                    ),
                                   ),
                             ),
                           ],
@@ -464,7 +503,8 @@ class HomeProductsAtRiskPanel extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => Navigator.of(context).pushNamed(AppRoutes.products),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed(AppRoutes.products),
                       child: Text(l10n.homeActionViewProducts),
                     ),
                   ),
@@ -486,7 +526,9 @@ class HomeAvgTicketTrendPanel extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Box<SaleTransaction>>(
-      valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
+      valueListenable: Hive.box<SaleTransaction>(
+        HiveBoxes.transactions,
+      ).listenable(),
       builder: (context, box, _) {
         final now = DateTime.now();
         final currentFrom = now.subtract(const Duration(days: 7));
@@ -511,8 +553,8 @@ class HomeAvgTicketTrendPanel extends StatelessWidget {
               Text(
                 l10n.homeAvgTicketSubtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
               const SizedBox(height: 14),
               Row(
@@ -520,9 +562,8 @@ class HomeAvgTicketTrendPanel extends StatelessWidget {
                   Expanded(
                     child: Text(
                       formatCurrencyCompact(current.avg),
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w700),
                     ),
                   ),
                   if (deltaPercent != null)
@@ -539,7 +580,8 @@ class HomeAvgTicketTrendPanel extends StatelessWidget {
                       ),
                       child: Text(
                         formatPercentDelta(deltaPercent),
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
                               color: deltaPercent >= 0
                                   ? colorScheme.onSecondaryContainer
                                   : colorScheme.onErrorContainer,
@@ -552,8 +594,8 @@ class HomeAvgTicketTrendPanel extends StatelessWidget {
               Text(
                 l10n.homeAvgTicketTransactions(current.count),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
             ],
           ),
@@ -571,7 +613,9 @@ class HomeWeeklyActivityPanel extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return ValueListenableBuilder<Box<SaleTransaction>>(
-      valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
+      valueListenable: Hive.box<SaleTransaction>(
+        HiveBoxes.transactions,
+      ).listenable(),
       builder: (context, box, _) {
         final now = DateTime.now();
         final today = DateTime(now.year, now.month, now.day);
@@ -581,14 +625,21 @@ class HomeWeeklyActivityPanel extends StatelessWidget {
         final points = <_DayActivity>[];
         for (var i = 0; i < 7; i++) {
           final dayStart = DateTime(start.year, start.month, start.day + i);
-          final dayEnd = DateTime(dayStart.year, dayStart.month, dayStart.day + 1);
+          final dayEnd = DateTime(
+            dayStart.year,
+            dayStart.month,
+            dayStart.day + 1,
+          );
           final count = box.values.where((sale) {
-            return !sale.createdAt.isBefore(dayStart) && sale.createdAt.isBefore(dayEnd);
+            return !sale.createdAt.isBefore(dayStart) &&
+                sale.createdAt.isBefore(dayEnd);
           }).length;
           points.add(
             _DayActivity(
               day: dayStart,
-              label: DateFormat.E(locale).format(dayStart).substring(0, 1).toUpperCase(),
+              label: DateFormat.E(
+                locale,
+              ).format(dayStart).substring(0, 1).toUpperCase(),
               count: count,
             ),
           );
@@ -610,16 +661,16 @@ class HomeWeeklyActivityPanel extends StatelessWidget {
               Text(
                 l10n.homeWeeklyActivitySubtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
               const SizedBox(height: 14),
               if (maxCount == 0)
                 Text(
                   l10n.homeNoSalesData,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.7),
-                      ),
+                    color: colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
                 )
               else
                 SizedBox(
@@ -638,12 +689,17 @@ class HomeWeeklyActivityPanel extends StatelessWidget {
                                   child: Align(
                                     alignment: Alignment.bottomCenter,
                                     child: AnimatedContainer(
-                                      duration: const Duration(milliseconds: 280),
-                                      height: 14 + ((point.count / maxCount) * 64),
+                                      duration: const Duration(
+                                        milliseconds: 280,
+                                      ),
+                                      height:
+                                          14 + ((point.count / maxCount) * 64),
                                       decoration: BoxDecoration(
                                         color: point.day == today
                                             ? colorScheme.primary
-                                            : colorScheme.primary.withValues(alpha: 0.45),
+                                            : colorScheme.primary.withValues(
+                                                alpha: 0.45,
+                                              ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
@@ -652,9 +708,11 @@ class HomeWeeklyActivityPanel extends StatelessWidget {
                                 const SizedBox(height: 8),
                                 Text(
                                   point.label,
-                                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                        color: colorScheme.onSurface
-                                            .withValues(alpha: 0.7),
+                                  style: Theme.of(context).textTheme.labelSmall
+                                      ?.copyWith(
+                                        color: colorScheme.onSurface.withValues(
+                                          alpha: 0.7,
+                                        ),
                                       ),
                                 ),
                               ],
@@ -681,7 +739,9 @@ class HomeWeeklyInsightsPanel extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return ValueListenableBuilder<Box<SaleTransaction>>(
-      valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
+      valueListenable: Hive.box<SaleTransaction>(
+        HiveBoxes.transactions,
+      ).listenable(),
       builder: (context, box, _) {
         final now = DateTime.now();
         final currentFrom = now.subtract(const Duration(days: 7));
@@ -690,13 +750,21 @@ class HomeWeeklyInsightsPanel extends StatelessWidget {
         final previous = _salesBetween(box.values, previousFrom, currentFrom);
 
         final insights = <String>[];
-        final currentTotal = current.fold<double>(0.0, (sum, item) => sum + item.amount);
-        final previousTotal = previous.fold<double>(0.0, (sum, item) => sum + item.amount);
+        final currentTotal = current.fold<double>(
+          0.0,
+          (sum, item) => sum + item.amount,
+        );
+        final previousTotal = previous.fold<double>(
+          0.0,
+          (sum, item) => sum + item.amount,
+        );
 
         if (previousTotal > 0 && currentTotal > 0) {
           final delta = ((currentTotal - previousTotal) / previousTotal) * 100;
           if (delta.abs() >= 5) {
-            final direction = delta >= 0 ? l10n.homeInsightDirectionUp : l10n.homeInsightDirectionDown;
+            final direction = delta >= 0
+                ? l10n.homeInsightDirectionUp
+                : l10n.homeInsightDirectionDown;
             insights.add(
               l10n.homeInsightRevenueDelta(
                 direction,
@@ -714,7 +782,9 @@ class HomeWeeklyInsightsPanel extends StatelessWidget {
 
         if (retailShift.abs() >= 0.1 || wholesaleShift.abs() >= 0.1) {
           final useRetail = retailShift.abs() >= wholesaleShift.abs();
-          final channelLabel = useRetail ? l10n.salesChannelRetail : l10n.salesChannelWholesale;
+          final channelLabel = useRetail
+              ? l10n.salesChannelRetail
+              : l10n.salesChannelWholesale;
           final shift = useRetail ? retailShift : wholesaleShift;
           insights.add(
             l10n.homeInsightChannelShift(
@@ -726,7 +796,9 @@ class HomeWeeklyInsightsPanel extends StatelessWidget {
 
         final topByAmount = <String, double>{};
         for (final sale in current) {
-          final key = sale.productId.isNotEmpty ? sale.productId : sale.productName;
+          final key = sale.productId.isNotEmpty
+              ? sale.productId
+              : sale.productName;
           topByAmount[key] = (topByAmount[key] ?? 0) + sale.amount;
         }
         if (topByAmount.isNotEmpty) {
@@ -734,7 +806,11 @@ class HomeWeeklyInsightsPanel extends StatelessWidget {
             return a.value >= b.value ? a : b;
           }).key;
           final topSale = current.firstWhere(
-            (item) => (item.productId.isNotEmpty ? item.productId : item.productName) == topKey,
+            (item) =>
+                (item.productId.isNotEmpty
+                    ? item.productId
+                    : item.productName) ==
+                topKey,
           );
           insights.add(l10n.homeInsightTopProduct(topSale.productName));
         }
@@ -755,8 +831,8 @@ class HomeWeeklyInsightsPanel extends StatelessWidget {
               Text(
                 l10n.homeWeeklyInsightsSubtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurface.withValues(alpha: 0.7),
-                    ),
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
               ),
               const SizedBox(height: 12),
               for (final text in insights.take(3))
@@ -794,60 +870,149 @@ class HomeQuickSalePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.homeQuickSale,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                letterSpacing: 1.2,
-              ),
-        ),
-        const SizedBox(height: 12),
-        ValueListenableBuilder<Box<Product>>(
-          valueListenable: Hive.box<Product>(HiveBoxes.products).listenable(),
-          builder: (context, productBox, _) {
-            if (productBox.values.isEmpty) {
-              return SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => Navigator.of(context).pushNamed(AppRoutes.products),
-                  child: Text(l10n.homeQuickAddProducts),
-                ),
-              );
-            }
+    return DashboardCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.homeQuickSale,
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(letterSpacing: 1.2),
+          ),
+          const SizedBox(height: 12),
+          ValueListenableBuilder<Box<Product>>(
+            valueListenable: Hive.box<Product>(HiveBoxes.products).listenable(),
+            builder: (context, productBox, _) {
+              if (productBox.values.isEmpty) {
+                return SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(AppRoutes.products),
+                    child: Text(l10n.homeQuickAddProducts),
+                  ),
+                );
+              }
 
-            return ValueListenableBuilder<Box<SaleTransaction>>(
-              valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
-              builder: (context, salesBox, _) {
-                final topProducts = SalesRepository().getTopProducts(limit: 3);
-                return Row(
+              return ValueListenableBuilder<Box<SaleTransaction>>(
+                valueListenable: Hive.box<SaleTransaction>(
+                  HiveBoxes.transactions,
+                ).listenable(),
+                builder: (context, salesBox, _) {
+                  final topProducts = SalesRepository().getTopProducts(
+                    limit: 3,
+                  );
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      for (final product in topProducts)
+                        QuickItem(
+                          label: product.name,
+                          imagePath: product.imageUrl,
+                          onTap: () => Navigator.of(
+                            context,
+                          ).pushNamed(AppRoutes.saleAdd, arguments: product),
+                        ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.saleAdd),
+              icon: const Icon(Icons.add),
+              label: Text(l10n.homeAddSale),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeLatestProductsPanel extends StatelessWidget {
+  const HomeLatestProductsPanel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ValueListenableBuilder<Box<Product>>(
+      valueListenable: Hive.box<Product>(HiveBoxes.products).listenable(),
+      builder: (context, box, _) {
+        final items = box.values.toList()..sort(_compareProductByNewest);
+        final latest = items.take(3).toList();
+
+        return DashboardCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.homeLatestProductsTitle,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l10n.homeLatestProductsSubtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: colorScheme.onSurface.withValues(alpha: 0.7),
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (latest.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    l10n.homeLatestProductsEmpty,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                  ),
+                )
+              else
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    for (final product in topProducts)
-                      QuickItem(
-                        label: product.name,
-                        imagePath: product.imageUrl,
-                        onTap: () => Navigator.of(
-                          context,
-                        ).pushNamed(AppRoutes.saleAdd, arguments: product),
+                    for (final product in latest)
+                      Expanded(
+                        child: Center(
+                          child: QuickItem(
+                            label: product.name,
+                            imagePath: product.imageUrl,
+                            onTap: () => Navigator.of(context).pushNamed(
+                              AppRoutes.productEdit,
+                              arguments: product,
+                            ),
+                          ),
+                        ),
                       ),
                   ],
-                );
-              },
-            );
-          },
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton.icon(
-            onPressed: () => Navigator.of(context).pushNamed(AppRoutes.saleAdd),
-            icon: const Icon(Icons.add),
-            label: Text(l10n.homeAddSale),
+                ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton.icon(
+                      onPressed: () => Navigator.of(
+                        context,
+                      ).pushNamed(AppRoutes.productEdit),
+                      icon: const Icon(Icons.add),
+                      label: Text(l10n.homeLatestProductsAddButton),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
@@ -859,56 +1024,61 @@ class HomeRecentSalesPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l10n.homeRecentSales,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pushNamed(AppRoutes.salesHistory),
-              child: Text(l10n.homeSeeHistory),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        ValueListenableBuilder<Box<SaleTransaction>>(
-          valueListenable: Hive.box<SaleTransaction>(HiveBoxes.transactions).listenable(),
-          builder: (context, box, _) {
-            final items = box.values.toList()
-              ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-            final recent = items.take(3).toList();
-            if (recent.isEmpty) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  l10n.homeRecentEmpty,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
-                ),
-              );
-            }
-
-            return Column(
-              children: [
-                for (final sale in recent) ...[
-                  RecentItem(
-                    title: sale.productName,
-                    subtitle: relativeTime(l10n, sale.createdAt),
-                    amount: sale.formatAmount(),
+    return DashboardCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                l10n.homeRecentSales,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(AppRoutes.salesHistory),
+                child: Text(l10n.homeSeeHistory),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ValueListenableBuilder<Box<SaleTransaction>>(
+            valueListenable: Hive.box<SaleTransaction>(
+              HiveBoxes.transactions,
+            ).listenable(),
+            builder: (context, box, _) {
+              final items = box.values.toList()
+                ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+              final recent = items.take(3).toList();
+              if (recent.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Text(
+                    l10n.homeRecentEmpty,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
                   ),
-                  if (sale != recent.last) const SizedBox(height: 8),
+                );
+              }
+
+              return Column(
+                children: [
+                  for (final sale in recent) ...[
+                    RecentItem(
+                      title: sale.productName,
+                      subtitle: relativeTime(l10n, sale.createdAt),
+                      amount: sale.formatAmount(),
+                    ),
+                    if (sale != recent.last) const SizedBox(height: 8),
+                  ],
                 ],
-              ],
-            );
-          },
-        ),
-      ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -938,20 +1108,14 @@ class _QuickActionDef {
 }
 
 class _RiskProduct {
-  const _RiskProduct({
-    required this.name,
-    required this.daysWithoutSales,
-  });
+  const _RiskProduct({required this.name, required this.daysWithoutSales});
 
   final String name;
   final int? daysWithoutSales;
 }
 
 class _RangeStats {
-  const _RangeStats({
-    required this.total,
-    required this.count,
-  });
+  const _RangeStats({required this.total, required this.count});
 
   final double total;
   final int count;
@@ -959,10 +1123,16 @@ class _RangeStats {
   double get avg => count == 0 ? 0.0 : total / count;
 }
 
-double _sumBetween(Iterable<SaleTransaction> sales, DateTime from, DateTime to) {
-  return sales.where((sale) {
-    return !sale.createdAt.isBefore(from) && sale.createdAt.isBefore(to);
-  }).fold(0.0, (sum, sale) => sum + sale.amount);
+double _sumBetween(
+  Iterable<SaleTransaction> sales,
+  DateTime from,
+  DateTime to,
+) {
+  return sales
+      .where((sale) {
+        return !sale.createdAt.isBefore(from) && sale.createdAt.isBefore(to);
+      })
+      .fold(0.0, (sum, sale) => sum + sale.amount);
 }
 
 List<SaleTransaction> _salesBetween(
@@ -975,7 +1145,11 @@ List<SaleTransaction> _salesBetween(
   }).toList();
 }
 
-_RangeStats _statsBetween(Iterable<SaleTransaction> sales, DateTime from, DateTime to) {
+_RangeStats _statsBetween(
+  Iterable<SaleTransaction> sales,
+  DateTime from,
+  DateTime to,
+) {
   var total = 0.0;
   var count = 0;
   for (final sale in sales) {
@@ -1009,11 +1183,14 @@ _ChannelShare _channelShare(Iterable<SaleTransaction> sales) {
 }
 
 class _ChannelShare {
-  const _ChannelShare({
-    required this.retail,
-    required this.wholesale,
-  });
+  const _ChannelShare({required this.retail, required this.wholesale});
 
   final double retail;
   final double wholesale;
+}
+
+int _compareProductByNewest(Product a, Product b) {
+  final aTs = int.tryParse(a.id) ?? 0;
+  final bTs = int.tryParse(b.id) ?? 0;
+  return bTs.compareTo(aTs);
 }

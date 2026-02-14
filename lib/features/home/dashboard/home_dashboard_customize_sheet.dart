@@ -160,6 +160,7 @@ List<_HomePreset> _buildPresets() {
         HomeDashboardWidgetIds.performance,
         HomeDashboardWidgetIds.quickActions,
         HomeDashboardWidgetIds.quickSale,
+        HomeDashboardWidgetIds.latestProducts,
         HomeDashboardWidgetIds.recentSales,
       ],
     ),
@@ -173,6 +174,7 @@ List<_HomePreset> _buildPresets() {
         HomeDashboardWidgetIds.channelMix,
         HomeDashboardWidgetIds.productsAtRisk,
         HomeDashboardWidgetIds.quickSale,
+        HomeDashboardWidgetIds.latestProducts,
         HomeDashboardWidgetIds.recentSales,
       ],
     ),
@@ -193,8 +195,10 @@ List<_HomePreset> _buildPresets() {
 }
 
 String _basicPresetLabel(AppLocalizations l10n) => l10n.homePresetBasic;
-String _commercialPresetLabel(AppLocalizations l10n) => l10n.homePresetCommercial;
-String _analyticalPresetLabel(AppLocalizations l10n) => l10n.homePresetAnalytical;
+String _commercialPresetLabel(AppLocalizations l10n) =>
+    l10n.homePresetCommercial;
+String _analyticalPresetLabel(AppLocalizations l10n) =>
+    l10n.homePresetAnalytical;
 
 String? _resolvePresetId({
   required List<_HomePreset> presets,

@@ -9,6 +9,7 @@ class PerformanceCard extends StatelessWidget {
     required this.deltaPositive,
     required this.background,
     this.foreground,
+    this.onTap,
   });
 
   final String label;
@@ -17,73 +18,94 @@ class PerformanceCard extends StatelessWidget {
   final bool deltaPositive;
   final Color background;
   final Color? foreground;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final shadowColor = Theme.of(context).shadowColor;
     final fg = foreground ?? Theme.of(context).colorScheme.onSurface;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: background,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: shadowColor.withValues(alpha: 0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: background,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: shadowColor.withValues(alpha: 0.05),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(label, style: TextStyle(color: fg.withValues(alpha: 0.7))),
-                const SizedBox(height: 4),
-                Text(
-                  amount,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: fg,
-                    fontWeight: FontWeight.w700,
-                  ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(color: fg.withValues(alpha: 0.7)),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      amount,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: fg,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: deltaPositive
-                  ? Theme.of(context).colorScheme.secondaryContainer
-                  : Theme.of(context).colorScheme.errorContainer,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  deltaPositive ? Icons.trending_up : Icons.trending_down,
-                  size: 14,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
                   color: deltaPositive
-                      ? Theme.of(context).colorScheme.onSecondaryContainer
-                      : Theme.of(context).colorScheme.onErrorContainer,
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : Theme.of(context).colorScheme.errorContainer,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  delta,
-                  style: TextStyle(
-                    color: deltaPositive
-                        ? Theme.of(context).colorScheme.onSecondaryContainer
-                        : Theme.of(context).colorScheme.onErrorContainer,
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Row(
+                  children: [
+                    Icon(
+                      deltaPositive ? Icons.trending_up : Icons.trending_down,
+                      size: 14,
+                      color: deltaPositive
+                          ? Theme.of(context).colorScheme.onSecondaryContainer
+                          : Theme.of(context).colorScheme.onErrorContainer,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      delta,
+                      style: TextStyle(
+                        color: deltaPositive
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
+                            : Theme.of(context).colorScheme.onErrorContainer,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (onTap != null) ...[
+                const SizedBox(width: 8),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: fg.withValues(alpha: 0.5),
                 ),
               ],
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
