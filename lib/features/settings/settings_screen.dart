@@ -59,15 +59,19 @@ class SettingsScreen extends StatelessWidget {
                       : Icons.workspace_premium_outlined,
                   iconBg: colorScheme.tertiaryContainer,
                   iconColor: colorScheme.onTertiaryContainer,
-                  title: isPremium ? 'Plan Premium activo' : 'Volverse Premium',
+                  title: isPremium
+                      ? l10n.settingsPremiumActiveTitle
+                      : l10n.settingsPremiumInactiveTitle,
                   subtitle: isPremium
-                      ? 'Ya tienes todas las funciones premium desbloqueadas.'
-                      : 'Desbloquea ajustes avanzados, widgets premium y exportación Excel.',
+                      ? l10n.settingsPremiumActiveSubtitle
+                      : l10n.settingsPremiumInactiveSubtitle,
                   onTap: () async {
                     if (isPremium) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Tu cuenta ya es Premium.'),
+                        SnackBar(
+                          content: Text(
+                            l10n.settingsPremiumAlreadyActiveMessage,
+                          ),
                         ),
                       );
                       return;
@@ -257,11 +261,13 @@ Future<void> _showOurStorySheet(
     title: l10n.settingsOriginTitle,
     isScrollControlled: true,
     useSafeArea: true,
-    mainAxisSize: MainAxisSize.max,
     paddingBuilder: (_) => const EdgeInsets.fromLTRB(20, 12, 20, 20),
     contentBuilder: (context) {
       return [
-        Flexible(
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(context).height * 0.6,
+          ),
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(4, 0, 4, 4),

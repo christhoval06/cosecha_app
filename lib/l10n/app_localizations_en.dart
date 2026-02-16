@@ -691,6 +691,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionGeneral => 'General';
 
   @override
+  String get settingsPremiumActiveTitle => 'Premium plan active';
+
+  @override
+  String get settingsPremiumInactiveTitle => 'Go Premium';
+
+  @override
+  String get settingsPremiumActiveSubtitle =>
+      'You already have all premium features unlocked.';
+
+  @override
+  String get settingsPremiumInactiveSubtitle =>
+      'Unlock advanced settings, premium widgets, and Excel export.';
+
+  @override
+  String get settingsPremiumAlreadyActiveMessage =>
+      'Your account is already Premium.';
+
+  @override
   String get settingsBusinessTitle => 'Business';
 
   @override
@@ -975,7 +993,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsOriginBody =>
-      'This app started when I saw my friend and partner Michael “Micha” writing every sale in a notebook. I wanted to help him take control of his business with a simple, fast tool built for his day-to-day. Cosecha is that daily support to sell with clarity and decide with confidence.';
+      'Cosecha was born in the field, not in an office: after seeing my business partner Michael “Micha” track sales in a notebook and end each day without clear visibility of the business.\n\nWhy use this app?\n• Daily control: you can review sales, products, and key metrics in minutes.\n• Better decisions with data: understand what sells, when, and why.\n• Organized operations: reminders, history, and reports in one place.\n\nWhy was it created?\nIt was created for small businesses like Micha\'s, which need operational clarity without complex systems or heavy processes.\n\nWhat problem does it solve?\nIt solves the same problem we faced at the start: scattered information, unreliable numbers, and decisions made blindly. Cosecha turns isolated records into actionable insight to grow with control.';
 
   @override
   String get settingsDeveloperTitle => 'Developer';

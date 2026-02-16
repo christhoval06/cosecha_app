@@ -1386,6 +1386,36 @@ abstract class AppLocalizations {
   /// **'General'**
   String get settingsSectionGeneral;
 
+  /// No description provided for @settingsPremiumActiveTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Plan Premium activo'**
+  String get settingsPremiumActiveTitle;
+
+  /// No description provided for @settingsPremiumInactiveTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Volverse Premium'**
+  String get settingsPremiumInactiveTitle;
+
+  /// No description provided for @settingsPremiumActiveSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Ya tienes todas las funciones premium desbloqueadas.'**
+  String get settingsPremiumActiveSubtitle;
+
+  /// No description provided for @settingsPremiumInactiveSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Desbloquea ajustes avanzados, widgets premium y exportación Excel.'**
+  String get settingsPremiumInactiveSubtitle;
+
+  /// No description provided for @settingsPremiumAlreadyActiveMessage.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu cuenta ya es Premium.'**
+  String get settingsPremiumAlreadyActiveMessage;
+
   /// No description provided for @settingsBusinessTitle.
   ///
   /// In es, this message translates to:
@@ -1923,7 +1953,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsOriginBody.
   ///
   /// In es, this message translates to:
-  /// **'Esta app nació al ver a mi amigo y socio Michael “Micha” anotar cada venta en una libreta. Quise ayudarlo a tener el control de su negocio con una herramienta simple, rápida y hecha a su medida. Cosecha es ese apoyo diario para vender con claridad y decidir con confianza.'**
+  /// **'Cosecha nació en el campo, no en una oficina: al ver a mi socio Michael “Micha” registrar ventas en una libreta y cerrar el día sin claridad real del negocio.\n\n¿Por qué usar esta app?\n• Control diario: ves ventas, productos y métricas clave en minutos.\n• Decisiones con datos: entiendes qué se vende, cuándo y por qué.\n• Orden sin fricción: recordatorios, historial y reportes en un solo lugar.\n\n¿Para qué fue creada?\nFue creada para pequeños negocios como el de Micha, que necesitan claridad operativa sin sistemas complejos ni procesos pesados.\n\n¿Qué problema resuelve?\nResuelve el mismo problema que vivimos al inicio: información dispersa, números poco confiables y decisiones a ciegas. Cosecha convierte registros sueltos en información accionable para crecer con control.'**
   String get settingsOriginBody;
 
   /// No description provided for @settingsDeveloperTitle.

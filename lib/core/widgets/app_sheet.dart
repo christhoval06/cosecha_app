@@ -12,6 +12,7 @@ class AppSheetLayout extends StatelessWidget {
     this.headerSpacing = 8,
     this.onClose,
     this.titleStyle,
+    this.scrollableContent = false,
   });
 
   final String title;
@@ -23,12 +24,19 @@ class AppSheetLayout extends StatelessWidget {
   final double headerSpacing;
   final VoidCallback? onClose;
   final TextStyle? titleStyle;
+  final bool scrollableContent;
 
   @override
   Widget build(BuildContext context) {
+    final safeBottom = MediaQuery.viewPaddingOf(context).bottom;
+    final content = Column(
+      crossAxisAlignment: crossAxisAlignment,
+      children: children,
+    );
     return SafeArea(
+      bottom: false,
       child: Padding(
-        padding: padding,
+        padding: padding.add(EdgeInsets.only(bottom: safeBottom)),
         child: Column(
           mainAxisSize: mainAxisSize,
           crossAxisAlignment: crossAxisAlignment,
@@ -50,7 +58,10 @@ class AppSheetLayout extends StatelessWidget {
               ],
             ),
             SizedBox(height: headerSpacing),
-            ...children,
+            if (scrollableContent)
+              Expanded(child: SingleChildScrollView(child: content))
+            else
+              ...children,
           ],
         ),
       ),
@@ -68,6 +79,7 @@ Future<T?> showAppSheet<T>({
   MainAxisSize mainAxisSize = MainAxisSize.min,
   CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
   double headerSpacing = 8,
+  bool scrollableContent = false,
   EdgeInsetsGeometry Function(BuildContext context)? paddingBuilder,
 }) {
   return showModalBottomSheet<T>(
@@ -84,6 +96,7 @@ Future<T?> showAppSheet<T>({
         mainAxisSize: mainAxisSize,
         crossAxisAlignment: crossAxisAlignment,
         headerSpacing: headerSpacing,
+        scrollableContent: scrollableContent,
         children: contentBuilder(context),
       );
     },
