@@ -10,6 +10,7 @@ import '../../core/widgets/list_empty_state.dart';
 import '../../core/widgets/list_picker_sheet.dart';
 import '../../core/constants/app_routes.dart';
 import '../../core/constants/sales_channels.dart';
+import '../../core/services/inventory_settings_service.dart';
 import '../../core/utils/formatters.dart';
 import '../../data/hive/boxes.dart';
 import '../../data/models/product.dart';
@@ -31,11 +32,24 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
   final _repository = SalesRepository();
   bool _saving = false;
   String? _selectedProductId;
+  bool _inventoryEnabled = false;
+  List<InventoryUnit> _units = const [];
 
   @override
   void initState() {
     super.initState();
     _selectedProductId = widget.product?.id;
+    _loadInventorySettings();
+  }
+
+  Future<void> _loadInventorySettings() async {
+    final enabled = await InventorySettingsService.isEnabled();
+    final units = await InventorySettingsService.getUnits();
+    if (!mounted) return;
+    setState(() {
+      _inventoryEnabled = enabled;
+      _units = units;
+    });
   }
 
   @override
@@ -128,6 +142,39 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
+                  Builder(
+                    builder: (context) {
+                      final product = products.firstWhere(
+                        (p) => p.id == _selectedProductId,
+                        orElse: () => widget.product ?? products.first,
+                      );
+                      final allowed = _resolveAllowedUnits(product);
+                      final initialUnit = allowed.isEmpty ? '' : allowed.first.id;
+                      if (!_inventoryEnabled) return const SizedBox.shrink();
+                      return FormBuilderDropdown<String>(
+                        name: 'unit_id',
+                        initialValue: initialUnit,
+                        decoration: InputDecoration(
+                          labelText: l10n.salesUnitLabel,
+                        ),
+                        items: allowed
+                            .map(
+                              (item) => DropdownMenuItem(
+                                value: item.id,
+                                child: Text(item.label),
+                              ),
+                            )
+                            .toList(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return l10n.salesUnitRequired;
+                          }
+                          return null;
+                        },
+                      );
+                    },
+                  ),
+                  if (_inventoryEnabled) const SizedBox(height: 16),
                   FormBuilderDropdown<String>(
                     name: 'channel',
                     initialValue: SalesChannels.retail,
@@ -200,6 +247,8 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
       quantity: int.parse(values['quantity'] as String),
       channel: values['channel'] as String,
       createdAt: DateTime.now(),
+      unitId: values['unit_id'] as String? ?? '',
+      unitLabel: _resolveUnitLabel(values['unit_id'] as String?),
     );
 
     try {
@@ -218,6 +267,21 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
 
   double? _parseAmountInput(String? raw) {
     return parseCurrencyInput(raw);
+  }
+
+  List<InventoryUnit> _resolveAllowedUnits(Product product) {
+    if (product.allowedUnitIds.isEmpty) return _units;
+    final allowed = _units
+        .where((unit) => product.allowedUnitIds.contains(unit.id))
+        .toList();
+    return allowed.isEmpty ? _units : allowed;
+  }
+
+  String _resolveUnitLabel(String? unitId) {
+    for (final unit in _units) {
+      if (unit.id == unitId) return unit.label;
+    }
+    return '';
   }
 }
 

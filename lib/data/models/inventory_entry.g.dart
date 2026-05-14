@@ -1,56 +1,59 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sale_transaction.dart';
+part of 'inventory_entry.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SaleTransactionAdapter extends TypeAdapter<SaleTransaction> {
+class InventoryEntryAdapter extends TypeAdapter<InventoryEntry> {
   @override
-  final int typeId = 3;
+  final int typeId = 5;
 
   @override
-  SaleTransaction read(BinaryReader reader) {
+  InventoryEntry read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SaleTransaction(
+    return InventoryEntry(
       id: fields[0] as String,
-      productName: fields[1] as String,
-      productId: fields[6] == null ? '' : fields[6] as String,
-      amount: fields[2] as double,
-      quantity: fields[3] as int,
-      channel: fields[4] as String,
-      createdAt: fields[5] as DateTime,
-      unitId: fields[7] == null ? '' : fields[7] as String,
-      unitLabel: fields[8] == null ? '' : fields[8] as String,
+      productId: fields[1] as String,
+      productName: fields[2] as String,
+      quantity: fields[3] as double,
+      purchasePrice: fields[4] as double,
+      suggestedSalePrice: fields[5] as double,
+      marginPercent: fields[6] as double,
+      unitId: fields[7] as String,
+      unitLabel: fields[8] as String,
+      createdAt: fields[9] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, SaleTransaction obj) {
+  void write(BinaryWriter writer, InventoryEntry obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.productName)
+      ..write(obj.productId)
       ..writeByte(2)
-      ..write(obj.amount)
+      ..write(obj.productName)
       ..writeByte(3)
       ..write(obj.quantity)
       ..writeByte(4)
-      ..write(obj.channel)
+      ..write(obj.purchasePrice)
       ..writeByte(5)
-      ..write(obj.createdAt)
+      ..write(obj.suggestedSalePrice)
       ..writeByte(6)
-      ..write(obj.productId)
+      ..write(obj.marginPercent)
       ..writeByte(7)
       ..write(obj.unitId)
       ..writeByte(8)
-      ..write(obj.unitLabel);
+      ..write(obj.unitLabel)
+      ..writeByte(9)
+      ..write(obj.createdAt);
   }
 
   @override
@@ -59,7 +62,7 @@ class SaleTransactionAdapter extends TypeAdapter<SaleTransaction> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SaleTransactionAdapter &&
+      other is InventoryEntryAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

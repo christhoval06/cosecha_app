@@ -5,11 +5,14 @@ import 'package:intl/intl.dart';
 
 import '../../core/widgets/avatar_image_picker.dart';
 import '../../core/widgets/form_builder_currency_field.dart';
+import '../../core/services/inventory_settings_service.dart';
 import '../../core/utils/file.dart';
 import '../../data/hive/boxes.dart';
+import '../../data/models/inventory_entry.dart';
 import '../../data/models/product.dart';
 import '../../data/models/product_price_history.dart';
 import '../../data/models/sale_transaction.dart';
+import '../../data/repositories/inventory_repository.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../l10n/app_localizations.dart';
 import '../../core/utils/formatters.dart';
@@ -19,6 +22,7 @@ import 'widgets/product_premium_insights_section.dart';
 import 'widgets/product_price_suggestion_card.dart';
 import 'widgets/product_sales_performance_section.dart';
 import 'widgets/product_strategy_tags_picker.dart';
+import 'widgets/inventory_entry_sheet.dart';
 
 class ProductEditScreen extends StatefulWidget {
   const ProductEditScreen({super.key, this.product});
@@ -32,6 +36,7 @@ class ProductEditScreen extends StatefulWidget {
 class _ProductEditScreenState extends State<ProductEditScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final _repository = ProductRepository();
+  final _inventoryRepository = InventoryRepository();
   late final TextEditingController _priceController;
   late final int _currencyDecimalDigits;
   late final NumberFormat _priceNumberFormatter;
@@ -40,6 +45,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   String _range = '1M';
   bool _saving = false;
   double? _priceDraft;
+  bool _inventoryEnabled = false;
+  List<InventoryUnit> _units = const [];
 
   bool get _isEdit => widget.product != null;
 
@@ -58,6 +65,17 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
           : _priceNumberFormatter.format(widget.product!.currentPrice),
     );
     _priceDraft = widget.product?.currentPrice;
+    _loadInventorySettings();
+  }
+
+  Future<void> _loadInventorySettings() async {
+    final enabled = await InventorySettingsService.isEnabled();
+    final units = await InventorySettingsService.getUnits();
+    if (!mounted) return;
+    setState(() {
+      _inventoryEnabled = enabled;
+      _units = units;
+    });
   }
 
   @override
@@ -68,6 +86,10 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentProduct = _isEdit
+        ? Hive.box<Product>(HiveBoxes.products).get(widget.product!.id) ??
+            widget.product!
+        : null;
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     final title = _isEdit ? l10n.productEditTitle : l10n.productAddTitle;
@@ -85,7 +107,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     ];
     final now = DateTime.now();
     final List<ProductPriceHistory> history = _isEdit
-        ? _repository.getHistory(widget.product!.id)
+        ? _repository.getHistory(currentProduct!.id)
         : <ProductPriceHistory>[];
     final from = _rangeStart(now);
     final to = now;
@@ -98,7 +120,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     final values = filtered.map((item) => item.price).toList().cast<double>();
     final totalLabel = values.isNotEmpty
         ? formatCurrency(values.last)
-        : formatCurrency(widget.product?.currentPrice ?? 0);
+        : formatCurrency(currentProduct?.currentPrice ?? 0);
     // Use the latest two price points: previous vs current.
     final changePercent = values.length >= 2
         ? _changePercent(
@@ -106,7 +128,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
             current: values.last,
           )
         : null;
-    final currentPrice = _priceDraft ?? widget.product?.currentPrice ?? 0.0;
+    final currentPrice = _priceDraft ?? currentProduct?.currentPrice ?? 0.0;
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -154,7 +176,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                 label: l10n.productNameLabel,
                 child: FormBuilderTextField(
                   name: 'name',
-                  initialValue: widget.product?.name,
+                  initialValue: currentProduct?.name,
                   decoration: InputDecoration(hintText: l10n.productNameHint),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -227,6 +249,20 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   );
                 },
               ),
+              if (_inventoryEnabled) const SizedBox(height: 16),
+              if (_inventoryEnabled)
+                FormBuilderCheckboxGroup<String>(
+                  name: 'unit_ids',
+                  initialValue: currentProduct?.allowedUnitIds ?? const [],
+                  options: _units
+                      .map(
+                        (unit) => FormBuilderFieldOption(
+                          value: unit.id,
+                          child: Text(unit.label),
+                        ),
+                      )
+                      .toList(),
+                ),
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
@@ -242,8 +278,25 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                 Column(
                   children: [
                     const SizedBox(height: 16),
+                    if (_inventoryEnabled) ...[
+                      Card(
+                        child: ListTile(
+                          title: Text(
+                            '${l10n.inventoryAvailableLabel}: ${currentProduct!.inventoryAvailable.toStringAsFixed(2)}',
+                          ),
+                          subtitle: Text(
+                            '${l10n.inventorySoldLabel}: ${currentProduct.inventorySold.toStringAsFixed(2)} · ${l10n.inventoryLastPurchaseLabel}: ${formatCurrency(currentProduct.lastPurchasePrice)}',
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.add_business_outlined),
+                            onPressed: _openInventoryEntrySheet,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                     ProductSalesPerformanceSection(
-                      product: widget.product!,
+                      product: currentProduct!,
                       range: _range,
                       onRangeChanged: (value) => setState(() => _range = value),
                       from: from,
@@ -251,7 +304,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                     ),
                     ProductPremiumInsightsSection(
                       l10n: l10n,
-                      product: widget.product!,
+                      product: currentProduct,
                       currentPrice: currentPrice,
                       suggestedPriceCard: _buildSuggestedPriceCard(l10n),
                       totalLabel: totalLabel,
@@ -353,11 +406,21 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       }
     }
 
+    final liveProduct = _isEdit
+        ? Hive.box<Product>(HiveBoxes.products).get(productId)
+        : null;
+
     final product = Product(
       id: productId,
       name: name,
       imageUrl: resolvedImagePath,
       currentPrice: price,
+      inventoryAvailable: liveProduct?.inventoryAvailable ?? 0,
+      inventorySold: liveProduct?.inventorySold ?? 0,
+      lastPurchasePrice: liveProduct?.lastPurchasePrice ?? 0,
+      allowedUnitIds: (values['unit_ids'] as List<dynamic>? ?? const [])
+          .map((e) => e.toString())
+          .toList(),
     );
 
     if (_isEdit && !(await _allowExtremeChange(price, strategyTags))) {
@@ -391,6 +454,10 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       name: '${source.name} (${l10n.productDuplicateSuffix})',
       imageUrl: source.imageUrl,
       currentPrice: source.currentPrice,
+      inventoryAvailable: source.inventoryAvailable,
+      inventorySold: source.inventorySold,
+      lastPurchasePrice: source.lastPurchasePrice,
+      allowedUnitIds: source.allowedUnitIds,
     );
     try {
       await _repository.save(duplicated);
@@ -448,5 +515,27 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
   double? _parsePriceInput(String? raw) {
     return parseCurrencyInput(raw, decimalDigits: _currencyDecimalDigits);
+  }
+
+  Future<void> _openInventoryEntrySheet() async {
+    if (!_inventoryEnabled || !_isEdit) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return InventoryEntrySheet(
+          productId: widget.product!.id,
+          productName: widget.product!.name,
+          units: _units,
+          quantityLabel: AppLocalizations.of(context).salesQuantity,
+          purchasePriceLabel: AppLocalizations.of(context).inventoryPurchasePriceLabel,
+          saveLabel: AppLocalizations.of(context).inventorySaveEntry,
+          onSave: (InventoryEntry entry) async {
+            await _inventoryRepository.registerEntry(entry);
+            if (mounted) setState(() {});
+          },
+        );
+      },
+    );
   }
 }

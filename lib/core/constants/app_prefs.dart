@@ -16,4 +16,6 @@ class AppPrefs {
   static const backupLastCompletedAtMs = 'backup_last_completed_at_ms_v1';
   static const backupReminderFrequency = 'backup_reminder_frequency_v1';
   static const backupReminderTapRoute = 'backup_reminder_tap_route_v1';
+  static const inventoryEnabled = 'inventory_enabled_v1';
+  static const inventoryUnits = 'inventory_units_v1';
 }

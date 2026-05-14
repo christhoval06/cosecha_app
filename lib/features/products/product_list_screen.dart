@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../core/widgets/list_empty_state.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/constants/app_routes.dart';
+import '../../core/services/inventory_settings_service.dart';
 import '../../data/hive/boxes.dart';
 import '../../data/models/product.dart';
 import '../../l10n/app_localizations.dart';
@@ -25,7 +26,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.productsTitle)),
+      appBar: AppBar(
+        title: Text(l10n.productsTitle),
+        actions: [
+          FutureBuilder<bool>(
+            future: InventorySettingsService.isEnabled(),
+            builder: (context, snapshot) {
+              if (snapshot.data != true) return const SizedBox.shrink();
+              return IconButton(
+                tooltip: l10n.inventorySettingsTitle,
+                icon: const Icon(Icons.inventory_2),
+                onPressed: () => Navigator.of(
+                  context,
+                ).pushNamed(AppRoutes.inventorySettings),
+              );
+            },
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushNamed(AppRoutes.productEdit);

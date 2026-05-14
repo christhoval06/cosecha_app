@@ -87,6 +87,10 @@ class ImagePathRepairService {
           name: product.name,
           imageUrl: recovered,
           currentPrice: product.currentPrice,
+          inventoryAvailable: product.inventoryAvailable,
+          inventorySold: product.inventorySold,
+          lastPurchasePrice: product.lastPurchasePrice,
+          allowedUnitIds: product.allowedUnitIds,
         ),
       );
     }

@@ -636,6 +636,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get salesSaveError => 'Error al guardar la venta';
 
   @override
+  String get salesUnitLabel => 'Unidad de venta';
+
+  @override
+  String get salesUnitRequired => 'Selecciona una unidad.';
+
+  @override
   String get homeRecentEmpty => 'Aún no hay ventas recientes.';
 
   @override
@@ -734,6 +740,48 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get settingsBackupReminderSubtitle =>
       'Configura y gestiona recordatorios para evitar pérdida de datos.';
+
+  @override
+  String get inventorySettingsTitle => 'Inventario';
+
+  @override
+  String get inventoryFeatureTitle => 'Activar inventario';
+
+  @override
+  String get inventoryFeatureSubtitle =>
+      'Lleva entradas, salidas y unidades asignadas por producto.';
+
+  @override
+  String get inventoryUnitsTitle => 'Unidades de venta';
+
+  @override
+  String get inventoryUnitsHint => 'Agregar unidad (ej. Caja, Galón)';
+
+  @override
+  String get inventoryAvailableLabel => 'Disponible';
+
+  @override
+  String get inventorySoldLabel => 'Vendido';
+
+  @override
+  String get inventoryLastPurchaseLabel => 'Última compra';
+
+  @override
+  String get inventoryPurchasePriceLabel => 'Precio de compra';
+
+  @override
+  String get inventorySaveEntry => 'Guardar entrada';
+
+  @override
+  String get inventoryMarginLabel => 'Margen de ganancia';
+
+  @override
+  String get inventoryPreviewTitle => 'Vista previa de precio';
+
+  @override
+  String inventorySuggestedPricePreview(Object price, Object margin) {
+    return 'Sugerido: $price ($margin%)';
+  }
 
   @override
   String get settingsBackupReminderEnabled => 'Activar recordatorios';

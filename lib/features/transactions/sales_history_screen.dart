@@ -266,6 +266,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
         quantity: 4,
         channel: SalesChannels.retail,
         createdAt: now.subtract(const Duration(hours: 2)),
+        unitId: '',
+        unitLabel: '',
       ),
       SaleTransaction(
         id: '',
@@ -275,6 +277,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
         quantity: 1,
         channel: SalesChannels.wholesale,
         createdAt: now.subtract(const Duration(hours: 5)),
+        unitId: '',
+        unitLabel: '',
       ),
       SaleTransaction(
         id: '',
@@ -284,6 +288,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
         quantity: 2,
         channel: SalesChannels.retail,
         createdAt: now.subtract(const Duration(days: 1, hours: 3)),
+        unitId: '',
+        unitLabel: '',
       ),
       SaleTransaction(
         id: '',
@@ -293,6 +299,8 @@ class _SalesHistoryScreenState extends State<SalesHistoryScreen> {
         quantity: 10,
         channel: SalesChannels.wholesale,
         createdAt: now.subtract(const Duration(days: 7, hours: 4)),
+        unitId: '',
+        unitLabel: '',
       ),
     ];
 

@@ -116,6 +116,16 @@ class SettingsScreen extends StatelessWidget {
                 context,
               ).pushNamed(AppRoutes.notificationSettings),
             ),
+            const SizedBox(height: 12),
+            SettingsTile(
+              icon: Icons.inventory_2_outlined,
+              iconBg: colorScheme.primaryContainer,
+              iconColor: colorScheme.onPrimaryContainer,
+              title: l10n.inventorySettingsTitle,
+              subtitle: l10n.inventoryFeatureSubtitle,
+              onTap: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.inventorySettings),
+            ),
             const SizedBox(height: 24),
             SettingsSectionTitle(text: l10n.settingsSectionAbout),
             const SizedBox(height: 12),
