@@ -98,6 +98,10 @@ class BackupService {
               imageAssets: imageAssets,
             ),
             'currentPrice': p.currentPrice,
+            'inventoryAvailable': p.inventoryAvailable,
+            'inventorySold': p.inventorySold,
+            'lastPurchasePrice': p.lastPurchasePrice,
+            'allowedUnitIds': p.allowedUnitIds,
           },
         )
         .toList();
@@ -112,6 +116,8 @@ class BackupService {
             'quantity': s.quantity,
             'channel': s.channel,
             'createdAt': s.createdAt.toIso8601String(),
+            'unitId': s.unitId,
+            'unitLabel': s.unitLabel,
           },
         )
         .toList();
@@ -235,6 +241,12 @@ class BackupService {
         name: p['name'] as String,
         imageUrl: restoredImagePath,
         currentPrice: (p['currentPrice'] as num).toDouble(),
+        inventoryAvailable: (p['inventoryAvailable'] as num?)?.toDouble() ?? 0,
+        inventorySold: (p['inventorySold'] as num?)?.toDouble() ?? 0,
+        lastPurchasePrice: (p['lastPurchasePrice'] as num?)?.toDouble() ?? 0,
+        allowedUnitIds: (p['allowedUnitIds'] as List<dynamic>? ?? const [])
+            .map((e) => e.toString())
+            .toList(),
       );
       await productBox.put(product.id, product);
     }
@@ -248,6 +260,8 @@ class BackupService {
         quantity: s['quantity'] as int,
         channel: s['channel'] as String,
         createdAt: DateTime.parse(s['createdAt'] as String),
+        unitId: s['unitId'] as String? ?? '',
+        unitLabel: s['unitLabel'] as String? ?? '',
       );
       await salesBox.put(sale.id, sale);
     }

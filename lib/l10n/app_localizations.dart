@@ -1266,6 +1266,18 @@ abstract class AppLocalizations {
   /// **'Error al guardar la venta'**
   String get salesSaveError;
 
+  /// No description provided for @salesUnitLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Unidad de venta'**
+  String get salesUnitLabel;
+
+  /// No description provided for @salesUnitRequired.
+  ///
+  /// In es, this message translates to:
+  /// **'Selecciona una unidad.'**
+  String get salesUnitRequired;
+
   /// No description provided for @homeRecentEmpty.
   ///
   /// In es, this message translates to:
@@ -1457,6 +1469,84 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Configura y gestiona recordatorios para evitar pérdida de datos.'**
   String get settingsBackupReminderSubtitle;
+
+  /// No description provided for @inventorySettingsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Inventario'**
+  String get inventorySettingsTitle;
+
+  /// No description provided for @inventoryFeatureTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Activar inventario'**
+  String get inventoryFeatureTitle;
+
+  /// No description provided for @inventoryFeatureSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Lleva entradas, salidas y unidades asignadas por producto.'**
+  String get inventoryFeatureSubtitle;
+
+  /// No description provided for @inventoryUnitsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Unidades de venta'**
+  String get inventoryUnitsTitle;
+
+  /// No description provided for @inventoryUnitsHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar unidad (ej. Caja, Galón)'**
+  String get inventoryUnitsHint;
+
+  /// No description provided for @inventoryAvailableLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Disponible'**
+  String get inventoryAvailableLabel;
+
+  /// No description provided for @inventorySoldLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Vendido'**
+  String get inventorySoldLabel;
+
+  /// No description provided for @inventoryLastPurchaseLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Última compra'**
+  String get inventoryLastPurchaseLabel;
+
+  /// No description provided for @inventoryPurchasePriceLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Precio de compra'**
+  String get inventoryPurchasePriceLabel;
+
+  /// No description provided for @inventorySaveEntry.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar entrada'**
+  String get inventorySaveEntry;
+
+  /// No description provided for @inventoryMarginLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Margen de ganancia'**
+  String get inventoryMarginLabel;
+
+  /// No description provided for @inventoryPreviewTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Vista previa de precio'**
+  String get inventoryPreviewTitle;
+
+  /// No description provided for @inventorySuggestedPricePreview.
+  ///
+  /// In es, this message translates to:
+  /// **'Sugerido: {price} ({margin}%)'**
+  String inventorySuggestedPricePreview(Object price, Object margin);
 
   /// No description provided for @settingsBackupReminderEnabled.
   ///

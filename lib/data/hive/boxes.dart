@@ -4,4 +4,5 @@ class HiveBoxes {
   static const productPriceHistory = 'product_price_history_box';
   static const transactions = 'transactions_box';
   static const reminders = 'reminders_box';
+  static const inventoryEntries = 'inventory_entries_box';
 }

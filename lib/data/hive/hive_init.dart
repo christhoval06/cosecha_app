@@ -7,6 +7,7 @@ import 'package:cosecha_app/data/models/product.dart';
 import 'package:cosecha_app/data/models/product_price_history.dart';
 import 'package:cosecha_app/data/models/reminder_item.dart';
 import 'package:cosecha_app/data/models/sale_transaction.dart';
+import 'package:cosecha_app/data/models/inventory_entry.dart';
 
 import 'boxes.dart';
 
@@ -40,6 +41,9 @@ class HiveInitializer {
     if (!Hive.isAdapterRegistered(4)) {
       Hive.registerAdapter(ReminderItemAdapter());
     }
+    if (!Hive.isAdapterRegistered(5)) {
+      Hive.registerAdapter(InventoryEntryAdapter());
+    }
   }
 
   static Future<void> _openBoxes() async {
@@ -47,6 +51,7 @@ class HiveInitializer {
     await Hive.openBox<Product>(HiveBoxes.products);
     await Hive.openBox<ProductPriceHistory>(HiveBoxes.productPriceHistory);
     await Hive.openBox<SaleTransaction>(HiveBoxes.transactions);
+    await Hive.openBox<InventoryEntry>(HiveBoxes.inventoryEntries);
     final legacyReminderBox = await Hive.openBox<dynamic>(HiveBoxes.reminders);
     await _migrateLegacyReminderBox(legacyReminderBox);
     await legacyReminderBox.close();

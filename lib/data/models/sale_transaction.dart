@@ -12,6 +12,8 @@ class SaleTransaction extends HiveObject {
     required this.quantity,
     required this.channel,
     required this.createdAt,
+    required this.unitId,
+    required this.unitLabel,
   });
 
   @HiveField(0)
@@ -34,4 +36,10 @@ class SaleTransaction extends HiveObject {
 
   @HiveField(6, defaultValue: '')
   final String productId;
+
+  @HiveField(7, defaultValue: '')
+  final String unitId;
+
+  @HiveField(8, defaultValue: '')
+  final String unitLabel;
 }

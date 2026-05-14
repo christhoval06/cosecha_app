@@ -267,7 +267,9 @@
   "salesFiltersApply": "Apply",
   "salesSave": "Save sale",
   "salesSaving": "Saving...",
-  "salesSaveError": "Failed to save sale"
+  "salesSaveError": "Failed to save sale",
+  "salesUnitLabel": "Sale unit",
+  "salesUnitRequired": "Select a unit."
   ,
   "homeLatestProductsTitle": "Recent products",
   "homeLatestProductsSubtitle": "Last 3 products added",
@@ -294,6 +296,25 @@
   "settingsSectionNotifications": "Notifications",
   "settingsBackupReminderTitle": "Backup reminders",
   "settingsBackupReminderSubtitle": "Configure and manage reminders to avoid data loss.",
+  "inventorySettingsTitle": "Inventory",
+  "inventoryFeatureTitle": "Enable inventory",
+  "inventoryFeatureSubtitle": "Track stock entries, exits, and unit assignments per product.",
+  "inventoryUnitsTitle": "Sales units",
+  "inventoryUnitsHint": "Add unit (e.g. Box, Gallon)",
+  "inventoryAvailableLabel": "Available",
+  "inventorySoldLabel": "Sold",
+  "inventoryLastPurchaseLabel": "Last purchase",
+  "inventoryPurchasePriceLabel": "Purchase price",
+  "inventorySaveEntry": "Save stock entry",
+  "inventoryMarginLabel": "Profit margin",
+  "inventoryPreviewTitle": "Price preview",
+  "inventorySuggestedPricePreview": "Suggested: {price} ({margin}%)",
+  "@inventorySuggestedPricePreview": {
+    "placeholders": {
+      "price": {},
+      "margin": {}
+    }
+  },
   "settingsBackupReminderEnabled": "Enable reminders",
   "settingsBackupReminderFrequency": "Frequency",
   "settingsBackupReminderFrequencyDaily": "Daily",

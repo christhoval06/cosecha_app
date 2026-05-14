@@ -65,6 +65,10 @@ class ProductRepository {
       name: product.name,
       imageUrl: product.imageUrl,
       currentPrice: product.currentPrice,
+      inventoryAvailable: product.inventoryAvailable,
+      inventorySold: product.inventorySold,
+      lastPurchasePrice: product.lastPurchasePrice,
+      allowedUnitIds: product.allowedUnitIds,
     );
   }
 }

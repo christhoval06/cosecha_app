@@ -14,6 +14,21 @@ class SalesRepository {
   Future<void> save(SaleTransaction sale) async {
     final resolved = _withId(sale);
     await _box.put(resolved.id, resolved);
+    final product = _productBox.get(resolved.productId);
+    if (product == null) return;
+    final sold = resolved.quantity.toDouble();
+    final nextAvailable = product.inventoryAvailable - sold;
+    final updated = Product(
+      id: product.id,
+      name: product.name,
+      imageUrl: product.imageUrl,
+      currentPrice: product.currentPrice,
+      inventoryAvailable: nextAvailable < 0 ? 0 : nextAvailable,
+      inventorySold: product.inventorySold + sold,
+      lastPurchasePrice: product.lastPurchasePrice,
+      allowedUnitIds: product.allowedUnitIds,
+    );
+    await _productBox.put(product.id, updated);
   }
 
   List<SaleTransaction> getByRange(DateTime from) {
@@ -97,6 +112,8 @@ class SalesRepository {
       quantity: sale.quantity,
       channel: sale.channel,
       createdAt: sale.createdAt,
+      unitId: sale.unitId,
+      unitLabel: sale.unitLabel,
     );
   }
 }

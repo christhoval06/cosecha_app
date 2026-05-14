@@ -13,6 +13,7 @@ class AppRoutes {
   static const settings = '/settings';
   static const notificationSettings = '/notification-settings';
   static const notificationReminders = '/notification-reminders';
+  static const inventorySettings = '/inventory-settings';
   static const developer = '/developer';
   static const dataBackup = '/data-backup';
 }
